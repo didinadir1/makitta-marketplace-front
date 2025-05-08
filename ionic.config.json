@@ -1,0 +1,7 @@
+{
+  "name": "makitta-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
