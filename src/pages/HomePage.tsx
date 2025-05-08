@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar } from '@ionic/react';
+import {IonContent, IonHeader, IonPage, IonSearchbar, IonTitle, IonToolbar} from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './HomePage.css'; // You might want to rename the CSS file as well
 
@@ -18,7 +18,7 @@ const HomePage: React.FC = () => {
         </IonHeader>
         {/* You can keep the search bar here if you want it on the Home page */}
         <IonSearchbar placeholder="Search"></IonSearchbar>
-        <ExploreContainer name="Home page" />
+        <ExploreContainer name="Home page"/>
       </IonContent>
     </IonPage>
   );
