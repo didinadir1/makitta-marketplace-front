@@ -10,8 +10,8 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { home, search, mail, person } from 'ionicons/icons'; // Import new icons
-import HomePage from './pages/HomePage'; // Import new page components
+import { restaurant, search, mail, person } from 'ionicons/icons'; // Changed home to restaurant
+import DishesPage from './pages/DishesPage'; // Import new DishesPage
 import SearchPage from './pages/SearchPage';
 import MessagesPage from './pages/MessagesPage';
 import ProfilePage from './pages/ProfilePage';
@@ -53,8 +53,8 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/home">
-            <HomePage />
+          <Route exact path="/dishes"> {/* Changed path to /dishes */}
+            <DishesPage />
           </Route>
           <Route exact path="/search">
             <SearchPage />
@@ -66,13 +66,13 @@ const App: React.FC = () => (
             <ProfilePage />
           </Route>
           <Route exact path="/">
-            <Redirect to="/home" />
+            <Redirect to="/dishes" /> {/* Changed redirect to /dishes */}
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/home">
-            <IonIcon aria-hidden="true" icon={home} />
-            <IonLabel>Home</IonLabel>
+          <IonTabButton tab="dishes" href="/dishes"> {/* Changed tab and href */}
+            <IonIcon aria-hidden="true" icon={restaurant} /> {/* Changed icon */}
+            <IonLabel>Dishes</IonLabel> {/* Changed label */}
           </IonTabButton>
           <IonTabButton tab="search" href="/search">
             <IonIcon aria-hidden="true" icon={search} />

@@ -1,0 +1,101 @@
+.dish-card {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dish-slides {
+  width: 100%;
+  height: 200px; /* Adjust as needed */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden; /* Ensures images don't overflow rounded corners */
+}
+
+.dish-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dish-card ion-card-header {
+  padding-bottom: 8px;
+}
+
+.dish-title-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dish-title-price ion-card-title {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.dish-price {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.dish-rating {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  color: var(--ion-color-medium);
+}
+
+.dish-rating ion-icon {
+  margin-right: 2px;
+}
+
+.rating-text {
+  margin-left: 4px;
+}
+
+.dish-card ion-card-content {
+  padding-top: 8px;
+}
+
+.dish-tags {
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px; /* Spacing between chips */
+}
+
+.dish-tags ion-chip {
+  font-size: 0.8em;
+  height: 28px; /* Adjust chip height */
+}
+
+.dish-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9em;
+  color: var(--ion-color-dark-tint);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+}
+
+.info-item ion-icon {
+  margin-right: 6px;
+}
+
+/* Style for the pager dots in IonSlides */
+.dish-slides::part(bullet) {
+  background-color: var(--ion-color-primary-contrast);
+  opacity: 0.5;
+  width: 8px;
+  height: 8px;
+}
+
+.dish-slides::part(bullet-active) {
+  background-color: var(--ion-color-primary);
+  opacity: 1;
+}
