@@ -100,12 +100,17 @@ const DishDetailPage: React.FC = () => {
         )}
 
         <div className="dish-detail-content">
-          <div className="dish-detail-header-section"> {/* Group header elements */}
+          <div className="dish-detail-header-section">
             <IonCardTitle className="dish-detail-name">{dish.name}</IonCardTitle>
-            <IonBadge color="success" className="dish-detail-price">{dish.price}</IonBadge>
+            <div className="price-add-container"> {/* Container for price and add button */}
+              <IonBadge color="success" className="dish-detail-price">{dish.price}</IonBadge>
+              <IonButton fill="clear" size="large" className="add-to-cart-button"> {/* Moved and restyled button */}
+                <IonIcon icon={addCircleOutline} slot="icon-only" />
+              </IonButton>
+            </div>
           </div>
 
-          <div className="dish-detail-meta-section"> {/* Group meta info */}
+          <div className="dish-detail-meta-section">
             <div className="dish-detail-rating">
               {renderRatingStars(dish.rating)}
               <span className="rating-text">({dish.rating.toFixed(1)})</span>
@@ -122,7 +127,7 @@ const DishDetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="dish-detail-tags-section"> {/* Group tags */}
+          <div className="dish-detail-tags-section">
             {dish.tags.map((tag, index) => (
               <IonChip key={index} outline={true} color="primary">
                 {tag}
@@ -130,12 +135,12 @@ const DishDetailPage: React.FC = () => {
             ))}
           </div>
 
-          <div className="dish-detail-description-section"> {/* Group description */}
+          <div className="dish-detail-description-section">
             <h3>Description</h3>
             <p>{dish.description}</p>
           </div>
 
-          <div className="dish-detail-reviews-section"> {/* Group reviews */}
+          <div className="dish-detail-reviews-section">
             <h3>Reviews ({dish.reviews.length})</h3>
             {dish.reviews.length > 0 ? (
               <IonList lines="none">
@@ -156,14 +161,6 @@ const DishDetailPage: React.FC = () => {
             )}
           </div>
         </div>
-
-        <div className="add-to-cart-button-container">
-          <IonButton expand="block" size="large">
-            <IonIcon icon={addCircleOutline} slot="start"/>
-            Add to Cart
-          </IonButton>
-        </div>
-
       </IonContent>
     </IonPage>
   );

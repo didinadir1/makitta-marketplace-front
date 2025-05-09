@@ -1,6 +1,7 @@
 /* Basic styling for the page */
 ion-content {
   --background: var(--ion-color-light); /* Use a light background */
+  --padding-bottom: 20px; /* Adjusted padding bottom */
 }
 
 /* Image Slider */
@@ -49,12 +50,13 @@ ion-content {
   box-shadow: 0 -8px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow for separation */
 }
 
-/* Header Section (Name and Price) */
+/* Header Section (Name, Price, and Add Button) */
 .dish-detail-header-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px; /* Increased space */
+  flex-wrap: wrap; /* Allow wrapping */
 }
 
 .dish-detail-name {
@@ -62,6 +64,14 @@ ion-content {
   font-weight: bold;
   margin: 0;
   color: var(--ion-color-dark);
+  flex-grow: 1; /* Allow name to take available space */
+  margin-right: 10px; /* Space between name and price/button */
+}
+
+.price-add-container {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between price badge and button */
 }
 
 .dish-detail-price {
@@ -71,7 +81,25 @@ ion-content {
   border-radius: 20px; /* More rounded badge */
   --background: var(--ion-color-success); /* Use success color */
   --color: var(--ion-color-success-contrast);
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  min-width: 60px; /* Ensure minimum width for centering */
 }
+
+.add-to-cart-button {
+  --padding-start: 8px; /* Adjust padding for icon-only button */
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  height: auto; /* Allow height to adjust */
+  --color: var(--ion-color-primary); /* Use primary color for the icon */
+}
+
+.add-to-cart-button ion-icon {
+  font-size: 1.8em; /* Larger icon */
+}
+
 
 /* Meta Info Section (Rating, Distance, Time) */
 .dish-detail-meta-section {
@@ -152,7 +180,7 @@ ion-content {
 
 /* Reviews Section */
 .dish-detail-reviews-section {
-  margin-bottom: 100px; /* More space for the fixed button */
+  margin-bottom: 0; /* Removed bottom margin */
 }
 
 .dish-detail-reviews-section h3 {
@@ -199,35 +227,4 @@ ion-content {
   font-size: 1em; /* Slightly larger review text */
   color: var(--ion-color-dark-tint);
   line-height: 1.5;
-}
-
-/* Fixed "Add to Cart" button */
-.add-to-cart-button-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 15px 16px; /* Increased padding */
-  background: var(--ion-color-light);
-  box-shadow: 0 -8px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow */
-  z-index: 10;
-}
-
-.add-to-cart-button-container ion-button {
-  --padding-top: 18px; /* Increased button padding */
-  --padding-bottom: 18px;
-  font-size: 1.2em; /* Larger button text */
-  font-weight: bold;
-  border-radius: 12px; /* More rounded button corners */
-  --background: var(--ion-color-primary);
-  --color: var(--ion-color-primary-contrast);
-}
-
-.add-to-cart-button-container ion-button ion-icon {
-  font-size: 1.3em; /* Larger icon in button */
-}
-
-/* Adjust content padding to prevent button from covering content */
-ion-content {
-  --padding-bottom: 100px; /* Add padding at the bottom equal to button container height */
 }
