@@ -1,0 +1,233 @@
+/* Basic styling for the page */
+ion-content {
+  --background: var(--ion-color-light); /* Use a light background */
+}
+
+/* Image Slider */
+.image-slider-container {
+  width: 100%;
+  height: 280px; /* Increased height for a more impactful image */
+  overflow: hidden;
+  position: relative;
+}
+
+.dish-detail-slides {
+  width: 100%;
+  height: 100%;
+}
+
+.dish-detail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Swiper pagination styling */
+.image-slider-container .swiper-pagination {
+  bottom: 10px !important; /* Position pagination inside the image area */
+}
+
+.image-slider-container .swiper-pagination-bullet {
+  background: var(--ion-color-primary);
+  opacity: 0.7;
+}
+
+.image-slider-container .swiper-pagination-bullet-active {
+  background: var(--ion-color-primary);
+  opacity: 1;
+}
+
+/* Main Content Area */
+.dish-detail-content {
+  padding: 20px 16px; /* Increased top padding */
+  background: var(--ion-color-light);
+  position: relative;
+  z-index: 1;
+  margin-top: -30px; /* More overlap with the image */
+  border-top-left-radius: 25px; /* More rounded top corners */
+  border-top-right-radius: 25px;
+  box-shadow: 0 -8px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow for separation */
+}
+
+/* Header Section (Name and Price) */
+.dish-detail-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px; /* Increased space */
+}
+
+.dish-detail-name {
+  font-size: 2em; /* Larger title */
+  font-weight: bold;
+  margin: 0;
+  color: var(--ion-color-dark);
+}
+
+.dish-detail-price {
+  font-size: 1.3em; /* Larger price badge */
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 20px; /* More rounded badge */
+  --background: var(--ion-color-success); /* Use success color */
+  --color: var(--ion-color-success-contrast);
+}
+
+/* Meta Info Section (Rating, Distance, Time) */
+.dish-detail-meta-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; /* Increased space */
+  flex-wrap: wrap;
+  gap: 20px; /* Space between rating and info items group */
+}
+
+.dish-detail-rating {
+  display: flex;
+  align-items: center;
+}
+
+.dish-detail-rating ion-icon {
+  font-size: 1.2em; /* Larger stars */
+}
+
+.dish-detail-rating .rating-text {
+  margin-left: 6px;
+  font-size: 1em; /* Larger rating text */
+  color: var(--ion-color-medium);
+}
+
+.dish-detail-info-items {
+  display: flex;
+  gap: 20px; /* Increased space between info items */
+  flex-wrap: wrap;
+}
+
+.dish-detail-info-items .info-item {
+  display: flex;
+  align-items: center;
+  font-size: 1em; /* Larger info text */
+  color: var(--ion-color-dark-tint);
+}
+
+.dish-detail-info-items .info-item ion-icon {
+  margin-right: 6px;
+  font-size: 1.1em; /* Larger icons */
+}
+
+/* Tags Section */
+.dish-detail-tags-section {
+  margin-bottom: 25px; /* Increased space */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Increased space between chips */
+}
+
+.dish-detail-tags-section ion-chip {
+  --background: var(--ion-color-primary-tint);
+  --color: var(--ion-color-primary-contrast);
+  font-size: 0.9em; /* Larger chip text */
+  padding: 6px 12px;
+  height: auto;
+  border-radius: 15px; /* More rounded chips */
+}
+
+/* Description Section */
+.dish-detail-description-section {
+  margin-bottom: 30px; /* Increased space */
+}
+
+.dish-detail-description-section h3 {
+  font-size: 1.4em; /* Larger heading */
+  margin-bottom: 10px;
+  color: var(--ion-color-dark);
+  font-weight: bold;
+}
+
+.dish-detail-description-section p {
+  font-size: 1.05em; /* Slightly larger description text */
+  line-height: 1.6;
+  color: var(--ion-color-dark-tint);
+}
+
+/* Reviews Section */
+.dish-detail-reviews-section {
+  margin-bottom: 100px; /* More space for the fixed button */
+}
+
+.dish-detail-reviews-section h3 {
+  font-size: 1.4em; /* Larger heading */
+  margin-bottom: 15px;
+  color: var(--ion-color-dark);
+  font-weight: bold;
+}
+
+.dish-detail-reviews-section ion-list {
+  background: transparent; /* Make list background transparent */
+}
+
+.review-card {
+  margin: 12px 0; /* Increased space between review cards */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Stronger shadow for review cards */
+  border-radius: 10px; /* More rounded review cards */
+  --background: var(--ion-color-step-50, #f2f2f2); /* Slightly different background for cards */
+}
+
+.review-card ion-card-content {
+  padding: 15px; /* Increased padding inside review cards */
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px; /* Increased space */
+}
+
+.review-header h4 {
+  font-size: 1.2em; /* Larger author name */
+  margin: 0;
+  color: var(--ion-color-dark);
+  font-weight: bold;
+}
+
+.review-rating ion-icon {
+  font-size: 1.1em; /* Slightly larger stars in reviews */
+}
+
+.review-card ion-text {
+  font-size: 1em; /* Slightly larger review text */
+  color: var(--ion-color-dark-tint);
+  line-height: 1.5;
+}
+
+/* Fixed "Add to Cart" button */
+.add-to-cart-button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 16px; /* Increased padding */
+  background: var(--ion-color-light);
+  box-shadow: 0 -8px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+  z-index: 10;
+}
+
+.add-to-cart-button-container ion-button {
+  --padding-top: 18px; /* Increased button padding */
+  --padding-bottom: 18px;
+  font-size: 1.2em; /* Larger button text */
+  font-weight: bold;
+  border-radius: 12px; /* More rounded button corners */
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
+
+.add-to-cart-button-container ion-button ion-icon {
+  font-size: 1.3em; /* Larger icon in button */
+}
+
+/* Adjust content padding to prevent button from covering content */
+ion-content {
+  --padding-bottom: 100px; /* Add padding at the bottom equal to button container height */
+}
