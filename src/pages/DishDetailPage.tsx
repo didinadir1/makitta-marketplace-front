@@ -1,30 +1,27 @@
 import {
   IonBackButton,
   IonBadge,
+  IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
-  IonCardHeader,
   IonCardTitle,
   IonChip,
   IonContent,
   IonHeader,
   IonIcon,
   IonImg,
-  IonItem,
-  IonLabel,
   IonList,
   IonPage,
   IonText,
   IonTitle,
   IonToolbar,
-  IonButton,
 } from '@ionic/react';
 import {useParams} from 'react-router';
-import {mockDishes, Review} from '../data/mockDishes';
-import {locationOutline, star, starHalf, timeOutline, addCircleOutline} from 'ionicons/icons';
+import {mockDishes} from '../data/mockDishes';
+import {addCircleOutline, locationOutline, star, starHalf, timeOutline} from 'ionicons/icons';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import { Pagination } from 'swiper/modules';
+import {Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import '@ionic/react/css/ionic-swiper.css';
@@ -88,7 +85,7 @@ const DishDetailPage: React.FC = () => {
           <div className="image-slider-container">
             <Swiper
               modules={[Pagination]}
-              pagination={{ clickable: true }}
+              pagination={{clickable: true}}
               initialSlide={0}
               speed={400}
               className="dish-detail-slides"
@@ -162,7 +159,7 @@ const DishDetailPage: React.FC = () => {
 
         <div className="add-to-cart-button-container">
           <IonButton expand="block" size="large">
-            <IonIcon icon={addCircleOutline} slot="start" />
+            <IonIcon icon={addCircleOutline} slot="start"/>
             Add to Cart
           </IonButton>
         </div>
