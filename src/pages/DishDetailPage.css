@@ -50,7 +50,7 @@ ion-content {
   box-shadow: 0 -8px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow for separation */
 }
 
-/* Header Section (Name, Price, and Add Button) */
+/* Header Section (Name and Price) */
 .dish-detail-header-section {
   display: flex;
   justify-content: space-between;
@@ -65,13 +65,7 @@ ion-content {
   margin: 0;
   color: var(--ion-color-dark);
   flex-grow: 1; /* Allow name to take available space */
-  margin-right: 10px; /* Space between name and price/button */
-}
-
-.price-add-container {
-  display: flex;
-  align-items: center;
-  gap: 5px; /* Space between price badge and button */
+  margin-right: 10px; /* Space between name and price */
 }
 
 .dish-detail-price {
@@ -86,20 +80,6 @@ ion-content {
   align-items: center; /* Center vertically */
   min-width: 60px; /* Ensure minimum width for centering */
 }
-
-.add-to-cart-button {
-  --padding-start: 8px; /* Adjust padding for icon-only button */
-  --padding-end: 8px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-  height: auto; /* Allow height to adjust */
-  --color: var(--ion-color-primary); /* Use primary color for the icon */
-}
-
-.add-to-cart-button ion-icon {
-  font-size: 1.8em; /* Larger icon */
-}
-
 
 /* Meta Info Section (Rating, Distance, Time) */
 .dish-detail-meta-section {
@@ -159,6 +139,26 @@ ion-content {
   height: auto;
   border-radius: 15px; /* More rounded chips */
 }
+
+/* Add to Cart Section (New Location) */
+.add-to-cart-section {
+  margin-bottom: 30px; /* Space below the button */
+}
+
+.add-to-cart-button {
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 10px;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
+
+.add-to-cart-button ion-icon {
+  font-size: 1.3em;
+}
+
 
 /* Description Section */
 .dish-detail-description-section {

@@ -19,7 +19,7 @@ import {
 } from '@ionic/react';
 import {useParams} from 'react-router';
 import {mockDishes} from '../data/mockDishes';
-import {addCircleOutline, locationOutline, star, starHalf, timeOutline} from 'ionicons/icons';
+import {cartOutline, locationOutline, star, starHalf, timeOutline} from 'ionicons/icons'; // Changed icon to cartOutline
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
 import 'swiper/css';
@@ -102,12 +102,7 @@ const DishDetailPage: React.FC = () => {
         <div className="dish-detail-content">
           <div className="dish-detail-header-section">
             <IonCardTitle className="dish-detail-name">{dish.name}</IonCardTitle>
-            <div className="price-add-container"> {/* Container for price and add button */}
-              <IonBadge color="success" className="dish-detail-price">{dish.price}</IonBadge>
-              <IonButton fill="clear" size="large" className="add-to-cart-button"> {/* Moved and restyled button */}
-                <IonIcon icon={addCircleOutline} slot="icon-only" />
-              </IonButton>
-            </div>
+            <IonBadge color="success" className="dish-detail-price">{dish.price}</IonBadge> {/* Price remains here */}
           </div>
 
           <div className="dish-detail-meta-section">
@@ -134,6 +129,15 @@ const DishDetailPage: React.FC = () => {
               </IonChip>
             ))}
           </div>
+
+          {/* Moved Add to Cart button here */}
+          <div className="add-to-cart-section">
+             <IonButton expand="block" size="large" className="add-to-cart-button">
+                <IonIcon icon={cartOutline} slot="start" /> {/* Changed icon */}
+                Add to Cart
+              </IonButton>
+          </div>
+
 
           <div className="dish-detail-description-section">
             <h3>Description</h3>
