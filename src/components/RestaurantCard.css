@@ -1,97 +1,144 @@
-/* Styles for the Restaurant Card component */
+/* Styles for the Restaurant Card component - New Design */
 
 .restaurant-card {
-  margin: 10px 0; /* Adjust margin as needed */
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Ensure image corners are rounded with the card */
+  margin: 15px 0; /* Increased margin for better separation */
+  border-radius: 12px; /* More rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Stronger shadow */
+  overflow: hidden;
+  background: var(--ion-color-light); /* Explicit background */
+}
+
+/* Image Slider Container */
+.restaurant-image-slider-container {
+  width: 100%;
+  height: 200px; /* Height for the image slider */
+  overflow: hidden;
+  position: relative;
+}
+
+.restaurant-slides {
+  width: 100%;
+  height: 100%;
 }
 
 .restaurant-image {
   width: 100%;
-  height: 180px; /* Fixed height for images */
-  object-fit: cover; /* Cover the area without distortion */
+  height: 100%;
+  object-fit: cover;
 }
 
-.restaurant-card ion-card-header {
-  padding: 12px 16px 8px 16px; /* Adjust padding */
+/* Swiper pagination styling */
+.restaurant-image-slider-container .swiper-pagination {
+  bottom: 10px !important;
 }
 
-.restaurant-title-rating {
+.restaurant-image-slider-container .swiper-pagination-bullet {
+  background: var(--ion-color-light); /* Light color for visibility on images */
+  opacity: 0.8;
+}
+
+.restaurant-image-slider-container .swiper-pagination-bullet-active {
+  background: var(--ion-color-light);
+  opacity: 1;
+}
+
+/* Card Content Area */
+.restaurant-card-content {
+  padding: 16px; /* Padding inside the content area */
+}
+
+/* Header (Name and Rating) */
+.restaurant-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
-.restaurant-card ion-card-title {
-  font-size: 1.2em;
+.restaurant-name {
+  font-size: 1.4em; /* Larger name */
   font-weight: bold;
   color: var(--ion-color-dark);
   margin: 0;
+  flex-grow: 1;
+  margin-right: 10px;
 }
 
 .restaurant-rating {
   display: flex;
   align-items: center;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .restaurant-rating ion-icon {
-  font-size: 1em;
+  font-size: 1.1em;
 }
 
 .restaurant-rating .rating-text {
-  margin-left: 4px;
-  font-size: 0.85em;
+  margin-left: 5px;
+  font-size: 0.9em;
   color: var(--ion-color-medium);
 }
 
-.restaurant-card ion-card-content {
-  padding: 0 16px 12px 16px; /* Adjust padding */
-}
-
-.restaurant-cuisine {
+/* Meta Info (Distance and Status) */
+.restaurant-meta-info {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px; /* Space between chips */
-  margin-bottom: 10px;
-}
-
-.restaurant-cuisine ion-chip {
-  --background: var(--ion-color-secondary-tint); /* Use a different color for cuisine tags */
-  --color: var(--ion-color-secondary-contrast);
-  font-size: 0.8em;
-  padding: 4px 8px;
-  height: auto;
-  border-radius: 12px;
-}
-
-.restaurant-info {
-  display: flex;
+  align-items: center;
   gap: 15px; /* Space between info items */
+  margin-bottom: 12px;
   flex-wrap: wrap;
-  font-size: 0.9em;
+}
+
+.restaurant-meta-info .info-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.95em;
   color: var(--ion-color-dark-tint);
 }
 
-.restaurant-info .info-item {
-  display: flex;
-  align-items: center;
-}
-
-.restaurant-info .info-item ion-icon {
-  margin-right: 4px;
+.restaurant-meta-info .info-item ion-icon {
+  margin-right: 5px;
   font-size: 1em;
   color: var(--ion-color-medium);
 }
 
-/* Styling for the status */
+/* Status Styling */
 .restaurant-status.open span {
-  color: var(--ion-color-success); /* Green for open */
+  color: var(--ion-color-success);
   font-weight: bold;
 }
 
 .restaurant-status.closed span {
-  color: var(--ion-color-danger); /* Red for closed */
+  color: var(--ion-color-danger);
   font-weight: bold;
+}
+
+
+/* Cuisine Tags */
+.restaurant-cuisine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px; /* Space between chips */
+  margin-bottom: 15px;
+}
+
+.restaurant-cuisine ion-chip {
+  --background: var(--ion-color-secondary-tint);
+  --color: var(--ion-color-secondary-contrast);
+  font-size: 0.85em;
+  padding: 5px 10px;
+  height: auto;
+  border-radius: 14px; /* More rounded chips */
+}
+
+/* Description */
+.restaurant-description {
+  margin-top: 10px;
+}
+
+.restaurant-description p {
+  font-size: 1em;
+  line-height: 1.5;
+  color: var(--ion-color-dark-tint);
+  margin: 0;
 }
