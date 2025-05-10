@@ -4,7 +4,7 @@ export interface Restaurant {
   cuisine: string[]; // e.g., ['Italian', 'Pizza']
   rating: number; // e.g., 1-5
   distance: string; // e.g., "0.5 miles"
-  deliveryTime: string; // e.g., "20-30 min"
+  status: 'Open' | 'Closed'; // Replaced deliveryTime with status
   imageUrl: string; // Single image URL for the restaurant card
 }
 
@@ -15,7 +15,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: ['Pizza', 'Italian'],
     rating: 4.5,
     distance: '1.2 miles',
-    deliveryTime: '25-35 min',
+    status: 'Open', // Updated data
     imageUrl: '/food1.jpeg',
   },
   {
@@ -24,7 +24,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: ['Sushi', 'Japanese'],
     rating: 4.8,
     distance: '0.8 miles',
-    deliveryTime: '20-30 min',
+    status: 'Open', // Updated data
     imageUrl: '/food2.jpeg',
   },
   {
@@ -33,7 +33,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: ['Burgers', 'American'],
     rating: 4.0,
     distance: '0.5 miles',
-    deliveryTime: '15-25 min',
+    status: 'Closed', // Updated data
     imageUrl: '/food3.jpeg',
   },
   {
@@ -42,7 +42,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: ['Salads', 'Healthy'],
     rating: 4.3,
     distance: '1.0 miles',
-    deliveryTime: '10-15 min',
+    status: 'Open', // Updated data
     imageUrl: '/food1.jpeg',
   },
   {
@@ -51,7 +51,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: ['Mexican', 'Tacos'],
     rating: 4.1,
     distance: '1.5 miles',
-    deliveryTime: '30-40 min',
+    status: 'Open', // Updated data
     imageUrl: '/food3.jpeg',
   },
 ];

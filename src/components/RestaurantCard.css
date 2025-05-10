@@ -84,3 +84,14 @@
   font-size: 1em;
   color: var(--ion-color-medium);
 }
+
+/* Styling for the status */
+.restaurant-status.open span {
+  color: var(--ion-color-success); /* Green for open */
+  font-weight: bold;
+}
+
+.restaurant-status.closed span {
+  color: var(--ion-color-danger); /* Red for closed */
+  font-weight: bold;
+}

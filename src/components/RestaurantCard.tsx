@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, IonChip, IonIcon, IonBadge } from '@ionic/react';
-import { star, starHalf, locationOutline, timeOutline } from 'ionicons/icons';
+import { star, starHalf, locationOutline, timeOutline, businessOutline } from 'ionicons/icons'; // Added businessOutline icon
 import { Restaurant } from '../data/mockRestaurants';
 import './RestaurantCard.css';
 
@@ -55,9 +55,10 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick }) 
               <IonIcon icon={locationOutline} slot="start" color="medium" />
               <span>{restaurant.distance}</span>
             </div>
-            <div className="info-item">
-              <IonIcon icon={timeOutline} slot="start" color="medium" />
-              <span>{restaurant.deliveryTime}</span>
+            {/* Display status instead of delivery time */}
+            <div className={`info-item restaurant-status ${restaurant.status.toLowerCase()}`}>
+              <IonIcon icon={businessOutline} slot="start" color="medium" /> {/* Changed icon */}
+              <span>{restaurant.status}</span>
             </div>
           </div>
         </IonCardContent>
