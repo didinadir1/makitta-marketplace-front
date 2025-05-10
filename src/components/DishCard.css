@@ -1,101 +1,121 @@
+/* Styles for the Dish Card component */
+
 .dish-card {
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 10px 0; /* Adjust margin as needed */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Ensure image corners are rounded with the card */
 }
 
 .dish-slides {
   width: 100%;
-  height: 200px; /* Adjust as needed */
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  overflow: hidden; /* Ensures images don't overflow rounded corners */
+  height: 180px; /* Fixed height for images, matching RestaurantCard */
 }
 
 .dish-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Cover the area without distortion */
 }
 
+/* Swiper pagination styling for DishCard */
+.dish-slides .swiper-pagination {
+  bottom: 10px !important; /* Position pagination inside the image area */
+}
+
+.dish-slides .swiper-pagination-bullet {
+  background: var(--ion-color-light); /* Use a light color for visibility on images */
+  opacity: 0.7;
+}
+
+.dish-slides .swiper-pagination-bullet-active {
+  background: var(--ion-color-light);
+  opacity: 1;
+}
+
+
 .dish-card ion-card-header {
-  padding-bottom: 8px;
+  padding: 12px 16px 8px 16px; /* Adjust padding */
 }
 
 .dish-title-price {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 .dish-title-price ion-card-title {
   font-size: 1.2em;
   font-weight: bold;
+  color: var(--ion-color-dark);
+  margin: 0;
 }
 
 .dish-price {
-  font-size: 1.1em;
+  font-size: 1em; /* Adjusted font size */
   font-weight: bold;
+  padding: 4px 8px; /* Adjusted padding */
+  border-radius: 15px; /* Adjusted border radius */
+  --background: var(--ion-color-success);
+  --color: var(--ion-color-success-contrast);
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  min-width: 50px; /* Ensure minimum width for centering */
 }
+
 
 .dish-rating {
   display: flex;
   align-items: center;
-  font-size: 0.9em;
-  color: var(--ion-color-medium);
 }
 
 .dish-rating ion-icon {
-  margin-right: 2px;
+  font-size: 1em;
 }
 
-.rating-text {
+.dish-rating .rating-text {
   margin-left: 4px;
+  font-size: 0.85em;
+  color: var(--ion-color-medium);
 }
 
 .dish-card ion-card-content {
-  padding-top: 8px;
+  padding: 0 16px 12px 16px; /* Adjust padding */
 }
 
 .dish-tags {
-  margin-bottom: 12px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px; /* Spacing between chips */
+  gap: 5px; /* Space between chips */
+  margin-bottom: 10px;
 }
 
 .dish-tags ion-chip {
+  --background: var(--ion-color-primary-tint);
+  --color: var(--ion-color-primary-contrast);
   font-size: 0.8em;
-  height: 28px; /* Adjust chip height */
+  padding: 4px 8px;
+  height: auto;
+  border-radius: 12px;
 }
 
 .dish-info {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 15px; /* Space between info items */
+  flex-wrap: wrap;
   font-size: 0.9em;
   color: var(--ion-color-dark-tint);
 }
 
-.info-item {
+.dish-info .info-item {
   display: flex;
   align-items: center;
 }
 
-.info-item ion-icon {
-  margin-right: 6px;
-}
-
-/* Style for the pager dots in IonSlides */
-.dish-slides::part(bullet) {
-  background-color: var(--ion-color-primary-contrast);
-  opacity: 0.5;
-  width: 8px;
-  height: 8px;
-}
-
-.dish-slides::part(bullet-active) {
-  background-color: var(--ion-color-primary);
-  opacity: 1;
+.dish-info .info-item ion-icon {
+  margin-right: 4px;
+  font-size: 1em;
+  color: var(--ion-color-medium);
 }
