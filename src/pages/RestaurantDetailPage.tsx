@@ -1,24 +1,20 @@
 import {
   IonBackButton,
-  IonBadge,
   IonButtons,
-  IonCard,
-  IonCardContent,
   IonCardTitle,
   IonChip,
   IonContent,
   IonHeader,
   IonIcon,
   IonImg,
-  IonList,
   IonPage,
-  IonText,
   IonTitle,
   IonToolbar,
+  useIonRouter
 } from '@ionic/react';
-import {useParams, useIonRouter} from 'react-router'; // Import useIonRouter
-import {mockRestaurants, Restaurant} from '../data/mockRestaurants';
-import {mockDishes, Dish} from '../data/mockDishes'; // Import mock dishes
+import { useParams} from 'react-router'; // Import useIonRouter
+import {mockRestaurants} from '../data/mockRestaurants';
+import {mockDishes} from '../data/mockDishes'; // Import mock dishes
 import {businessOutline, locationOutline, star, starHalf} from 'ionicons/icons';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
@@ -155,7 +151,7 @@ const RestaurantDetailPage: React.FC = () => {
                 >
                   {restaurantDishes.map(dish => (
                     <SwiperSlide key={dish.id} className="dish-swiper-slide"> {/* Style individual slides */}
-                      <DishCard dish={dish} onClick={handleDishCardClick} isCompact={true} /> {/* Pass isCompact prop */}
+                      <DishCard dish={dish} onClick={handleDishCardClick} isCompact={true}/> {/* Pass isCompact prop */}
                     </SwiperSlide>
                   ))}
                 </Swiper>
