@@ -16,6 +16,7 @@ import RestaurantPage from './pages/RestaurantPage'; // Import the new Restauran
 import MessagesPage from './pages/MessagesPage';
 import ProfilePage from './pages/ProfilePage';
 import DishDetailPage from './pages/DishDetailPage';
+import RestaurantDetailPage from './pages/RestaurantDetailPage'; // Import the new RestaurantDetailPage
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -57,8 +58,8 @@ const App: React.FC = () => (
           <Route exact path="/dishes">
             <DishesPage />
           </Route>
-          <Route exact path="/restaurants"> {/* Changed path to /restaurants */}
-            <RestaurantPage /> {/* Render RestaurantPage */}
+          <Route exact path="/restaurants">
+            <RestaurantPage />
           </Route>
           <Route path="/messages">
             <MessagesPage />
@@ -69,6 +70,9 @@ const App: React.FC = () => (
           <Route exact path="/dish/:id">
             <DishDetailPage />
           </Route>
+          <Route exact path="/restaurant/:id"> {/* Added route for RestaurantDetailPage */}
+            <RestaurantDetailPage />
+          </Route>
           <Route exact path="/">
             <Redirect to="/dishes" />
           </Route>
@@ -78,9 +82,9 @@ const App: React.FC = () => (
             <IonIcon aria-hidden="true" icon={restaurant} />
             <IonLabel>Dishes</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="restaurants" href="/restaurants"> {/* Changed tab and href */}
-            <IonIcon aria-hidden="true" icon={business} /> {/* Changed icon */}
-            <IonLabel>Restaurants</IonLabel> {/* Changed label */}
+          <IonTabButton tab="restaurants" href="/restaurants">
+            <IonIcon aria-hidden="true" icon={business} />
+            <IonLabel>Restaurants</IonLabel>
           </IonTabButton>
           <IonTabButton tab="messages" href="/messages">
             <IonIcon aria-hidden="true" icon={mail} />

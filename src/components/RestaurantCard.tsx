@@ -34,7 +34,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) =>
   };
 
   return (
-    <div onClick={() => onClick(restaurant.id)}>
+    <div onClick={() => onClick(restaurant.id)}> {/* Call onClick with restaurant ID */}
       <IonCard className="restaurant-card">
         {restaurant.imageUrls.length > 0 && (
             <Swiper

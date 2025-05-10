@@ -21,7 +21,7 @@ const RestaurantPage: React.FC = () => {
     const lowercasedFilter = searchText.toLowerCase();
     const filteredData = restaurants.filter(restaurant => {
       return restaurant.name.toLowerCase().includes(lowercasedFilter) ||
-             restaurant.tags.some(tag => tag.toLowerCase().includes(lowercasedFilter));
+             restaurant.cuisine.some(tag => tag.toLowerCase().includes(lowercasedFilter)); // Filter by cuisine
     });
     setFilteredRestaurants(filteredData);
   }, [searchText, restaurants]);
@@ -35,7 +35,7 @@ const RestaurantPage: React.FC = () => {
       setFilteredRestaurants(newMockRestaurants.filter(restaurant => { // Re-apply filter if searchText exists
         const lowercasedFilter = searchText.toLowerCase();
         return restaurant.name.toLowerCase().includes(lowercasedFilter) ||
-               restaurant.tags.some(tag => tag.toLowerCase().includes(lowercasedFilter));
+               restaurant.cuisine.some(tag => tag.toLowerCase().includes(lowercasedFilter));
       }));
       console.log('Async operation has ended');
       event.detail.complete();
@@ -43,9 +43,7 @@ const RestaurantPage: React.FC = () => {
   };
 
   const handleRestaurantCardClick = (restaurantId: string) => {
-    // Implement navigation to a restaurant detail page if needed later
-    console.log(`Clicked on restaurant with ID: ${restaurantId}`);
-    // router.push(`/restaurant/${restaurantId}`); // Example navigation
+    router.push(`/restaurant/${restaurantId}`); // Navigate to the restaurant detail page
   };
 
   return (
@@ -58,7 +56,7 @@ const RestaurantPage: React.FC = () => {
           <IonSearchbar
             value={searchText}
             onIonInput={(e) => setSearchText(e.detail.value!)}
-            placeholder="Search restaurants or tags"
+            placeholder="Search restaurants or cuisine" // Updated placeholder
             debounce={300}
           ></IonSearchbar>
         </IonToolbar>

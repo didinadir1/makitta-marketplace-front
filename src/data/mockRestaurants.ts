@@ -7,6 +7,7 @@ export interface Restaurant {
   status: 'Open' | 'Closed'; // Replaced deliveryTime with status
   imageUrls: string[]; // Changed to array for multiple images
   description: string; // Added description
+  dishIds: string[]; // Added list of dish IDs
 }
 
 export const mockRestaurants: Restaurant[] = [
@@ -22,7 +23,8 @@ export const mockRestaurants: Restaurant[] = [
       '/food2.jpeg',
       '/food3.jpeg',
     ],
-    description: 'Serving authentic Neapolitan pizzas and classic Italian pasta dishes in a cozy atmosphere.', // Added description
+    description: 'Serving authentic Neapolitan pizzas and classic Italian pasta dishes in a cozy atmosphere.',
+    dishIds: ['1', '2'], // Linked to Spaghetti Carbonara and Margherita Pizza
   },
   {
     id: 'r2',
@@ -36,6 +38,7 @@ export const mockRestaurants: Restaurant[] = [
       '/food1.jpeg',
     ],
     description: 'Freshly prepared sushi and sashimi with a wide selection of rolls and Japanese appetizers.',
+    dishIds: ['3'], // Linked to Sushi Platter
   },
   {
     id: 'r3',
@@ -49,6 +52,7 @@ export const mockRestaurants: Restaurant[] = [
       '/food1.jpeg',
     ],
     description: 'Classic American burgers, fries, and shakes made with high-quality ingredients.',
+    dishIds: ['4'], // Linked to Chicken Burger
   },
   {
     id: 'r4',
@@ -62,6 +66,7 @@ export const mockRestaurants: Restaurant[] = [
       '/food3.jpeg',
     ],
     description: 'Fresh and healthy salads, bowls, and smoothies for a nutritious meal.',
+    dishIds: ['5'], // Linked to Caesar Salad
   },
   {
     id: 'r5',
@@ -75,5 +80,6 @@ export const mockRestaurants: Restaurant[] = [
       '/food2.jpeg',
     ],
     description: 'Authentic Mexican street tacos, burritos, and quesadillas with homemade salsas.',
+    dishIds: [], // No dishes linked for this example
   },
 ];
