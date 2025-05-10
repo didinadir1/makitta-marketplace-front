@@ -38,7 +38,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick }) => { // Destructur
     <div onClick={() => onClick(dish.id)}> {/* Wrap with a clickable div */}
       <IonCard className="dish-card">
         {dish.imageUrls.length > 0 && (
-          <div>
+          <div className="dish-image-slider-container"> {/* Container for slider */}
           <Swiper
             modules={[Pagination]}
             pagination={{clickable: true}}
@@ -58,7 +58,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick }) => { // Destructur
             <IonCardTitle>{dish.name}</IonCardTitle>
             <IonBadge color="success" className="dish-price">{dish.price}</IonBadge>
           </div>
-          <div className="dish-rating">
+          <div className="dish-rating"> {/* Keep this structure for styling */}
             {renderRatingStars(dish.rating)}
             <span className="rating-text">({dish.rating.toFixed(1)})</span>
           </div>
