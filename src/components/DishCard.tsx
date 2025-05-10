@@ -57,30 +57,34 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
             <IonCardTitle>{dish.name}</IonCardTitle>
             <IonBadge color="success" className="dish-price">{dish.price}</IonBadge>
           </div>
-          <div className="dish-rating"> {/* Keep this structure for styling */}
-            {renderRatingStars(dish.rating)}
-            <span className="rating-text">({dish.rating.toFixed(1)})</span>
-          </div>
+          {!isCompact && ( // Conditionally hide rating in compact mode
+            <div className="dish-rating"> {/* Keep this structure for styling */}
+              {renderRatingStars(dish.rating)}
+              <span className="rating-text">({dish.rating.toFixed(1)})</span>
+            </div>
+          )}
         </IonCardHeader>
-        <IonCardContent>
-          <div className="dish-tags">
-            {dish.tags.map((tag, index) => (
-              <IonChip key={index} outline={true} color="primary">
-                {tag}
-              </IonChip>
-            ))}
-          </div>
-          <div className="dish-info">
-            <div className="info-item">
-              <IonIcon icon={locationOutline} slot="start" color="medium" />
-              <span>{dish.distance}</span>
+        {!isCompact && ( // Conditionally hide content in compact mode
+          <IonCardContent>
+            <div className="dish-tags">
+              {dish.tags.map((tag, index) => (
+                <IonChip key={index} outline={true} color="primary">
+                  {tag}
+                </IonChip>
+              ))}
             </div>
-            <div className="info-item">
-              <IonIcon icon={timeOutline} slot="start" color="medium" />
-              <span>{dish.timeToReady}</span>
+            <div className="dish-info">
+              <div className="info-item">
+                <IonIcon icon={locationOutline} slot="start" color="medium" />
+                <span>{dish.distance}</span>
+              </div>
+              <div className="info-item">
+                <IonIcon icon={timeOutline} slot="start" color="medium" />
+                <span>{dish.timeToReady}</span>
+              </div>
             </div>
-          </div>
-        </IonCardContent>
+          </IonCardContent>
+        )}
       </IonCard>
     </div>
   );

@@ -144,6 +144,8 @@
   border-radius: 8px; /* Slightly less rounded */
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* Lighter shadow */
   width: 100%; /* Ensure card takes full width of its slide */
+  display: flex; /* Use flexbox for internal layout */
+  flex-direction: column; /* Stack content vertically */
 }
 
 .dish-card.compact .dish-slides {
@@ -166,57 +168,36 @@
 
 .dish-card.compact ion-card-header {
   padding: 8px 10px 4px 10px; /* Reduced padding */
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .dish-card.compact .dish-title-price {
-  margin-bottom: 3px; /* Reduced space */
+  margin-bottom: 0; /* Remove bottom margin */
+  flex-direction: column; /* Stack title and price vertically */
+  align-items: flex-start; /* Align items to the start */
 }
 
 .dish-card.compact .dish-title-price ion-card-title {
   font-size: 1em; /* Smaller title */
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add ellipsis */
+  width: 100%; /* Ensure it takes full width */
 }
 
 .dish-card.compact .dish-price {
   font-size: 0.8em; /* Smaller price */
-  padding: 3px 6px;
-  min-width: 40px;
+  padding: 2px 5px; /* Reduced padding */
+  min-width: auto; /* Allow width to be determined by content */
+  align-self: flex-end; /* Align price to the end */
+  margin-top: 4px; /* Space between title and price */
 }
 
-.dish-card.compact .dish-rating {
-  margin-bottom: 5px; /* Reduced space */
-}
-
-.dish-card.compact .dish-rating ion-icon {
-  font-size: 0.9em; /* Smaller stars */
-}
-
-.dish-card.compact .dish-rating .rating-text {
-  font-size: 0.8em; /* Smaller rating text */
-}
-
+.dish-card.compact .dish-rating,
 .dish-card.compact ion-card-content {
-  padding: 0 10px 8px 10px; /* Reduced padding */
+  display: none; /* Hide rating and content in compact mode */
 }
 
-.dish-card.compact .dish-tags {
-  margin-bottom: 8px; /* Reduced space */
-  gap: 3px; /* Reduced gap */
-}
-
-.dish-card.compact .dish-tags ion-chip {
-  font-size: 0.7em; /* Smaller chips */
-  padding: 3px 6px;
-  border-radius: 10px;
-}
-
-.dish-card.compact .dish-info {
-  gap: 10px; /* Reduced gap */
-  font-size: 0.8em; /* Smaller info text */
-}
-
-.dish-card.compact .dish-info .info-item ion-icon {
-  font-size: 0.9em; /* Smaller icons */
-}
 
 /* Swiper pagination styling for compact DishCard */
 .dish-card.compact .swiper-pagination {
@@ -224,12 +205,18 @@
 }
 
 .dish-card.compact .swiper-pagination-bullet {
+  background: var(--ion-color-light); /* Use a light color for visibility on images */
+  opacity: 0.8;
   width: 6px; /* Smaller bullets */
   height: 6px;
   margin: 0 3px; /* Reduced space */
+  border-radius: 50%;
+  transition: opacity 0.3s ease;
 }
 
 .dish-card.compact .swiper-pagination-bullet-active {
+  background: var(--ion-color-light);
+  opacity: 1;
   width: 8px; /* Slightly larger active bullet */
   height: 8px;
 }
