@@ -143,12 +143,26 @@
   margin: 0; /* Remove margin when in compact mode */
   border-radius: 8px; /* Slightly less rounded */
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* Lighter shadow */
+  width: 100%; /* Ensure card takes full width of its slide */
 }
 
 .dish-card.compact .dish-slides {
   width: 100%;
-  height: 120px; /* Smaller height for compact cards */
+  /* Use padding-top trick for square aspect ratio */
+  padding-top: 100%; /* Makes the height equal to the width */
+  height: 0; /* Reset height */
+  position: relative; /* Needed for absolute positioning of image */
 }
+
+.dish-card.compact .dish-image {
+  position: absolute; /* Position image absolutely within the padded container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 
 .dish-card.compact ion-card-header {
   padding: 8px 10px 4px 10px; /* Reduced padding */
