@@ -143,4 +143,11 @@
   line-height: 1.5;
   color: var(--ion-color-dark-tint);
   margin: 0;
+
+  /* Limit to two lines and add ellipsis */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
