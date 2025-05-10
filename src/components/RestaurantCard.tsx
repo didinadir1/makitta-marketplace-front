@@ -1,9 +1,9 @@
 import React from 'react';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, IonChip, IonIcon, IonBadge } from '@ionic/react';
-import { star, starHalf, locationOutline, timeOutline, businessOutline } from 'ionicons/icons';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules'; // Import Pagination module
-import { Restaurant } from '../data/mockRestaurants';
+import {IonCard, IonCardContent, IonCardTitle, IonChip, IonIcon, IonImg} from '@ionic/react';
+import {businessOutline, locationOutline, star, starHalf} from 'ionicons/icons';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Pagination} from 'swiper/modules'; // Import Pagination module
+import {Restaurant} from '../data/mockRestaurants';
 import './RestaurantCard.css';
 import 'swiper/css'; // Import Swiper core styles
 import 'swiper/css/pagination'; // Import Swiper pagination styles
@@ -15,20 +15,20 @@ interface RestaurantCardProps {
   onClick: (restaurantId: string) => void;
 }
 
-const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick }) => {
+const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) => {
   const renderRatingStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
 
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<IonIcon key={`full-${i}`} icon={star} color="warning" />);
+      stars.push(<IonIcon key={`full-${i}`} icon={star} color="warning"/>);
     }
     if (hasHalfStar) {
-      stars.push(<IonIcon key="half" icon={starHalf} color="warning" />);
+      stars.push(<IonIcon key="half" icon={starHalf} color="warning"/>);
     }
     for (let i = (fullStars + (hasHalfStar ? 1 : 0)); i < 5; i++) {
-      stars.push(<IonIcon key={`empty-${i}`} icon={star} style={{ color: 'var(--ion-color-medium-shade)' }} />);
+      stars.push(<IonIcon key={`empty-${i}`} icon={star} style={{color: 'var(--ion-color-medium-shade)'}}/>);
     }
     return stars;
   };
@@ -40,14 +40,14 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick }) 
           <div className="restaurant-image-slider-container"> {/* Container for slider */}
             <Swiper
               modules={[Pagination]}
-              pagination={{ clickable: true }}
+              pagination={{clickable: true}}
               initialSlide={0}
               speed={400}
               className="restaurant-slides"
             >
               {restaurant.imageUrls.map((url, index) => (
                 <SwiperSlide key={index}>
-                  <IonImg src={url} alt={`${restaurant.name} image ${index + 1}`} className="restaurant-image" />
+                  <IonImg src={url} alt={`${restaurant.name} image ${index + 1}`} className="restaurant-image"/>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -65,11 +65,11 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick }) 
 
           <div className="restaurant-meta-info">
             <div className="info-item">
-              <IonIcon icon={locationOutline} slot="start" color="medium" />
+              <IonIcon icon={locationOutline} slot="start" color="medium"/>
               <span>{restaurant.distance}</span>
             </div>
             <div className={`info-item restaurant-status ${restaurant.status.toLowerCase()}`}>
-              <IonIcon icon={businessOutline} slot="start" color="medium" />
+              <IonIcon icon={businessOutline} slot="start" color="medium"/>
               <span>{restaurant.status}</span>
             </div>
           </div>

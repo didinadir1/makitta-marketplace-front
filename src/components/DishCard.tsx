@@ -2,8 +2,11 @@ import React from 'react';
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, IonChip, IonIcon, IonBadge } from '@ionic/react';
 import { star, starHalf, locationOutline, timeOutline } from 'ionicons/icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import {Pagination} from "swiper/modules"; // Import Pagination module
 import { Dish } from '../data/mockDishes'; // Assuming mockDishes.ts is in src/data
 import './DishCard.css';
+import 'swiper/css'; // Import Swiper core styles
+import 'swiper/css/pagination'; // Import Swiper pagination styles
 import '@ionic/react/css/ionic-swiper.css';
 
 
@@ -35,13 +38,20 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick }) => { // Destructur
     <div onClick={() => onClick(dish.id)}> {/* Wrap with a clickable div */}
       <IonCard className="dish-card">
         {dish.imageUrls.length > 0 && (
-          <Swiper pagination={dish.imageUrls.length > 1} initialSlide={0} speed={400}  className="dish-slides">
+          <div>
+          <Swiper
+            modules={[Pagination]}
+            pagination={{clickable: true}}
+            initialSlide={0}
+            speed={400}
+            className="dish-slides">
             {dish.imageUrls.map((url, index) => (
               <SwiperSlide key={index}>
                 <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-image" />
               </SwiperSlide>
             ))}
           </Swiper>
+          </div>
         )}
         <IonCardHeader>
           <div className="dish-title-price">

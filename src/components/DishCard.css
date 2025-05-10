@@ -1,121 +1,122 @@
 /* Styles for the Dish Card component */
 
 .dish-card {
-  margin: 10px 0; /* Adjust margin as needed */
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Ensure image corners are rounded with the card */
+    margin: 10px 0; /* Adjust margin as needed */
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensure image corners are rounded with the card */
 }
 
 .dish-slides {
-  width: 100%;
-  height: 180px; /* Fixed height for images, matching RestaurantCard */
+    width: 100%;
+    height: 180px; /* Fixed height for images, matching RestaurantCard */
 }
 
 .dish-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Cover the area without distortion */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area without distortion */
 }
 
 /* Swiper pagination styling for DishCard */
 .dish-slides .swiper-pagination {
-  bottom: 10px !important; /* Position pagination inside the image area */
+    bottom: 10px !important; /* Position pagination inside the image area */
 }
 
 .dish-slides .swiper-pagination-bullet {
-  background: var(--ion-color-light); /* Use a light color for visibility on images */
-  opacity: 0.7;
+    background: var(--ion-color-light); /* Use a light color for visibility on images */
+    opacity: 0.7;
 }
 
 .dish-slides .swiper-pagination-bullet-active {
-  background: var(--ion-color-light);
-  opacity: 1;
+    background: var(--ion-color-light);
+    opacity: 1;
 }
 
 
 .dish-card ion-card-header {
-  padding: 12px 16px 8px 16px; /* Adjust padding */
+    padding: 12px 16px 8px 16px; /* Adjust padding */
+    gap: 5px;
 }
 
 .dish-title-price {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .dish-title-price ion-card-title {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: var(--ion-color-dark);
-  margin: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--ion-color-dark);
+    margin: 0;
 }
 
 .dish-price {
-  font-size: 1em; /* Adjusted font size */
-  font-weight: bold;
-  padding: 4px 8px; /* Adjusted padding */
-  border-radius: 15px; /* Adjusted border radius */
-  --background: var(--ion-color-success);
-  --color: var(--ion-color-success-contrast);
-  display: flex; /* Use flexbox for centering */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  min-width: 50px; /* Ensure minimum width for centering */
+    font-size: 1em; /* Adjusted font size */
+    font-weight: bold;
+    padding: 4px 8px; /* Adjusted padding */
+    border-radius: 15px; /* Adjusted border radius */
+    --background: var(--ion-color-success);
+    --color: var(--ion-color-success-contrast);
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-width: 50px; /* Ensure minimum width for centering */
 }
 
 
 .dish-rating {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .dish-rating ion-icon {
-  font-size: 1em;
+    font-size: 1em;
 }
 
 .dish-rating .rating-text {
-  margin-left: 4px;
-  font-size: 0.85em;
-  color: var(--ion-color-medium);
+    margin-left: 4px;
+    font-size: 0.85em;
+    color: var(--ion-color-medium);
 }
 
 .dish-card ion-card-content {
-  padding: 0 16px 12px 16px; /* Adjust padding */
+    padding: 0 16px 12px 16px; /* Adjust padding */
 }
 
 .dish-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px; /* Space between chips */
-  margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* Space between chips */
+    margin-bottom: 10px;
 }
 
 .dish-tags ion-chip {
-  --background: var(--ion-color-primary-tint);
-  --color: var(--ion-color-primary-contrast);
-  font-size: 0.8em;
-  padding: 4px 8px;
-  height: auto;
-  border-radius: 12px;
+    --background: var(--ion-color-primary-tint);
+    --color: var(--ion-color-primary-contrast);
+    font-size: 0.8em;
+    padding: 4px 8px;
+    height: auto;
+    border-radius: 12px;
 }
 
 .dish-info {
-  display: flex;
-  gap: 15px; /* Space between info items */
-  flex-wrap: wrap;
-  font-size: 0.9em;
-  color: var(--ion-color-dark-tint);
+    display: flex;
+    gap: 15px; /* Space between info items */
+    flex-wrap: wrap;
+    font-size: 0.9em;
+    color: var(--ion-color-dark-tint);
 }
 
 .dish-info .info-item {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .dish-info .info-item ion-icon {
-  margin-right: 4px;
-  font-size: 1em;
-  color: var(--ion-color-medium);
+    margin-right: 4px;
+    font-size: 1em;
+    color: var(--ion-color-medium);
 }
