@@ -1,0 +1,35 @@
+/* Styles for the Restaurant Page */
+
+/* Ensure search bar in the header is sticky on iOS */
+ion-header ion-toolbar:nth-child(2) {
+  --background: var(--ion-color-light); /* Or your preferred background */
+}
+
+/* Add some padding to the list of restaurants */
+.restaurant-list {
+  padding: 0 16px 16px 16px; /* top right bottom left */
+  background: transparent; /* Ensure list background doesn't obscure page background */
+}
+
+/* Remove default list styling if it interferes */
+.restaurant-list ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: transparent;
+}
+
+/* Styling for when no results are found */
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: var(--ion-color-medium-shade);
+}
+
+.no-results p {
+  font-size: 1.1em;
+}
+
+/* Optional: Style for the condensed header title */
+ion-header[collapse="condense"] ion-toolbar ion-title {
+  padding-left: 16px; /* Align with content padding */
+}
