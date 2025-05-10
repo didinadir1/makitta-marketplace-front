@@ -167,21 +167,43 @@ ion-content {
 .dishes-swiper-container {
   width: 100%;
   overflow: hidden; /* Hide overflow for horizontal scrolling */
-}
-
-.dishes-swiper {
   padding-bottom: 10px; /* Add padding for potential scrollbar */
 }
 
+.dishes-swiper {
+  /* No specific styles needed here, Swiper handles the layout */
+}
+
 .dish-swiper-slide {
-  width: 250px; /* Fixed width for each dish card in the horizontal list */
+  width: 150px !important; /* Smaller fixed width for each dish card */
   flex-shrink: 0; /* Prevent shrinking */
+  height: auto; /* Allow height to adjust based on content */
 }
 
 /* Adjust DishCard margin within the horizontal list */
 .dish-swiper-slide .dish-card {
   margin: 0; /* Remove vertical margin */
+  height: 100%; /* Make card take full height of slide */
+  display: flex; /* Use flexbox for internal layout */
+  flex-direction: column; /* Stack content vertically */
 }
+
+/* Ensure content within compact dish card fits */
+.dish-swiper-slide .dish-card .dish-slides {
+  height: 100px; /* Smaller image height for compact cards */
+}
+
+.dish-swiper-slide .dish-card ion-card-header {
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.dish-swiper-slide .dish-card ion-card-content {
+  flex-grow: 1; /* Allow content to take remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribute space */
+}
+
 
 /* Optional: Style for reviews section if added later */
 /* .restaurant-detail-reviews-section {

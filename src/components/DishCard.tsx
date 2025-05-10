@@ -13,9 +13,10 @@ import '@ionic/react/css/ionic-swiper.css';
 interface DishCardProps {
   dish: Dish;
   onClick: (dishId: string) => void; // Added onClick prop
+  isCompact?: boolean; // Added prop for compact styling
 }
 
-const DishCard: React.FC<DishCardProps> = ({ dish, onClick }) => { // Destructure onClick
+const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false }) => { // Destructure and provide default
   const renderRatingStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -36,7 +37,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick }) => { // Destructur
 
   return (
     <div onClick={() => onClick(dish.id)}> {/* Wrap with a clickable div */}
-      <IonCard className="dish-card">
+      <IonCard className={`dish-card ${isCompact ? 'compact' : ''}`}> {/* Apply compact class */}
         {dish.imageUrls.length > 0 && (
           <Swiper
             modules={[Pagination]}
