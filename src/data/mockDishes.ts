@@ -28,8 +28,8 @@ export const mockDishes: Dish[] = [
     distance: '1.2 miles',
     timeToReady: '25-35 min',
     imageUrls: [
-      'https://via.placeholder.com/300x200/FFC107/000000?Text=Carbonara+1',
-      'https://via.placeholder.com/300x200/FF9800/000000?Text=Carbonara+2',
+      '/food1.jpeg',
+      '/food2.jpeg',
     ],
     description: 'A classic Italian pasta dish from Rome made with egg, hard cheese, cured pork, and black pepper.',
     reviews: [
@@ -46,9 +46,9 @@ export const mockDishes: Dish[] = [
     distance: '0.8 miles',
     timeToReady: '20-30 min',
     imageUrls: [
-      'https://via.placeholder.com/300x200/4CAF50/FFFFFF?Text=Pizza+1',
-      'https://via.placeholder.com/300x200/8BC34A/FFFFFF?Text=Pizza+2',
-      'https://via.placeholder.com/300x200/CDDC39/000000?Text=Pizza+3',
+      '/food1.jpeg',
+      '/food2.jpeg',
+      '/food3.jpeg',
     ],
     description: 'A traditional Neapolitan pizza topped with San Marzano tomatoes, fresh mozzarella cheese, fresh basil, salt, and extra-virgin olive oil.',
     reviews: [
@@ -65,7 +65,7 @@ export const mockDishes: Dish[] = [
     distance: '2.5 miles',
     timeToReady: '30-40 min',
     imageUrls: [
-      'https://via.placeholder.com/300x200/E91E63/FFFFFF?Text=Sushi+1',
+      '/food1.jpeg',
     ],
     description: 'A selection of fresh and expertly prepared sushi and sashimi.',
     reviews: [
@@ -82,8 +82,8 @@ export const mockDishes: Dish[] = [
     distance: '0.5 miles',
     timeToReady: '15-25 min',
     imageUrls: [
-      'https://via.placeholder.com/300x200/9C27B0/FFFFFF?Text=Burger+1',
-      'https://via.placeholder.com/300x200/673AB7/FFFFFF?Text=Burger+2',
+      '/food1.jpeg',
+      '/food2.jpeg',
     ],
     description: 'A juicy grilled chicken patty served in a bun with lettuce, tomato, and special sauce.',
     reviews: [
@@ -100,7 +100,7 @@ export const mockDishes: Dish[] = [
     distance: '1.0 miles',
     timeToReady: '10-15 min',
     imageUrls: [
-      'https://via.placeholder.com/300x200/00BCD4/FFFFFF?Text=Salad+1',
+      '/food1.jpeg',
     ],
     description: 'Crisp romaine lettuce, croutons, parmesan cheese, and Caesar dressing.',
     reviews: [

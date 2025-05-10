@@ -16,7 +16,7 @@ export const mockRestaurants: Restaurant[] = [
     rating: 4.5,
     distance: '1.2 miles',
     deliveryTime: '25-35 min',
-    imageUrl: 'https://via.placeholder.com/300x200/FF5722/FFFFFF?Text=Pizza+Palace',
+    imageUrl: '/food1.jpeg',
   },
   {
     id: 'r2',
@@ -25,7 +25,7 @@ export const mockRestaurants: Restaurant[] = [
     rating: 4.8,
     distance: '0.8 miles',
     deliveryTime: '20-30 min',
-    imageUrl: 'https://via.placeholder.com/300x200/009688/FFFFFF?Text=Sushi+Spot',
+    imageUrl: '/food2.jpeg',
   },
   {
     id: 'r3',
@@ -34,7 +34,7 @@ export const mockRestaurants: Restaurant[] = [
     rating: 4.0,
     distance: '0.5 miles',
     deliveryTime: '15-25 min',
-    imageUrl: 'https://via.placeholder.com/300x200/795548/FFFFFF?Text=Burger+Joint',
+    imageUrl: '/food3.jpeg',
   },
   {
     id: 'r4',
@@ -43,7 +43,7 @@ export const mockRestaurants: Restaurant[] = [
     rating: 4.3,
     distance: '1.0 miles',
     deliveryTime: '10-15 min',
-    imageUrl: 'https://via.placeholder.com/300x200/8BC34A/FFFFFF?Text=Healthy+Bites',
+    imageUrl: '/food1.jpeg',
   },
   {
     id: 'r5',
@@ -52,6 +52,6 @@ export const mockRestaurants: Restaurant[] = [
     rating: 4.1,
     distance: '1.5 miles',
     deliveryTime: '30-40 min',
-    imageUrl: 'https://via.placeholder.com/300x200/FFC107/000000?Text=Taco+Town',
+    imageUrl: '/food3.jpeg',
   },
 ];
