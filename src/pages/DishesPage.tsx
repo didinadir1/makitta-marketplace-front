@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonSearchbar, IonTitle, IonToolbar, IonList, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonSearchbar, IonTitle, IonToolbar, IonList, IonRefresher, IonRefresherContent, RefresherEventDetail, useIonRouter } from '@ionic/react';
 import { chevronDownCircleOutline } from 'ionicons/icons';
 import React, { useState, useEffect } from 'react';
 import DishCard from '../components/DishCard';
@@ -7,8 +7,10 @@ import './DishesPage.css';
 
 const DishesPage: React.FC = () => {
   const [searchText, setSearchText] = useState('');
-  const [dishes, setDishes] = useState<Dish[]>([]);
+  const [dishes, setDishes] = useState<Dish[]>([]
+  );
   const [filteredDishes, setFilteredDishes] = useState<Dish[]>([]);
+  const router = useIonRouter(); // Get the router hook
 
   useEffect(() => {
     // Simulate fetching data
@@ -41,6 +43,10 @@ const DishesPage: React.FC = () => {
     }, 2000);
   };
 
+  const handleDishCardClick = (dishId: string) => {
+    router.push(`/dish/${dishId}`); // Navigate to the dish detail page
+  };
+
   return (
     <IonPage>
       <IonHeader translucent={true}>
@@ -68,7 +74,7 @@ const DishesPage: React.FC = () => {
         <IonList className="dish-list">
           {filteredDishes.length > 0 ? (
             filteredDishes.map(dish => (
-              <DishCard key={dish.id} dish={dish} />
+              <DishCard key={dish.id} dish={dish} onClick={handleDishCardClick} /> // Pass the click handler
             ))
           ) : (
             <div className="no-results">

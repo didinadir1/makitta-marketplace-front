@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import {Redirect, Route} from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -9,13 +9,13 @@ import {
   IonTabs,
   setupIonicReact
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { restaurant, search, mail, person } from 'ionicons/icons'; // Changed home to restaurant
+import {IonReactRouter} from '@ionic/react-router';
+import {mail, person, restaurant, search} from 'ionicons/icons'; // Changed home to restaurant
 import DishesPage from './pages/DishesPage'; // Import new DishesPage
 import SearchPage from './pages/SearchPage';
 import MessagesPage from './pages/MessagesPage';
 import ProfilePage from './pages/ProfilePage';
-
+import DishDetailPage from './pages/DishDetailPage'; // Import the new DishDetailPage
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -38,7 +38,6 @@ import '@ionic/react/css/display.css';
  * For more info, please see:
  * https://ionicframework.com/docs/theming/dark-mode
  */
-
 /* import '@ionic/react/css/palettes/dark.always.css'; */
 /* import '@ionic/react/css/palettes/dark.class.css'; */
 import '@ionic/react/css/palettes/dark.system.css';
@@ -54,36 +53,39 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route exact path="/dishes"> {/* Changed path to /dishes */}
-            <DishesPage />
+            <DishesPage/>
           </Route>
           <Route exact path="/search">
-            <SearchPage />
+            <SearchPage/>
           </Route>
           <Route path="/messages">
-            <MessagesPage />
+            <MessagesPage/>
           </Route>
           <Route path="/profile">
-            <ProfilePage />
+            <ProfilePage/>
+          </Route>
+          <Route exact path="/dish/:id">
+            <DishDetailPage/>
           </Route>
           <Route exact path="/">
-            <Redirect to="/dishes" /> {/* Changed redirect to /dishes */}
+            <Redirect to="/dishes"/> {/* Changed redirect to /dishes */}
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="dishes" href="/dishes"> {/* Changed tab and href */}
-            <IonIcon aria-hidden="true" icon={restaurant} /> {/* Changed icon */}
+            <IonIcon aria-hidden="true" icon={restaurant}/> {/* Changed icon */}
             <IonLabel>Dishes</IonLabel> {/* Changed label */}
           </IonTabButton>
           <IonTabButton tab="search" href="/search">
-            <IonIcon aria-hidden="true" icon={search} />
+            <IonIcon aria-hidden="true" icon={search}/>
             <IonLabel>Search</IonLabel>
           </IonTabButton>
           <IonTabButton tab="messages" href="/messages">
-            <IonIcon aria-hidden="true" icon={mail} />
+            <IonIcon aria-hidden="true" icon={mail}/>
             <IonLabel>Messages</IonLabel>
           </IonTabButton>
           <IonTabButton tab="profile" href="/profile">
-            <IonIcon aria-hidden="true" icon={person} />
+            <IonIcon aria-hidden="true" icon={person}/>
             <IonLabel>Profile</IonLabel>
           </IonTabButton>
         </IonTabBar>

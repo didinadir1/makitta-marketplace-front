@@ -57,6 +57,7 @@ ion-content {
   align-items: center;
   margin-bottom: 12px; /* Increased space */
   flex-wrap: wrap; /* Allow wrapping */
+  gap: 10px;
 }
 
 .dish-detail-name {
