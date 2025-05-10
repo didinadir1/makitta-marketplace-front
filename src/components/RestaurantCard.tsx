@@ -37,7 +37,6 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) =>
     <div onClick={() => onClick(restaurant.id)}>
       <IonCard className="restaurant-card">
         {restaurant.imageUrls.length > 0 && (
-          <div className="restaurant-image-slider-container"> {/* Container for slider */}
             <Swiper
               modules={[Pagination]}
               pagination={{clickable: true}}
@@ -51,7 +50,6 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) =>
                 </SwiperSlide>
               ))}
             </Swiper>
-          </div>
         )}
 
         <IonCardContent className="restaurant-card-content"> {/* Content area below image */}
