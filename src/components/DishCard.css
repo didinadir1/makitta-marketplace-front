@@ -146,6 +146,7 @@
   width: 100%; /* Ensure card takes full width of its slide */
   display: flex; /* Use flexbox for internal layout */
   flex-direction: column; /* Stack content vertically */
+  background: var(--ion-color-step-50, #f2f2f2); /* Add a subtle background */
 }
 
 .dish-card.compact .dish-slides {
@@ -154,6 +155,9 @@
   padding-top: 100%; /* Makes the height equal to the width */
   height: 0; /* Reset height */
   position: relative; /* Needed for absolute positioning of image */
+  overflow: hidden; /* Hide overflow */
+  border-top-left-radius: 8px; /* Match card border radius */
+  border-top-right-radius: 8px;
 }
 
 .dish-card.compact .dish-image {
@@ -183,6 +187,8 @@
   overflow: hidden; /* Hide overflow */
   text-overflow: ellipsis; /* Add ellipsis */
   width: 100%; /* Ensure it takes full width */
+  font-weight: normal; /* Less bold title */
+  color: var(--ion-color-dark);
 }
 
 .dish-card.compact .dish-price {
@@ -191,6 +197,8 @@
   min-width: auto; /* Allow width to be determined by content */
   align-self: flex-end; /* Align price to the end */
   margin-top: 4px; /* Space between title and price */
+  --background: var(--ion-color-success-tint); /* Lighter success color */
+  --color: var(--ion-color-success-contrast);
 }
 
 .dish-card.compact .dish-rating,

@@ -41,7 +41,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
         {dish.imageUrls.length > 0 && (
           <Swiper
             modules={[Pagination]}
-            pagination={true}
+            pagination={!isCompact ? true : false} // Only show pagination in non-compact mode
             initialSlide={0}
             speed={400}
             className="dish-slides">
@@ -57,14 +57,14 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
             <IonCardTitle>{dish.name}</IonCardTitle>
             <IonBadge color="success" className="dish-price">{dish.price}</IonBadge>
           </div>
-          {!isCompact && ( // Conditionally hide rating in compact mode
+          {!isCompact && ( // Conditionally hide rating in non-compact mode
             <div className="dish-rating"> {/* Keep this structure for styling */}
               {renderRatingStars(dish.rating)}
               <span className="rating-text">({dish.rating.toFixed(1)})</span>
             </div>
           )}
         </IonCardHeader>
-        {!isCompact && ( // Conditionally hide content in compact mode
+        {!isCompact && ( // Conditionally hide content in non-compact mode
           <IonCardContent>
             <div className="dish-tags">
               {dish.tags.map((tag, index) => (
