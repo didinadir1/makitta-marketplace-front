@@ -24,7 +24,7 @@ export const mockRestaurants: Restaurant[] = [
       '/food3.jpeg',
     ],
     description: 'Serving authentic Neapolitan pizzas and classic Italian pasta dishes in a cozy atmosphere.',
-    dishIds: ['1', '2'], // Linked to Spaghetti Carbonara and Margherita Pizza
+    dishIds: ['1', '2', '6', '7', '8'], // 5 dishes
   },
   {
     id: 'r2',
@@ -38,7 +38,7 @@ export const mockRestaurants: Restaurant[] = [
       '/food1.jpeg',
     ],
     description: 'Freshly prepared sushi and sashimi with a wide selection of rolls and Japanese appetizers.',
-    dishIds: ['3'], // Linked to Sushi Platter
+    dishIds: ['3', '9', '10', '11'], // 4 dishes
   },
   {
     id: 'r3',
@@ -52,7 +52,7 @@ export const mockRestaurants: Restaurant[] = [
       '/food1.jpeg',
     ],
     description: 'Classic American burgers, fries, and shakes made with high-quality ingredients.',
-    dishIds: ['4'], // Linked to Chicken Burger
+    dishIds: ['4', '12', '13', '14', '15', '16'], // 6 dishes
   },
   {
     id: 'r4',
@@ -66,7 +66,7 @@ export const mockRestaurants: Restaurant[] = [
       '/food3.jpeg',
     ],
     description: 'Fresh and healthy salads, bowls, and smoothies for a nutritious meal.',
-    dishIds: ['5'], // Linked to Caesar Salad
+    dishIds: ['5', '17', '18'], // 3 dishes
   },
   {
     id: 'r5',
@@ -80,6 +80,6 @@ export const mockRestaurants: Restaurant[] = [
       '/food2.jpeg',
     ],
     description: 'Authentic Mexican street tacos, burritos, and quesadillas with homemade salsas.',
-    dishIds: [], // No dishes linked for this example
+    dishIds: ['19', '20', '21', '22'], // 4 dishes
   },
 ];
