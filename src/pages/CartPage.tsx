@@ -13,14 +13,25 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
+  IonItem, // Import IonItem
 } from '@ionic/react';
 import React from 'react';
 import {useCart} from '../state/cartState'; // Import the cart hook
 import {addOutline, cartOutline, removeOutline, trashOutline} from 'ionicons/icons';
 import './CartPage.css';
+import { useIonRouter } from '@ionic/react-router'; // Import useIonRouter
 
 const CartPage: React.FC = () => {
   const {cartItems, total, addItem, removeItem, updateItemQuantity, clearCart} = useCart();
+  const router = useIonRouter(); // Get the router hook
+
+  // Placeholder for delivery cost - you would likely fetch this dynamically
+  const deliveryCost = 5.00;
+  const finalTotal = total + deliveryCost;
+
+  const handleItemClick = (dishId: string) => {
+    router.push(`/dish/${dishId}`); // Navigate to the dish detail page
+  };
 
   return (
     <IonPage>
@@ -46,30 +57,35 @@ const CartPage: React.FC = () => {
           <>
             <IonList lines="none" className="cart-items-list">
               {cartItems.map(item => (
-                <IonCard key={item.dish.id} className="cart-item-card">
-                  <IonCardContent className="cart-item-content">
-                    {item.dish.imageUrls && item.dish.imageUrls.length > 0 && (
-                      <img src={item.dish.imageUrls[0]} alt={item.dish.name} className="cart-item-image"/>
-                    )}
-                    <div className="item-details">
-                      <IonLabel className="item-name">{item.dish.name}</IonLabel>
-                      <IonText color="medium" className="item-price">
-                        {item.dish.price}
-                      </IonText>
-                    </div>
-                    <div className="item-quantity-controls">
-                      <IonButton fill="clear" size="small"
-                                 onClick={() => updateItemQuantity(item.dish.id, item.quantity - 1)}>
-                        <IonIcon icon={removeOutline}/>
-                      </IonButton>
-                      <IonBadge color="light" className="item-quantity">{item.quantity}</IonBadge>
-                      <IonButton fill="clear" size="small"
-                                 onClick={() => updateItemQuantity(item.dish.id, item.quantity + 1)}>
-                        <IonIcon icon={addOutline}/>
-                      </IonButton>
-                    </div>
-                  </IonCardContent>
-                </IonCard>
+                <IonItem key={item.dish.id} onClick={() => handleItemClick(item.dish.id)} detail={false} className="cart-item-container"> {/* Wrap in IonItem */}
+                  <IonCard className="cart-item-card">
+                    <IonCardContent className="cart-item-content">
+                      {item.dish.imageUrls && item.dish.imageUrls.length > 0 && (
+                        <img src={item.dish.imageUrls[0]} alt={item.dish.name} className="cart-item-image"/>
+                      )}
+                      <div className="item-details">
+                        <IonLabel className="item-name">{item.dish.name}</IonLabel>
+                        <IonText color="medium" className="item-unit-price"> {/* Display unit price */}
+                          Unit Price: {item.dish.price}
+                        </IonText>
+                        <IonText color="dark" className="item-total-price"> {/* Display item total price */}
+                          Total: ${(parseFloat(item.dish.price.replace('$', '')) * item.quantity).toFixed(2)}
+                        </IonText>
+                      </div>
+                      <div className="item-quantity-controls">
+                        <IonButton fill="clear" size="small"
+                                   onClick={(e) => { e.stopPropagation(); updateItemQuantity(item.dish.id, item.quantity - 1); }}> {/* Stop propagation */}
+                          <IonIcon icon={removeOutline}/>
+                        </IonButton>
+                        <IonBadge color="light" className="item-quantity">{item.quantity}</IonBadge>
+                        <IonButton fill="clear" size="small"
+                                   onClick={(e) => { e.stopPropagation(); updateItemQuantity(item.dish.id, item.quantity + 1); }}> {/* Stop propagation */}
+                          <IonIcon icon={addOutline}/>
+                        </IonButton>
+                      </div>
+                    </IonCardContent>
+                  </IonCard>
+                </IonItem>
               ))}
             </IonList>
 
@@ -78,19 +94,22 @@ const CartPage: React.FC = () => {
                 <IonText>Subtotal:</IonText>
                 <IonText>${total.toFixed(2)}</IonText>
               </div>
-              {/* Add other summary rows like delivery fee, tax if needed */}
+              <div className="summary-row"> {/* Delivery Cost Row */}
+                <IonText>Delivery Fee:</IonText>
+                <IonText>${deliveryCost.toFixed(2)}</IonText>
+              </div>
               <div className="summary-row total-row">
                 <IonText color="dark">
-                  <h3>Total:</h3>
+                  <h3>Order Total:</h3> {/* Changed label */}
                 </IonText>
                 <IonText color="dark">
-                  <h3>${total.toFixed(2)}</h3>
+                  <h3>${finalTotal.toFixed(2)}</h3> {/* Display final total */}
                 </IonText>
               </div>
             </div>
 
             <IonButton expand="block" size="large" className="checkout-button">
-              Checkout
+              Checkout (${finalTotal.toFixed(2)}) {/* Update button text */}
             </IonButton>
           </>
         )}
