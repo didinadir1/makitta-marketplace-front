@@ -149,7 +149,7 @@
   background: var(--ion-color-step-50, #f2f2f2); /* Add a subtle background */
 }
 
-.dish-card.compact .dish-slides {
+.dish-card.compact .dish-image-container { /* Use the new container */
   width: 100%;
   /* Use padding-top trick for square aspect ratio */
   padding-top: 100%; /* Makes the height equal to the width */
@@ -208,23 +208,7 @@
 
 
 /* Swiper pagination styling for compact DishCard */
+/* Hide pagination in compact mode */
 .dish-card.compact .swiper-pagination {
-  bottom: 5px !important; /* Lower position for pagination */
-}
-
-.dish-card.compact .swiper-pagination-bullet {
-  background: var(--ion-color-light); /* Use a light color for visibility on images */
-  opacity: 0.8;
-  width: 6px; /* Smaller bullets */
-  height: 6px;
-  margin: 0 3px; /* Reduced space */
-  border-radius: 50%;
-  transition: opacity 0.3s ease;
-}
-
-.dish-card.compact .swiper-pagination-bullet-active {
-  background: var(--ion-color-light);
-  opacity: 1;
-  width: 8px; /* Slightly larger active bullet */
-  height: 8px;
+  display: none;
 }

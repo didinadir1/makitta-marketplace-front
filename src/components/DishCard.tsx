@@ -39,18 +39,9 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
     <div onClick={() => onClick(dish.id)}> {/* Wrap with a clickable div */}
       <IonCard className={`dish-card ${isCompact ? 'compact' : ''}`}> {/* Apply compact class */}
         {dish.imageUrls.length > 0 && (
-          <Swiper
-            modules={[Pagination]}
-            pagination={!isCompact ? true : false} // Only show pagination in non-compact mode
-            initialSlide={0}
-            speed={400}
-            className="dish-slides">
-            {dish.imageUrls.map((url, index) => (
-              <SwiperSlide key={index}>
-                <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-image" />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <div className="dish-image-container"> {/* Use a simple container for compact mode image */}
+             <IonImg src={dish.imageUrls[0]} alt={`${dish.name} image`} className="dish-image" /> {/* Display first image */}
+          </div>
         )}
         <IonCardHeader>
           <div className="dish-title-price">
