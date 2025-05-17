@@ -1,6 +1,6 @@
 import React from 'react';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, IonChip, IonIcon, IonBadge } from '@ionic/react';
-import { star, starHalf, locationOutline, timeOutline } from 'ionicons/icons';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, IonChip, IonIcon, IonBadge, IonButton } from '@ionic/react'; // Import IonButton
+import { star, starHalf, locationOutline, timeOutline, cartOutline } from 'ionicons/icons'; // Import cartOutline icon
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {Pagination} from "swiper/modules"; // Import Pagination module
 import { Dish } from '../data/mockDishes'; // Assuming mockDishes.ts is in src/data
@@ -8,6 +8,8 @@ import './DishCard.css';
 import 'swiper/css'; // Import Swiper core styles
 import 'swiper/css/pagination'; // Import Swiper pagination styles
 import '@ionic/react/css/ionic-swiper.css';
+import { useCart } from '../state/cartState'; // Import the useCart hook
+import { useIonToast } from '@ionic/react'; // Import useIonToast hook
 
 
 interface DishCardProps {
@@ -17,6 +19,9 @@ interface DishCardProps {
 }
 
 const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false }) => { // Destructure and provide default
+  const { addItem } = useCart(); // Use the addItem function from the cart state
+  const [presentToast] = useIonToast(); // Use the useIonToast hook
+
   const renderRatingStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -32,6 +37,17 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
       stars.push(<IonIcon key={`empty-${i}`} icon={star} style={{ color: 'var(--ion-color-medium-shade)' }} />);
     }
     return stars;
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop event propagation to prevent card click
+    addItem(dish); // Add the current dish to the cart
+    presentToast({ // Present the toast
+      message: `${dish.name} added to cart!`,
+      duration: 1500,
+      position: 'bottom',
+      color: 'success',
+    });
   };
 
 
@@ -74,6 +90,14 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
                 <span>{dish.timeToReady}</span>
               </div>
             </div>
+             <IonButton
+                shape="round"
+                size="small"
+                className="add-to-cart-button-card"
+                onClick={handleAddToCart} // Add click handler
+              >
+                <IonIcon icon={cartOutline} slot="icon-only" />
+              </IonButton>
           </IonCardContent>
         )}
       </IonCard>

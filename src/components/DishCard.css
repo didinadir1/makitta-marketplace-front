@@ -101,6 +101,7 @@
 
 .dish-card ion-card-content {
     padding: 0 16px 12px 16px; /* Adjust padding */
+    position: relative; /* Needed for absolute positioning of the button */
 }
 
 .dish-tags {
@@ -137,6 +138,29 @@
     font-size: 1em;
     color: var(--ion-color-medium);
 }
+
+/* Add to Cart Button on Card */
+.add-to-cart-button-card {
+  position: absolute; /* Position absolutely */
+  bottom: 10px; /* Distance from bottom */
+  right: 10px; /* Distance from right */
+  --padding-start: 8px; /* Adjust padding for round button */
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --border-radius: 50%; /* Make it round */
+  height: 40px; /* Fixed height for round button */
+  width: 40px; /* Fixed width for round button */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+  z-index: 5; /* Ensure it's above other content */
+}
+
+.add-to-cart-button-card ion-icon {
+  font-size: 1.3em; /* Icon size */
+}
+
 
 /* --- Compact Styling for Restaurant Detail Page --- */
 .dish-card.compact {
