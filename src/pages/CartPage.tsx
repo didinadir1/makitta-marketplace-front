@@ -14,12 +14,12 @@ import {
   IonTitle,
   IonToolbar,
   IonItem, // Import IonItem
+  useIonRouter
 } from '@ionic/react';
 import React from 'react';
 import {useCart} from '../state/cartState'; // Import the cart hook
 import {addOutline, cartOutline, removeOutline, trashOutline} from 'ionicons/icons';
 import './CartPage.css';
-import { useIonRouter } from '@ionic/react-router'; // Import useIonRouter
 
 const CartPage: React.FC = () => {
   const {cartItems, total, addItem, removeItem, updateItemQuantity, clearCart} = useCart();
