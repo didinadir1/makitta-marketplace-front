@@ -26,6 +26,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import '@ionic/react/css/ionic-swiper.css';
 import './DishDetailPage.css';
+import { useCart } from '../state/cartState'; // Import the useCart hook
 
 interface DishDetailParams {
   id: string;
@@ -34,6 +35,7 @@ interface DishDetailParams {
 const DishDetailPage: React.FC = () => {
   const {id} = useParams<DishDetailParams>();
   const dish = mockDishes.find(d => d.id === id);
+  const { addItem } = useCart(); // Use the addItem function from the cart state
 
   if (!dish) {
     return (
@@ -70,6 +72,12 @@ const DishDetailPage: React.FC = () => {
     return stars;
   };
 
+  const handleAddToCart = () => {
+    addItem(dish); // Add the current dish to the cart
+    // Optionally provide user feedback, e.g., a toast message
+    console.log(`${dish.name} added to cart`);
+  };
+
   return (
     <IonPage>
       <IonHeader translucent={true}>
@@ -92,7 +100,7 @@ const DishDetailPage: React.FC = () => {
             >
               {dish.imageUrls.map((url, index) => (
                 <SwiperSlide key={index}>
-                  <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-detail-image"/>
+                <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-detail-image"/>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -132,7 +140,7 @@ const DishDetailPage: React.FC = () => {
 
           {/* Moved Add to Cart button here */}
           <div className="add-to-cart-section">
-             <IonButton expand="block" size="large" className="add-to-cart-button">
+             <IonButton expand="block" size="large" className="add-to-cart-button" onClick={handleAddToCart}> {/* Added onClick handler */}
                 <IonIcon icon={cartOutline} slot="start" /> {/* Changed icon */}
                 Add to Cart
               </IonButton>

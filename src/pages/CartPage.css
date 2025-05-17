@@ -1,0 +1,130 @@
+/* Styles for the Cart Page */
+
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80%; /* Center in the available space */
+  text-align: center;
+}
+
+.empty-cart ion-icon {
+  font-size: 4em; /* Large icon */
+  margin-bottom: 10px;
+}
+
+.empty-cart ion-text p {
+  font-size: 1.2em;
+}
+
+/* Cart Items List */
+.cart-items-list {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
+.cart-item-card {
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --background: var(--ion-color-step-50, #f2f2f2);
+}
+
+.cart-item-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.cart-item-image {
+  width: 60px; /* Fixed image size */
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 15px;
+  flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.item-details {
+  flex-grow: 1; /* Allow details to take available space */
+  margin-right: 10px;
+}
+
+.item-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+  margin-bottom: 4px;
+}
+
+.item-price {
+  font-size: 0.9em;
+  color: var(--ion-color-medium);
+}
+
+.item-quantity-controls {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Prevent controls from shrinking */
+}
+
+.item-quantity-controls ion-button {
+  --padding-start: 5px;
+  --padding-end: 5px;
+  --min-width: 30px; /* Ensure buttons are clickable */
+}
+
+.item-quantity {
+  margin: 0 8px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  --background: var(--ion-color-light);
+  --color: var(--ion-color-dark);
+}
+
+/* Cart Summary */
+.cart-summary {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid var(--ion-color-step-150, #d9d9d9);
+  border-bottom: 1px solid var(--ion-color-step-150, #d9d9d9);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 1em;
+  color: var(--ion-color-dark-tint);
+}
+
+.summary-row.total-row {
+  margin-top: 15px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+}
+
+.summary-row h3 {
+  margin: 0;
+}
+
+/* Checkout Button */
+.checkout-button {
+  margin-top: 20px;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 10px;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
