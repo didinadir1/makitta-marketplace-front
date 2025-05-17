@@ -12,12 +12,12 @@ import {
   IonToolbar,
   useIonRouter
 } from '@ionic/react';
-import { useParams} from 'react-router'; // Import useIonRouter
+import {useParams} from 'react-router'; // Import useIonRouter
 import {mockRestaurants} from '../data/mockRestaurants';
 import {mockDishes} from '../data/mockDishes'; // Import mock dishes
 import {businessOutline, locationOutline, star, starHalf} from 'ionicons/icons';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {Pagination} from 'swiper/modules';
+import {EffectCards, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import '@ionic/react/css/ionic-swiper.css';
@@ -147,11 +147,14 @@ const RestaurantDetailPage: React.FC = () => {
                 <Swiper
                   slidesPerView={'auto'} // Show as many as fit
                   spaceBetween={15} // Space between dish cards
-                  className="dishes-swiper"
-                >
+                  effect={'cards'}
+                  modules={[EffectCards]}
+                  grabCursor
+                  className="mySwiper">
+
                   {restaurantDishes.map(dish => (
                     <SwiperSlide key={dish.id} className="dish-swiper-slide"> {/* Style individual slides */}
-                      <DishCard dish={dish} onClick={handleDishCardClick} isCompact={true}/> {/* Pass isCompact prop */}
+                      <DishCard dish={dish} onClick={handleDishCardClick} /> {/* Pass isCompact prop */}
                     </SwiperSlide>
                   ))}
                 </Swiper>

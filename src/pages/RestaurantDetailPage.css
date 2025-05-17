@@ -175,9 +175,9 @@ ion-content {
 }
 
 .dish-swiper-slide {
-  width: 160px !important; /* Slightly larger fixed width for each dish card */
+  width: 290px !important; /* Slightly larger fixed width for each dish card */
   flex-shrink: 0; /* Prevent shrinking */
-  height: auto; /* Allow height to adjust based on content */
+  height: 200px; /* Allow height to adjust based on content */
 }
 
 /* Adjust DishCard margin within the horizontal list */
