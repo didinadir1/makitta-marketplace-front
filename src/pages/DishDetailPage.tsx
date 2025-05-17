@@ -16,6 +16,8 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
+  IonToast, // Import IonToast
+  useIonToast, // Import useIonToast hook
 } from '@ionic/react';
 import {useParams} from 'react-router';
 import {mockDishes} from '../data/mockDishes';
@@ -36,6 +38,7 @@ const DishDetailPage: React.FC = () => {
   const {id} = useParams<DishDetailParams>();
   const dish = mockDishes.find(d => d.id === id);
   const { addItem } = useCart(); // Use the addItem function from the cart state
+  const [presentToast] = useIonToast(); // Use the useIonToast hook
 
   if (!dish) {
     return (
@@ -74,8 +77,12 @@ const DishDetailPage: React.FC = () => {
 
   const handleAddToCart = () => {
     addItem(dish); // Add the current dish to the cart
-    // Optionally provide user feedback, e.g., a toast message
-    console.log(`${dish.name} added to cart`);
+    presentToast({ // Present the toast
+      message: `${dish.name} added to cart!`,
+      duration: 1500,
+      position: 'bottom',
+      color: 'success',
+    });
   };
 
   return (

@@ -14,7 +14,8 @@ import {
   IonTitle,
   IonToolbar,
   IonItem, // Import IonItem
-  useIonRouter
+  useIonRouter,
+  useIonAlert, // Import useIonAlert hook
 } from '@ionic/react';
 import React from 'react';
 import {useCart} from '../state/cartState'; // Import the cart hook
@@ -24,6 +25,7 @@ import './CartPage.css';
 const CartPage: React.FC = () => {
   const {cartItems, total, addItem, removeItem, updateItemQuantity, clearCart} = useCart();
   const router = useIonRouter(); // Get the router hook
+  const [presentAlert] = useIonAlert(); // Use the useIonAlert hook
 
   // Placeholder for delivery cost - you would likely fetch this dynamically
   const deliveryCost = 5.00;
@@ -32,6 +34,32 @@ const CartPage: React.FC = () => {
   const handleItemClick = (dishId: string) => {
     router.push(`/dish/${dishId}`); // Navigate to the dish detail page
   };
+
+  const handleUpdateQuantity = (dishId: string, currentQuantity: number, newQuantity: number) => {
+    if (newQuantity <= 0 && currentQuantity === 1) {
+      // If quantity is 1 and user clicks minus, show confirmation dialog
+      presentAlert({
+        header: 'Remove Item',
+        message: 'Are you sure you want to remove this item from your cart?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },
+          {
+            text: 'Remove',
+            handler: () => {
+              removeItem(dishId); // Remove the item if confirmed
+            },
+          },
+        ],
+      });
+    } else {
+      // Otherwise, just update the quantity
+      updateItemQuantity(dishId, newQuantity);
+    }
+  };
+
 
   return (
     <IonPage>
@@ -74,12 +102,12 @@ const CartPage: React.FC = () => {
                       </div>
                       <div className="item-quantity-controls">
                         <IonButton fill="clear" size="small"
-                                   onClick={(e) => { e.stopPropagation(); updateItemQuantity(item.dish.id, item.quantity - 1); }}> {/* Stop propagation */}
+                                   onClick={(e) => { e.stopPropagation(); handleUpdateQuantity(item.dish.id, item.quantity, item.quantity - 1); }}> {/* Use handleUpdateQuantity */}
                           <IonIcon icon={removeOutline}/>
                         </IonButton>
                         <IonBadge color="light" className="item-quantity">{item.quantity}</IonBadge>
                         <IonButton fill="clear" size="small"
-                                   onClick={(e) => { e.stopPropagation(); updateItemQuantity(item.dish.id, item.quantity + 1); }}> {/* Stop propagation */}
+                                   onClick={(e) => { e.stopPropagation(); handleUpdateQuantity(item.dish.id, item.quantity, item.quantity + 1); }}> {/* Use handleUpdateQuantity */}
                           <IonIcon icon={addOutline}/>
                         </IonButton>
                       </div>
