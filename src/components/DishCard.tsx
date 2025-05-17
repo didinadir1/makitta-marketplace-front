@@ -92,7 +92,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
             </div>
              <IonButton
                 shape="round"
-                size="small"
+                size="default"
                 className="add-to-cart-button-card"
                 onClick={handleAddToCart} // Add click handler
               >
