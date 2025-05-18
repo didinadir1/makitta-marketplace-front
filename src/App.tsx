@@ -10,9 +10,9 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { 
-  restaurant, business, person, cart, 
-  gridOutline, fastFoodOutline, receiptOutline, chatbubbleOutline 
+import {
+  restaurant, business, person, cart,
+  grid, fastFood, receipt, chatbubble // Changed to filled icons
 } from 'ionicons/icons'; // Added restaurant mode icons
 import DishesPage from './pages/DishesPage';
 import RestaurantPage from './pages/RestaurantPage';
@@ -63,7 +63,7 @@ setupIonicReact();
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
   const { isRestaurantMode } = useAppMode();
-  
+
   return (
     <IonTabs>
       <IonRouterOutlet>
@@ -77,7 +77,7 @@ const TabsContainer: React.FC = () => {
         <Route exact path="/cart">
           <CartPage />
         </Route>
-        
+
         {/* Restaurant mode routes */}
         <Route exact path="/dashboard">
           <DashboardPage />
@@ -91,7 +91,7 @@ const TabsContainer: React.FC = () => {
         <Route exact path="/messages">
           <MessagesPage />
         </Route>
-        
+
         {/* Common routes */}
         <Route exact path="/profile">
           <ProfilePage />
@@ -99,6 +99,9 @@ const TabsContainer: React.FC = () => {
         <Route exact path="/profile/edit">
           <ProfileEditPage />
         </Route>
+         {/* Dish and Restaurant Detail pages might be needed in both modes,
+             or you might want separate detail pages for restaurant mode.
+             Keeping them outside conditional rendering for now. */}
         <Route exact path="/dish/:id">
           <DishDetailPage />
         </Route>
@@ -109,24 +112,24 @@ const TabsContainer: React.FC = () => {
           <Redirect to={isRestaurantMode() ? "/dashboard" : "/dishes"} />
         </Route>
       </IonRouterOutlet>
-      
+
       {isRestaurantMode() ? (
         // Restaurant mode tabs
         <IonTabBar slot="bottom">
           <IonTabButton tab="dashboard" href="/dashboard">
-            <IonIcon aria-hidden="true" icon={gridOutline} />
+            <IonIcon aria-hidden="true" icon={grid} /> {/* Changed icon */}
             <IonLabel>Dashboard</IonLabel>
           </IonTabButton>
           <IonTabButton tab="products" href="/products">
-            <IonIcon aria-hidden="true" icon={fastFoodOutline} />
+            <IonIcon aria-hidden="true" icon={fastFood} /> {/* Changed icon */}
             <IonLabel>Products</IonLabel>
           </IonTabButton>
           <IonTabButton tab="orders" href="/orders">
-            <IonIcon aria-hidden="true" icon={receiptOutline} />
+            <IonIcon aria-hidden="true" icon={receipt} /> {/* Changed icon */}
             <IonLabel>Orders</IonLabel>
           </IonTabButton>
           <IonTabButton tab="messages" href="/messages">
-            <IonIcon aria-hidden="true" icon={chatbubbleOutline} />
+            <IonIcon aria-hidden="true" icon={chatbubble} /> {/* Changed icon */}
             <IonLabel>Messages</IonLabel>
           </IonTabButton>
           <IonTabButton tab="profile" href="/profile">
