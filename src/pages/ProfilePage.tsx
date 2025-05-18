@@ -1,26 +1,30 @@
 import {
+  IonAvatar,
+  IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
   IonPage,
   IonTitle,
   IonToolbar,
-  IonCard,
-  IonCardContent,
-  IonAvatar,
-  IonLabel,
-  IonIcon,
-  IonButton,
-  IonButtons,
+  useIonAlert,
   useIonRouter,
-  IonList,
-  IonItem,
-  IonNote, // Import IonNote for subtitles or descriptions
-} from '@ionic/react';
+} from '@ionic/react'; // Import useIonAlert for Log Out confirmation
 import React from 'react';
 import './ProfilePage.css';
-import { mockUser } from '../data/mockUser'; // Import mock user data
-import { createOutline, personOutline, listOutline, helpCircleOutline, informationCircleOutline, logOutOutline, chevronForwardOutline } from 'ionicons/icons'; // Import necessary icons and chevronForwardOutline
-import { useIonAlert } from '@ionic/react'; // Import useIonAlert for Log Out confirmation
+import {mockUser} from '../data/mockUser'; // Import mock user data
+import {
+  chevronForwardOutline,
+  createOutline,
+  helpCircleOutline,
+  informationCircleOutline,
+  listOutline,
+  logOutOutline,
+  personOutline
+} from 'ionicons/icons'; // Import necessary icons and chevronForwardOutline
 
 const ProfilePage: React.FC = () => {
   const router = useIonRouter(); // Get the router hook
@@ -83,7 +87,7 @@ const ProfilePage: React.FC = () => {
         <div className="profile-header"> {/* Use a div for the header area */}
           <div className="profile-info-container"> {/* Container for avatar and name */}
             <IonAvatar className="profile-avatar">
-              <img src={mockUser.profilePictureUrl} alt="Profile" />
+              <img src={mockUser.profilePictureUrl} alt="Profile"/>
             </IonAvatar>
             <div className="profile-name-container"> {/* Container for name and potential subtitle */}
               <IonLabel className="profile-name">{mockUser.name}</IonLabel>
@@ -92,34 +96,34 @@ const ProfilePage: React.FC = () => {
             </div>
           </div>
           <IonButton fill="clear" className="edit-profile-button" onClick={handleEditClick}>
-            <IonIcon icon={createOutline} slot="icon-only" />
+            <IonIcon icon={createOutline} slot="icon-only"/>
           </IonButton>
         </div>
 
         <div className="profile-sections">
           <IonList lines="full" className="profile-menu-list"> {/* Use full lines for separation */}
             <IonItem button onClick={handleAccountClick}>
-              <IonIcon icon={personOutline} slot="start" color="medium" />
+              <IonIcon icon={personOutline} slot="start" color="medium"/>
               <IonLabel>Account</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium" /> {/* Add chevron icon */}
+              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
             </IonItem>
             <IonItem button onClick={handleOrdersClick}>
-              <IonIcon icon={listOutline} slot="start" color="medium" />
+              <IonIcon icon={listOutline} slot="start" color="medium"/>
               <IonLabel>Orders</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium" /> {/* Add chevron icon */}
+              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
             </IonItem>
             <IonItem button onClick={handleHelpClick}>
-              <IonIcon icon={helpCircleOutline} slot="start" color="medium" />
+              <IonIcon icon={helpCircleOutline} slot="start" color="medium"/>
               <IonLabel>Help & Support</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium" /> {/* Add chevron icon */}
+              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
             </IonItem>
             <IonItem button onClick={handleAboutClick}>
-              <IonIcon icon={informationCircleOutline} slot="start" color="medium" />
+              <IonIcon icon={informationCircleOutline} slot="start" color="medium"/>
               <IonLabel>About App</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium" /> {/* Add chevron icon */}
+              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
             </IonItem>
             <IonItem button onClick={handleLogoutClick} className="logout-item">
-              <IonIcon icon={logOutOutline} slot="start" color="danger" />
+              <IonIcon icon={logOutOutline} slot="start" color="danger"/>
               <IonLabel color="danger">Log Out</IonLabel>
             </IonItem>
           </IonList>
