@@ -89,7 +89,8 @@ ion-content {
   border-radius: 0; /* Remove rounded corners */
   box-shadow: none; /* Remove shadow */
   --background: transparent; /* Ensure background is transparent */
-  padding: 12px 0; /* Add vertical padding to items */
+  padding: 15px 0; /* Increased vertical padding to make items larger */
+  --border-color: var(--ion-color-step-100, #e6e6e6); /* Explicitly set border color for consistency */
 }
 
 /* Removed custom bottom border */
