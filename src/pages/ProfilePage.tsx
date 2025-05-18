@@ -10,10 +10,12 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  IonToggle,
   useIonAlert,
   useIonRouter,
-} from '@ionic/react'; // Import useIonAlert for Log Out confirmation
-import React from 'react';
+} from '@ionic/react'; // Added IonToggle
+import React, { useEffect } from 'react';
+import { useAppMode } from '../state/appModeState';
 import './ProfilePage.css';
 import {mockUser} from '../data/mockUser'; // Import mock user data
 import {
@@ -29,6 +31,7 @@ import {
 const ProfilePage: React.FC = () => {
   const router = useIonRouter(); // Get the router hook
   const [presentAlert] = useIonAlert(); // Use the useIonAlert hook
+  const { mode, toggleMode, isRestaurantMode } = useAppMode();
 
   const handleEditClick = () => {
     router.push('/profile/edit'); // Navigate to the profile edit page
@@ -101,7 +104,15 @@ const ProfilePage: React.FC = () => {
         </div>
 
         <div className="profile-sections">
-          <IonList lines="full" className="profile-menu-list"> {/* Use full lines for separation */}
+          <IonList lines="full" className="profile-menu-list">
+            <IonItem>
+              <IonLabel>Restaurant Mode</IonLabel>
+              <IonToggle 
+                checked={isRestaurantMode()} 
+                onIonChange={toggleMode}
+                color="primary"
+              />
+            </IonItem>
             <IonItem button onClick={handleAccountClick} detail={true}> {/* Use detail={true} for chevron */}
               <IonIcon icon={personOutline} slot="start" color="medium"/>
               <IonLabel>Account</IonLabel>

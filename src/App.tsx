@@ -10,7 +10,10 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { restaurant, business, mail, person, cart } from 'ionicons/icons'; // Import cart icon
+import { 
+  restaurant, business, person, cart, 
+  gridOutline, fastFoodOutline, receiptOutline, chatbubbleOutline 
+} from 'ionicons/icons'; // Added restaurant mode icons
 import DishesPage from './pages/DishesPage';
 import RestaurantPage from './pages/RestaurantPage';
 import MessagesPage from './pages/MessagesPage';
@@ -20,6 +23,10 @@ import RestaurantDetailPage from './pages/RestaurantDetailPage';
 import CartPage from './pages/CartPage'; // Import the new CartPage
 import ProfileEditPage from './pages/ProfileEditPage'; // Import the new ProfileEditPage
 import { CartProvider } from './state/cartState'; // Import CartProvider
+import { AppModeProvider, useAppMode } from './state/appModeState'; // Import AppModeProvider
+import DashboardPage from './pages/DashboardPage';
+import ProductsPage from './pages/ProductsPage';
+import OrdersPage from './pages/OrdersPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -53,57 +60,113 @@ import './theme/variables.css';
 
 setupIonicReact();
 
+// Create a TabsContainer component to use the mode context
+const TabsContainer: React.FC = () => {
+  const { isRestaurantMode } = useAppMode();
+  
+  return (
+    <IonTabs>
+      <IonRouterOutlet>
+        {/* Normal mode routes */}
+        <Route exact path="/dishes">
+          <DishesPage />
+        </Route>
+        <Route exact path="/restaurants">
+          <RestaurantPage />
+        </Route>
+        <Route exact path="/cart">
+          <CartPage />
+        </Route>
+        
+        {/* Restaurant mode routes */}
+        <Route exact path="/dashboard">
+          <DashboardPage />
+        </Route>
+        <Route exact path="/products">
+          <ProductsPage />
+        </Route>
+        <Route exact path="/orders">
+          <OrdersPage />
+        </Route>
+        <Route exact path="/messages">
+          <MessagesPage />
+        </Route>
+        
+        {/* Common routes */}
+        <Route exact path="/profile">
+          <ProfilePage />
+        </Route>
+        <Route exact path="/profile/edit">
+          <ProfileEditPage />
+        </Route>
+        <Route exact path="/dish/:id">
+          <DishDetailPage />
+        </Route>
+        <Route exact path="/restaurant/:id">
+          <RestaurantDetailPage />
+        </Route>
+        <Route exact path="/">
+          <Redirect to={isRestaurantMode() ? "/dashboard" : "/dishes"} />
+        </Route>
+      </IonRouterOutlet>
+      
+      {isRestaurantMode() ? (
+        // Restaurant mode tabs
+        <IonTabBar slot="bottom">
+          <IonTabButton tab="dashboard" href="/dashboard">
+            <IonIcon aria-hidden="true" icon={gridOutline} />
+            <IonLabel>Dashboard</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="products" href="/products">
+            <IonIcon aria-hidden="true" icon={fastFoodOutline} />
+            <IonLabel>Products</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="orders" href="/orders">
+            <IonIcon aria-hidden="true" icon={receiptOutline} />
+            <IonLabel>Orders</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="messages" href="/messages">
+            <IonIcon aria-hidden="true" icon={chatbubbleOutline} />
+            <IonLabel>Messages</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="profile" href="/profile">
+            <IonIcon aria-hidden="true" icon={person} />
+            <IonLabel>Profile</IonLabel>
+          </IonTabButton>
+        </IonTabBar>
+      ) : (
+        // Normal mode tabs
+        <IonTabBar slot="bottom">
+          <IonTabButton tab="dishes" href="/dishes">
+            <IonIcon aria-hidden="true" icon={restaurant} />
+            <IonLabel>Dishes</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="restaurants" href="/restaurants">
+            <IonIcon aria-hidden="true" icon={business} />
+            <IonLabel>Restaurants</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="cart" href="/cart">
+            <IonIcon aria-hidden="true" icon={cart} />
+            <IonLabel>Cart</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="profile" href="/profile">
+            <IonIcon aria-hidden="true" icon={person} />
+            <IonLabel>Profile</IonLabel>
+          </IonTabButton>
+        </IonTabBar>
+      )}
+    </IonTabs>
+  );
+};
+
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <CartProvider> {/* Wrap with CartProvider */}
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route exact path="/dishes">
-              <DishesPage />
-            </Route>
-            <Route exact path="/restaurants">
-              <RestaurantPage />
-            </Route>
-            <Route exact path="/cart"> {/* Added route for CartPage */}
-              <CartPage />
-            </Route>
-            <Route exact path="/profile"> {/* Keep the main profile route */}
-              <ProfilePage />
-            </Route>
-             <Route exact path="/profile/edit"> {/* Added route for ProfileEditPage */}
-              <ProfileEditPage />
-            </Route>
-            <Route exact path="/dish/:id">
-              <DishDetailPage />
-            </Route>
-            <Route exact path="/restaurant/:id">
-              <RestaurantDetailPage />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/dishes" />
-            </Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="dishes" href="/dishes">
-              <IonIcon aria-hidden="true" icon={restaurant} />
-              <IonLabel>Dishes</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="restaurants" href="/restaurants">
-              <IonIcon aria-hidden="true" icon={business} />
-              <IonLabel>Restaurants</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="cart" href="/cart"> {/* Added Cart tab button */}
-              <IonIcon aria-hidden="true" icon={cart} />
-              <IonLabel>Cart</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="profile" href="/profile">
-              <IonIcon aria-hidden="true" icon={person} />
-              <IonLabel>Profile</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </CartProvider>
+      <AppModeProvider>
+        <CartProvider>
+        <TabsContainer />
+        </CartProvider>
+      </AppModeProvider>
     </IonReactRouter>
   </IonApp>
 );
