@@ -36,7 +36,7 @@ ion-content {
 
 
 .metric-card {
-  min-width: 150px; /* Minimum width for each card */
+  min-width: 160px; /* Slightly increased minimum width */
   flex-shrink: 0; /* Prevent cards from shrinking */
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -67,6 +67,28 @@ ion-content {
   margin: 0;
   color: var(--ion-color-dark);
 }
+
+/* Styling for the change indicator */
+.metric-change {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  margin-top: 5px; /* Space above the change indicator */
+}
+
+.metric-change ion-icon {
+  font-size: 1em;
+  margin-right: 4px;
+}
+
+.metric-change.positive ion-icon {
+  color: var(--ion-color-success);
+}
+
+.metric-change.negative ion-icon {
+  color: var(--ion-color-danger);
+}
+
 
 /* Top Selling Items Section */
 .top-selling-section {

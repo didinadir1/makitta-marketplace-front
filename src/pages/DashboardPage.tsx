@@ -16,10 +16,25 @@ import {
 import React from 'react';
 import './DashboardPage.css';
 import {mockDashboardData} from '../data/mockDashboardData'; // Import mock dashboard data
-import {cashOutline, cubeOutline, receiptOutline, timeOutline, trendingUpOutline} from 'ionicons/icons'; // Import icons
+import {cashOutline, cubeOutline, receiptOutline, timeOutline, trendingUpOutline, arrowUpOutline, arrowDownOutline} from 'ionicons/icons'; // Import icons including arrow icons
 
 const DashboardPage: React.FC = () => {
   const {metrics, topSellingItems, recentOrders} = mockDashboardData;
+
+  const renderChange = (change: number) => {
+    const isPositive = change >= 0;
+    const changeIcon = isPositive ? arrowUpOutline : arrowDownOutline;
+    const changeColor = isPositive ? 'success' : 'danger';
+
+    return (
+      <div className={`metric-change ${isPositive ? 'positive' : 'negative'}`}>
+        <IonIcon icon={changeIcon} color={changeColor} />
+        <IonText color={changeColor}>
+          <span>{Math.abs(change).toFixed(1)}%</span>
+        </IonText>
+      </div>
+    );
+  };
 
   return (
     <IonPage>
@@ -41,6 +56,7 @@ const DashboardPage: React.FC = () => {
                   <IonText color="dark" className="metric-value">
                     <h3>${metrics.totalRevenue.toFixed(2)}</h3>
                   </IonText>
+                  {renderChange(metrics.totalRevenueChange)} {/* Display change */}
                 </IonCardContent>
               </IonCard>
               <IonCard className="metric-card">
@@ -50,6 +66,7 @@ const DashboardPage: React.FC = () => {
                   <IonText color="dark" className="metric-value">
                     <h3>{metrics.ordersToday}</h3>
                   </IonText>
+                   {renderChange(metrics.ordersTodayChange)} {/* Display change */}
                 </IonCardContent>
               </IonCard>
               <IonCard className="metric-card">
@@ -59,6 +76,7 @@ const DashboardPage: React.FC = () => {
                   <IonText color="dark" className="metric-value">
                     <h3>${metrics.averageOrderValue.toFixed(2)}</h3>
                   </IonText>
+                   {renderChange(metrics.averageOrderValueChange)} {/* Display change */}
                 </IonCardContent>
               </IonCard>
             </div>

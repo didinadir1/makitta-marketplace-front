@@ -1,7 +1,10 @@
 export interface Metric {
   totalRevenue: number;
+  totalRevenueChange: number; // Percentage change
   ordersToday: number;
+  ordersTodayChange: number; // Percentage change
   averageOrderValue: number;
+  averageOrderValueChange: number; // Percentage change
   // Add other metrics as needed
 }
 
@@ -29,8 +32,11 @@ export interface DashboardData {
 export const mockDashboardData: DashboardData = {
   metrics: {
     totalRevenue: 15235.75,
+    totalRevenueChange: 5.2, // Example: 5.2% increase
     ordersToday: 45,
+    ordersTodayChange: -2.1, // Example: 2.1% decrease
     averageOrderValue: 33.86,
+    averageOrderValueChange: 1.5, // Example: 1.5% increase
   },
   topSellingItems: [
     { id: '1', name: 'Spaghetti Carbonara', category: 'Pasta', unitsSold: 120 },
