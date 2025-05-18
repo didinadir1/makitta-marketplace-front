@@ -92,10 +92,10 @@ ion-content {
   padding: 12px 0; /* Add vertical padding to items */
 }
 
-/* Add a subtle bottom border to items */
-.profile-menu-list ion-item:not(:last-child) {
-  border-bottom: 1px solid var(--ion-color-step-100, #e6e6e6); /* Subtle separator line */
-}
+/* Removed custom bottom border */
+/* .profile-menu-list ion-item:not(:last-child) {
+  border-bottom: 1px solid var(--ion-color-step-100, #e6e6e6);
+} */
 
 
 .profile-menu-list ion-item ion-icon[slot="start"] {
