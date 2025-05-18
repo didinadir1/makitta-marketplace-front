@@ -18,6 +18,7 @@ import ProfilePage from './pages/ProfilePage';
 import DishDetailPage from './pages/DishDetailPage';
 import RestaurantDetailPage from './pages/RestaurantDetailPage';
 import CartPage from './pages/CartPage'; // Import the new CartPage
+import ProfileEditPage from './pages/ProfileEditPage'; // Import the new ProfileEditPage
 import { CartProvider } from './state/cartState'; // Import CartProvider
 
 /* Core CSS required for Ionic components to work properly */
@@ -67,11 +68,11 @@ const App: React.FC = () => (
             <Route exact path="/cart"> {/* Added route for CartPage */}
               <CartPage />
             </Route>
-            <Route path="/messages">
-              <MessagesPage />
-            </Route>
-            <Route path="/profile">
+            <Route exact path="/profile"> {/* Keep the main profile route */}
               <ProfilePage />
+            </Route>
+             <Route exact path="/profile/edit"> {/* Added route for ProfileEditPage */}
+              <ProfileEditPage />
             </Route>
             <Route exact path="/dish/:id">
               <DishDetailPage />
@@ -95,10 +96,6 @@ const App: React.FC = () => (
             <IonTabButton tab="cart" href="/cart"> {/* Added Cart tab button */}
               <IonIcon aria-hidden="true" icon={cart} />
               <IonLabel>Cart</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="messages" href="/messages">
-              <IonIcon aria-hidden="true" icon={mail} />
-              <IonLabel>Messages</IonLabel>
             </IonTabButton>
             <IonTabButton tab="profile" href="/profile">
               <IonIcon aria-hidden="true" icon={person} />
