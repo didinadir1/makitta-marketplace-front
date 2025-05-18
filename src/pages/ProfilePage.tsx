@@ -11,12 +11,12 @@ import {
   IonIcon,
   IonButton,
   IonButtons,
+  useIonRouter
 } from '@ionic/react';
 import React from 'react';
 import './ProfilePage.css';
 import { mockUser } from '../data/mockUser'; // Import mock user data
 import { createOutline } from 'ionicons/icons'; // Import edit icon
-import { useIonRouter } from '@ionic/react-router'; // Import useIonRouter
 
 const ProfilePage: React.FC = () => {
   const router = useIonRouter(); // Get the router hook
