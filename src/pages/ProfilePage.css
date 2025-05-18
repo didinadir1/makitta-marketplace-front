@@ -65,4 +65,41 @@ ion-content {
   padding: 16px; /* Padding for the sections below the card */
 }
 
-/* Add styles for individual sections as they are implemented */
+/* Styles for the profile menu list */
+.profile-menu-list {
+  background: transparent; /* Ensure list background is transparent */
+  margin-top: 20px; /* Space above the list */
+}
+
+.profile-menu-list ion-item {
+  --padding-start: 16px; /* Standard item padding */
+  --inner-padding-end: 16px;
+  --inner-border-width: 0; /* Remove inner border */
+  margin-bottom: 8px; /* Space between menu items */
+  border-radius: 8px; /* Rounded corners for items */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  --background: var(--ion-color-step-50, #f2f2f2); /* Subtle background */
+}
+
+.profile-menu-list ion-item ion-icon {
+  margin-right: 10px; /* Space between icon and label */
+}
+
+.profile-menu-list ion-item ion-label {
+  font-size: 1em;
+  color: var(--ion-color-dark);
+}
+
+/* Specific styling for the logout item */
+.profile-menu-list .logout-item {
+  --background: var(--ion-color-danger-tint); /* Lighter danger background */
+}
+
+.profile-menu-list .logout-item ion-icon {
+  color: var(--ion-color-danger); /* Danger color for icon */
+}
+
+.profile-menu-list .logout-item ion-label {
+  color: var(--ion-color-danger); /* Danger color for label */
+  font-weight: bold;
+}
