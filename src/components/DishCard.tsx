@@ -1,25 +1,35 @@
 import React from 'react';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, IonChip, IonIcon, IonBadge, IonButton } from '@ionic/react'; // Import IonButton
-import { star, starHalf, locationOutline, timeOutline, cartOutline } from 'ionicons/icons'; // Import cartOutline icon
-import { Swiper, SwiperSlide } from 'swiper/react';
+import {
+  IonBadge,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonChip,
+  IonIcon,
+  IonImg,
+  useIonToast
+} from '@ionic/react'; // Import IonButton // Import useIonToast hook
+import {cartOutline, locationOutline, star, starHalf, timeOutline} from 'ionicons/icons'; // Import cartOutline icon
+import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from "swiper/modules"; // Import Pagination module
-import { Dish } from '../data/mockDishes'; // Assuming mockDishes.ts is in src/data
+import {Dish} from '../data/mockDishes'; // Assuming mockDishes.ts is in src/data
 import './DishCard.css';
 import 'swiper/css'; // Import Swiper core styles
 import 'swiper/css/pagination'; // Import Swiper pagination styles
 import '@ionic/react/css/ionic-swiper.css';
-import { useCart } from '../state/cartState'; // Import the useCart hook
-import { useIonToast } from '@ionic/react'; // Import useIonToast hook
+import {useCart} from '../state/cartState'; // Import the useCart hook
 
 
 interface DishCardProps {
   dish: Dish;
-  onClick: (dishId: string) => void; // Added onClick prop
-  isCompact?: boolean; // Added prop for compact styling
+  onClick: (dishId: string) => void;
+  isCompact?: boolean;
 }
 
-const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false }) => { // Destructure and provide default
-  const { addItem } = useCart(); // Use the addItem function from the cart state
+const DishCard: React.FC<DishCardProps> = ({dish, onClick, isCompact = false}) => { // Destructure and provide default
+  const {addItem} = useCart(); // Use the addItem function from the cart state
   const [presentToast] = useIonToast(); // Use the useIonToast hook
 
   const renderRatingStars = (rating: number) => {
@@ -28,13 +38,13 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
     const hasHalfStar = rating % 1 !== 0;
 
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<IonIcon key={`full-${i}`} icon={star} color="warning" />);
+      stars.push(<IonIcon key={`full-${i}`} icon={star} color="warning"/>);
     }
     if (hasHalfStar) {
-      stars.push(<IonIcon key="half" icon={starHalf} color="warning" />);
+      stars.push(<IonIcon key="half" icon={starHalf} color="warning"/>);
     }
     for (let i = (fullStars + (hasHalfStar ? 1 : 0)); i < 5; i++) {
-      stars.push(<IonIcon key={`empty-${i}`} icon={star} style={{ color: 'var(--ion-color-medium-shade)' }} />);
+      stars.push(<IonIcon key={`empty-${i}`} icon={star} style={{color: 'var(--ion-color-medium-shade)'}}/>);
     }
     return stars;
   };
@@ -53,53 +63,64 @@ const DishCard: React.FC<DishCardProps> = ({ dish, onClick, isCompact = false })
 
   return (
     <div onClick={() => onClick(dish.id)}> {/* Wrap with a clickable div */}
-      <IonCard className={`dish-card ${isCompact ? 'compact' : ''}`}> {/* Apply compact class */}
+      <IonCard className={`dish-card`}> {/* Apply compact class */}
         {dish.imageUrls.length > 0 && (
-          <div className="dish-image-container"> {/* Use a simple container for compact mode image */}
-             <IonImg src={dish.imageUrls[0]} alt={`${dish.name} image`} className="dish-image" /> {/* Display first image */}
-          </div>
-        )}
+          isCompact ? (
+            <div className="dish-image-container"> {/* Use a simple container for compact mode image */}
+              <IonImg src={dish.imageUrls[0]} alt={`${dish.name} image`}
+                      className="dish-image"/> {/* Display first image */}
+            </div>
+          ) : (
+            <Swiper
+              modules={[Pagination]}
+              pagination={!isCompact} // Only show pagination in non-compact mode
+              initialSlide={0}
+              speed={400}
+              className="dish-slides">
+              {dish.imageUrls.map((url, index) => (
+                <SwiperSlide key={index}>
+                  <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-image"/>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ))}
         <IonCardHeader>
           <div className="dish-title-price">
             <IonCardTitle>{dish.name}</IonCardTitle>
             <IonBadge color="success" className="dish-price">{dish.price}</IonBadge>
           </div>
-          {!isCompact && ( // Conditionally hide rating in non-compact mode
-            <div className="dish-rating"> {/* Keep this structure for styling */}
-              {renderRatingStars(dish.rating)}
-              <span className="rating-text">({dish.rating.toFixed(1)})</span>
-            </div>
-          )}
+          <div className="dish-rating"> {/* Keep this structure for styling */}
+            {renderRatingStars(dish.rating)}
+            <span className="rating-text">({dish.rating.toFixed(1)})</span>
+          </div>
         </IonCardHeader>
-        {!isCompact && ( // Conditionally hide content in non-compact mode
-          <IonCardContent>
-            <div className="dish-tags">
-              {dish.tags.map((tag, index) => (
-                <IonChip key={index} outline={true} color="primary">
-                  {tag}
-                </IonChip>
-              ))}
+        <IonCardContent>
+          <div className="dish-tags">
+            {dish.tags.map((tag, index) => (
+              <IonChip key={index} outline={true} color="primary">
+                {tag}
+              </IonChip>
+            ))}
+          </div>
+          <div className="dish-info">
+            <div className="info-item">
+              <IonIcon icon={locationOutline} slot="start" color="medium"/>
+              <span>{dish.distance}</span>
             </div>
-            <div className="dish-info">
-              <div className="info-item">
-                <IonIcon icon={locationOutline} slot="start" color="medium" />
-                <span>{dish.distance}</span>
-              </div>
-              <div className="info-item">
-                <IonIcon icon={timeOutline} slot="start" color="medium" />
-                <span>{dish.timeToReady}</span>
-              </div>
+            <div className="info-item">
+              <IonIcon icon={timeOutline} slot="start" color="medium"/>
+              <span>{dish.timeToReady}</span>
             </div>
-             <IonButton
-                shape="round"
-                size="default"
-                className="add-to-cart-button-card"
-                onClick={handleAddToCart} // Add click handler
-              >
-                <IonIcon icon={cartOutline} slot="icon-only" />
-              </IonButton>
-          </IonCardContent>
-        )}
+          </div>
+          {isCompact || (<IonButton
+            shape="round"
+            size="default"
+            className="add-to-cart-button-card"
+            onClick={handleAddToCart} // Add click handler
+          >
+            <IonIcon icon={cartOutline} slot="icon-only"/>
+          </IonButton>)}
+        </IonCardContent>
       </IonCard>
     </div>
   );

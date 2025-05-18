@@ -154,7 +154,7 @@ const RestaurantDetailPage: React.FC = () => {
 
                   {restaurantDishes.map(dish => (
                     <SwiperSlide key={dish.id} className="dish-swiper-slide"> {/* Style individual slides */}
-                      <DishCard dish={dish} onClick={handleDishCardClick} /> {/* Pass isCompact prop */}
+                      <DishCard dish={dish} onClick={handleDishCardClick} isCompact/> {/* Pass isCompact prop */}
                     </SwiperSlide>
                   ))}
                 </Swiper>
