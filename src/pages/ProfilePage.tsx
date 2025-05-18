@@ -102,27 +102,27 @@ const ProfilePage: React.FC = () => {
 
         <div className="profile-sections">
           <IonList lines="full" className="profile-menu-list"> {/* Use full lines for separation */}
-            <IonItem button onClick={handleAccountClick}>
+            <IonItem button onClick={handleAccountClick} detail={true}> {/* Use detail={true} for chevron */}
               <IonIcon icon={personOutline} slot="start" color="medium"/>
               <IonLabel>Account</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
+              {/* Removed explicit chevron icon */}
             </IonItem>
-            <IonItem button onClick={handleOrdersClick}>
+            <IonItem button onClick={handleOrdersClick} detail={true}> {/* Use detail={true} for chevron */}
               <IonIcon icon={listOutline} slot="start" color="medium"/>
               <IonLabel>Orders</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
+              {/* Removed explicit chevron icon */}
             </IonItem>
-            <IonItem button onClick={handleHelpClick}>
+            <IonItem button onClick={handleHelpClick} detail={true}> {/* Use detail={true} for chevron */}
               <IonIcon icon={helpCircleOutline} slot="start" color="medium"/>
               <IonLabel>Help & Support</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
+              {/* Removed explicit chevron icon */}
             </IonItem>
-            <IonItem button onClick={handleAboutClick}>
+            <IonItem button onClick={handleAboutClick} detail={true}> {/* Use detail={true} for chevron */}
               <IonIcon icon={informationCircleOutline} slot="start" color="medium"/>
               <IonLabel>About App</IonLabel>
-              <IonIcon icon={chevronForwardOutline} slot="end" color="medium"/> {/* Add chevron icon */}
+              {/* Removed explicit chevron icon */}
             </IonItem>
-            <IonItem button onClick={handleLogoutClick} className="logout-item">
+            <IonItem button onClick={handleLogoutClick} className="logout-item" detail={false}> {/* detail={false} for logout */}
               <IonIcon icon={logOutOutline} slot="start" color="danger"/>
               <IonLabel color="danger">Log Out</IonLabel>
             </IonItem>
