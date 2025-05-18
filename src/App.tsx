@@ -152,6 +152,10 @@ const TabsContainer: React.FC = () => {
             <IonIcon aria-hidden="true" icon={cart} />
             <IonLabel>Cart</IonLabel>
           </IonTabButton>
+          <IonTabButton tab="messages" href="/messages">
+            <IonIcon aria-hidden="true" icon={chatbubble} /> {/* Changed icon */}
+            <IonLabel>Messages</IonLabel>
+          </IonTabButton>
           <IonTabButton tab="profile" href="/profile">
             <IonIcon aria-hidden="true" icon={person} />
             <IonLabel>Profile</IonLabel>
