@@ -1,26 +1,25 @@
 import {
+  IonBadge,
+  IonCard,
+  IonCardContent,
   IonContent,
   IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonList,
+  IonIcon,
   IonItem,
   IonLabel,
+  IonList,
+  IonPage,
   IonText,
-  IonIcon,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/react';
 import React from 'react';
 import './DashboardPage.css';
-import { mockDashboardData } from '../data/mockDashboardData'; // Import mock dashboard data
-import { trendingUpOutline, cashOutline, receiptOutline, cubeOutline, timeOutline } from 'ionicons/icons'; // Import icons
+import {mockDashboardData} from '../data/mockDashboardData'; // Import mock dashboard data
+import {cashOutline, cubeOutline, receiptOutline, timeOutline, trendingUpOutline} from 'ionicons/icons'; // Import icons
 
 const DashboardPage: React.FC = () => {
-  const { metrics, topSellingItems, recentOrders } = mockDashboardData;
+  const {metrics, topSellingItems, recentOrders} = mockDashboardData;
 
   return (
     <IonPage>
@@ -37,7 +36,7 @@ const DashboardPage: React.FC = () => {
             <div className="metrics-cards">
               <IonCard className="metric-card">
                 <IonCardContent>
-                  <IonIcon icon={cashOutline} color="success" className="metric-icon" />
+                  <IonIcon icon={cashOutline} color="success" className="metric-icon"/>
                   <IonLabel className="metric-label">Total Revenue</IonLabel>
                   <IonText color="dark" className="metric-value">
                     <h3>${metrics.totalRevenue.toFixed(2)}</h3>
@@ -46,7 +45,7 @@ const DashboardPage: React.FC = () => {
               </IonCard>
               <IonCard className="metric-card">
                 <IonCardContent>
-                  <IonIcon icon={receiptOutline} color="primary" className="metric-icon" />
+                  <IonIcon icon={receiptOutline} color="primary" className="metric-icon"/>
                   <IonLabel className="metric-label">Orders Today</IonLabel>
                   <IonText color="dark" className="metric-value">
                     <h3>{metrics.ordersToday}</h3>
@@ -55,7 +54,7 @@ const DashboardPage: React.FC = () => {
               </IonCard>
               <IonCard className="metric-card">
                 <IonCardContent>
-                  <IonIcon icon={trendingUpOutline} color="warning" className="metric-icon" />
+                  <IonIcon icon={trendingUpOutline} color="warning" className="metric-icon"/>
                   <IonLabel className="metric-label">Avg. Order Value</IonLabel>
                   <IonText color="dark" className="metric-value">
                     <h3>${metrics.averageOrderValue.toFixed(2)}</h3>
@@ -71,7 +70,7 @@ const DashboardPage: React.FC = () => {
             <IonList lines="none" className="top-selling-list">
               {topSellingItems.map(item => (
                 <IonItem key={item.id} className="top-selling-item">
-                  <IonIcon icon={cubeOutline} slot="start" color="medium" />
+                  <IonIcon icon={cubeOutline} slot="start" color="medium"/>
                   <IonLabel>
                     <h4>{item.name}</h4>
                     <p>{item.category}</p>
@@ -102,10 +101,10 @@ const DashboardPage: React.FC = () => {
                       </IonText>
                     </div>
                     <div className="order-time">
-                       <IonIcon icon={timeOutline} slot="start" color="medium" />
-                       <IonText color="medium">
-                         <p>{order.time}</p>
-                       </IonText>
+                      <IonIcon icon={timeOutline} slot="start" color="medium"/>
+                      <IonText color="medium">
+                        <p>{order.time}</p>
+                      </IonText>
                     </div>
                   </IonCardContent>
                 </IonCard>
