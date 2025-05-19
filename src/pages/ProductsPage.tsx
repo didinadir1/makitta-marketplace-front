@@ -6,6 +6,8 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import React from 'react';
+import ProductList from '../components/products/ProductList'; // Import ProductList
+import './ProductsPage.css'; // Assuming you have a CSS file for this page
 
 const ProductsPage: React.FC = () => {
   return (
@@ -23,8 +25,8 @@ const ProductsPage: React.FC = () => {
         </IonHeader>
         <div className="products-container">
           <h2>Manage Your Products</h2>
-          <p>Add, edit, and manage your restaurant's products here.</p>
-          {/* Products management content will go here */}
+          {/* Render the ProductList component */}
+          <ProductList />
         </div>
       </IonContent>
     </IonPage>
