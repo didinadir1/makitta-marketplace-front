@@ -27,6 +27,7 @@ import { AppModeProvider, useAppMode } from './state/appModeState'; // Import Ap
 import DashboardPage from './pages/DashboardPage';
 import ProductsPage from './pages/ProductsPage';
 import OrdersPage from './pages/OrdersPage';
+import { AppContextProvider } from './context/AppContext'; // Import AppContextProvider
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -171,7 +172,9 @@ const App: React.FC = () => (
     <IonReactRouter>
       <AppModeProvider>
         <CartProvider>
-        <TabsContainer />
+          <AppContextProvider> {/* Wrap with AppContextProvider */}
+            <TabsContainer />
+          </AppContextProvider>
         </CartProvider>
       </AppModeProvider>
     </IonReactRouter>
