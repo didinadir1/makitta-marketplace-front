@@ -1,17 +1,18 @@
-import { IonList, IonItem, IonLabel } from '@ionic/react';
+import { IonList } from '@ionic/react';
 import React from 'react';
+import { Product } from '../../types/Product'; // Assuming Product type is defined here
+import { mockProducts } from '../../data/mockProducts'; // Import mock products
+import ProductCard from './ProductCard'; // Import the new ProductCard component
 
 const ProductList: React.FC = () => {
-  // This component will eventually fetch and display a list of products
+  // Use mock data for now
+  const products: Product[] = mockProducts;
+
   return (
-    <IonList>
-      <IonItem>
-        <IonLabel>Placeholder Product 1</IonLabel>
-      </IonItem>
-      <IonItem>
-        <IonLabel>Placeholder Product 2</IonLabel>
-      </IonItem>
-      {/* More product items will be rendered here */}
+    <IonList lines="none"> {/* Remove default list lines */}
+      {products.map(product => (
+        <ProductCard key={product.id} product={product} />
+      ))}
     </IonList>
   );
 };

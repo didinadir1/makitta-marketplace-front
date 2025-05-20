@@ -1,4 +1,4 @@
-import { Product } from '../types';
+import {Product} from "../types/Product";
 
 export const mockProducts: Product[] = [
   {
@@ -9,6 +9,10 @@ export const mockProducts: Product[] = [
     category: 'cat1', // Appetizers
     basePrice: 5.99,
     addOns: ['Extra Sauce'],
+    imageUrls: [
+      '/food1.jpeg',
+      '/food2.jpeg',
+    ]
   },
   {
     id: 'prod2',
@@ -18,6 +22,10 @@ export const mockProducts: Product[] = [
     category: 'cat2', // Main Courses
     basePrice: 18.50,
     addOns: ['Lemon Wedge', 'Tartar Sauce'],
+    imageUrls: [
+      '/food1.jpeg',
+      '/food2.jpeg',
+    ]
   },
   {
     id: 'prod3',
@@ -27,6 +35,10 @@ export const mockProducts: Product[] = [
     category: 'cat3', // Desserts
     basePrice: 7.00,
     addOns: ['Whipped Cream', 'Ice Cream'],
+    imageUrls: [
+      '/food1.jpeg',
+      '/food2.jpeg',
+    ]
   },
   {
     id: 'prod4',
@@ -36,6 +48,10 @@ export const mockProducts: Product[] = [
     category: 'cat4', // Drinks
     basePrice: 2.50,
     addOns: ['Ice'],
+    imageUrls: [
+      '/food1.jpeg',
+      '/food2.jpeg',
+    ]
   },
   {
     id: 'prod5',
@@ -45,6 +61,10 @@ export const mockProducts: Product[] = [
     category: 'cat2', // Main Courses
     basePrice: 25.00,
     addOns: ['Mushroom Sauce', 'Peppercorn Sauce'],
+    imageUrls: [
+      '/food1.jpeg',
+      '/food2.jpeg',
+    ]
   },
   {
     id: 'prod6',
@@ -54,5 +74,9 @@ export const mockProducts: Product[] = [
     category: 'cat1', // Appetizers (or could be Main if large)
     basePrice: 9.75,
     addOns: ['Grilled Chicken', 'Shrimp'],
+    imageUrls: [
+      '/food1.jpeg',
+      '/food2.jpeg',
+    ]
   },
 ];
