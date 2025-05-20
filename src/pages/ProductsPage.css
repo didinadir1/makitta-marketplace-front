@@ -5,17 +5,14 @@ ion-content {
 
 /* Container Styling for Sections */
 .section-container {
-  background: var(--ion-background-color, #fff); /* White background for sections */
-  margin: 15px; /* Add margin around sections */
-  padding: 15px; /* Add padding inside sections */
-  border-radius: 8px; /* Rounded corners for sections */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Subtle shadow for sections */
-  margin-bottom: 20px; /* Space between sections */
+  /* Removed panel styles: background, margin, padding, border-radius, box-shadow */
+  /* These styles are now removed to make sections not look like panels */
+  margin-bottom: 20px; /* Keep space between sections */
 }
 
 /* Products Container */
 .products-container {
-  /* Inherits styles from .section-container */
+  padding: 0 15px; /* Add horizontal padding to content within the section */
 }
 
 .products-container h2 {
@@ -28,7 +25,7 @@ ion-content {
 
 /* Schedules Container */
 .schedules-container {
-  /* Inherits styles from .section-container */
+  padding: 0 15px; /* Add horizontal padding to content within the section */
 }
 
 .schedules-container h2 {
@@ -56,7 +53,6 @@ ion-content {
   font-size: 1.1em; /* Slightly larger font size */
   font-weight: bold;
   text-transform: none; /* Prevent uppercase text */
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12); /* Slightly stronger shadow */
   --background: var(--ion-color-primary, #3880ff); /* Use primary color */
   --color: var(--ion-color-primary-contrast, #fff); /* White text */
 }
