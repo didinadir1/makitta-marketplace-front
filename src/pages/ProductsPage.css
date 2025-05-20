@@ -1,0 +1,39 @@
+/* Products Container */
+.products-container {
+  padding: 15px;
+}
+
+.products-container h2 {
+  margin-bottom: 10px;
+  font-size: 1.3em;
+}
+
+/* Schedules Container */
+.schedules-container {
+  padding: 15px;
+  padding-top: 0; /* Remove top padding as button will have margin */
+}
+
+.schedules-container h2 {
+  margin-bottom: 10px;
+  font-size: 1.3em;
+}
+
+/* Add Schedule Button Styling */
+.add-schedule-button-container {
+  display: flex;
+  justify-content: center; /* Center the button horizontally */
+  margin-bottom: 15px; /* Add space below the button */
+}
+
+.add-schedule-button-container ion-button {
+  --padding-start: 20px; /* Adjust padding */
+  --padding-end: 20px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  --border-radius: 25px; /* Make it pill-shaped */
+  font-size: 1em; /* Adjust font size */
+  font-weight: bold;
+  text-transform: none; /* Prevent uppercase text */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}

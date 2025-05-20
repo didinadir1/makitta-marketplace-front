@@ -52,10 +52,14 @@ const ProductsPage: React.FC = () => {
 
         <div className="schedules-container">
           <h2>Product Schedules</h2>
-          <IonButton expand="block" onClick={handleAddScheduleClick}>
-            <IonIcon slot="start" icon={addOutline}></IonIcon>
-            Add New Schedule
-          </IonButton>
+          {/* Add Schedule Button */}
+          <div className="add-schedule-button-container">
+            <IonButton onClick={handleAddScheduleClick}>
+              <IonIcon slot="start" icon={addOutline}></IonIcon>
+              Add New Schedule
+            </IonButton>
+          </div>
+
 
           {/* List of Schedule Cards */}
           <IonList lines="none"> {/* Remove default list lines */}
