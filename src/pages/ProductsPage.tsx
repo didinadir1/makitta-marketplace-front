@@ -6,8 +6,8 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import React from 'react';
-import './ProductsPage.css';
-import ProductList from "../components/products/ProductList"; // Assuming you have a CSS file for this page
+import ProductList from '../components/products/ProductList'; // Import ProductList
+import './ProductsPage.css'; // Assuming you have a CSS file for this page
 
 const ProductsPage: React.FC = () => {
   return (
