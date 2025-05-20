@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Category, Product, Schedule } from '../types'; // Assuming types are correctly defined elsewhere
 import { mockCategories } from '../data/mockCategories'; // Import mock data
 import { mockProducts } from '../data/mockProducts'; // Import mock data
-import { mockSchedules } from '../data/mockSchedules'; // Import mock data
+import { mockSchedules } from '../data/mockSchedules';
+import {Category} from "../types/Category";
+import {Product} from "../types/Product";
+import {Schedule} from "../types/Schedule"; // Import mock data
 
 interface ProductContextType {
   categories: Category[];

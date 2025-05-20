@@ -4,37 +4,25 @@ ion-content {
 }
 
 /* Container Styling for Sections */
-.section-container {
-  /* Removed panel styles: background, margin, padding, border-radius, box-shadow */
-  /* These styles are now removed to make sections not look like panels */
-  margin-bottom: 20px; /* Keep space between sections */
-}
 
-/* Products Container */
-.products-container {
-  padding: 0 15px; /* Add horizontal padding to content within the section */
-}
-
-.products-container h2 {
+/* Section Title Styling */
+.section-title {
   margin-top: 0; /* Remove default top margin */
   margin-bottom: 15px; /* Add space below heading */
   font-size: 1.4em; /* Slightly larger heading */
   font-weight: bold;
   color: var(--ion-color-dark, #000); /* Darker heading color */
+  padding: 0 15px; /* Add horizontal padding to the title */
 }
 
-/* Schedules Container */
-.schedules-container {
-  padding: 0 15px; /* Add horizontal padding to content within the section */
+
+/* Section Separator */
+.section-separator {
+  height: 1px; /* Height of the separator line */
+  background-color: var(--ion-color-step-150, #dcdcdc); /* Light grey color */
+  margin: 30px 15px; /* Add vertical margin and horizontal padding */
 }
 
-.schedules-container h2 {
-  margin-top: 0; /* Remove default top margin */
-  margin-bottom: 15px; /* Add space below heading */
-  font-size: 1.4em; /* Slightly larger heading */
-  font-weight: bold;
-  color: var(--ion-color-dark, #000); /* Darker heading color */
-}
 
 /* Add Schedule Button Styling */
 .add-schedule-button-container {
