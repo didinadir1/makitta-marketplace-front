@@ -38,4 +38,6 @@
 .schedule-actions ion-button {
   --padding-start: 5px; /* Adjust button padding */
   --padding-end: 5px;
+  /* Increase the size of the icon */
+  font-size: 1.3em; /* Adjust this value to make the icon bigger */
 }
