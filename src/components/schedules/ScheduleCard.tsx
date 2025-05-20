@@ -48,8 +48,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
             <p className="schedule-days">{schedule.days.join(', ')}</p>
           </IonText> */}
         </div>
-        <div className="schedule-actions">
-          <IonButton fill="clear" size="small" onClick={handleEditClick}>
+        {/* Make the entire actions div clickable */}
+        <div className="schedule-actions" onClick={handleEditClick}>
+          <IonButton fill="clear" size="small">
             <IonIcon slot="icon-only" icon={createOutline}></IonIcon>
             {/* <IonLabel>Edit</IonLabel> Add label if preferred */}
           </IonButton>

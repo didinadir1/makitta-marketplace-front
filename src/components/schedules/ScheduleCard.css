@@ -33,11 +33,21 @@
 
 .schedule-actions {
   flex-shrink: 0; /* Prevent actions from shrinking */
+  display: flex; /* Use flexbox to center content */
+  align-items: center; /* Vertically center the icon */
+  justify-content: center; /* Horizontally center the icon (if needed, though align-items is key here) */
+  padding: 5px; /* Add padding to make the clickable area larger */
+  cursor: pointer; /* Indicate it's clickable */
+  /* Make the entire actions area clickable */
+  width: 40px; /* Give it a fixed width to define the clickable area */
+  height: 100%; /* Make it take the full height of the card content */
 }
 
 .schedule-actions ion-button {
-  --padding-start: 5px; /* Adjust button padding */
-  --padding-end: 5px;
-  /* Increase the size of the icon */
-  font-size: 1.3em; /* Adjust this value to make the icon bigger */
+  --padding-start: 0; /* Remove button padding */
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  margin: 0; /* Remove button margin */
+  font-size: 1.3em; /* Keep the increased icon size */
 }
