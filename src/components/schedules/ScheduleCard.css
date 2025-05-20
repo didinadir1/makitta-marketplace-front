@@ -1,0 +1,41 @@
+.schedule-card {
+  margin: 10px; /* Add some margin around the card */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Ensure content stays within rounded corners */
+}
+
+.schedule-card ion-card-header {
+  padding-bottom: 0; /* Reduce space below title */
+}
+
+.schedule-card ion-card-title {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.schedule-card ion-card-content {
+  display: flex;
+  justify-content: space-between; /* Space out details and actions */
+  align-items: center; /* Vertically align items */
+  padding-top: 5px; /* Reduce space above content */
+}
+
+.schedule-details {
+  flex-grow: 1; /* Details take up available space */
+  margin-right: 10px; /* Space between details and actions */
+}
+
+.schedule-details p {
+  margin: 2px 0; /* Reduce margin between detail lines */
+  font-size: 0.9em;
+}
+
+.schedule-actions {
+  flex-shrink: 0; /* Prevent actions from shrinking */
+}
+
+.schedule-actions ion-button {
+  --padding-start: 5px; /* Adjust button padding */
+  --padding-end: 5px;
+}
