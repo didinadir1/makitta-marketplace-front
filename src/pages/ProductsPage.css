@@ -1,22 +1,42 @@
+/* General Page Styling */
+ion-content {
+  --background: var(--ion-color-light, #f4f5f8); /* Use a light background for the page */
+}
+
+/* Container Styling for Sections */
+.section-container {
+  background: var(--ion-background-color, #fff); /* White background for sections */
+  margin: 15px; /* Add margin around sections */
+  padding: 15px; /* Add padding inside sections */
+  border-radius: 8px; /* Rounded corners for sections */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Subtle shadow for sections */
+  margin-bottom: 20px; /* Space between sections */
+}
+
 /* Products Container */
 .products-container {
-  padding: 15px;
+  /* Inherits styles from .section-container */
 }
 
 .products-container h2 {
-  margin-bottom: 10px;
-  font-size: 1.3em;
+  margin-top: 0; /* Remove default top margin */
+  margin-bottom: 15px; /* Add space below heading */
+  font-size: 1.4em; /* Slightly larger heading */
+  font-weight: bold;
+  color: var(--ion-color-dark, #000); /* Darker heading color */
 }
 
 /* Schedules Container */
 .schedules-container {
-  padding: 15px;
-  padding-top: 0; /* Remove top padding as button will have margin */
+  /* Inherits styles from .section-container */
 }
 
 .schedules-container h2 {
-  margin-bottom: 10px;
-  font-size: 1.3em;
+  margin-top: 0; /* Remove default top margin */
+  margin-bottom: 15px; /* Add space below heading */
+  font-size: 1.4em; /* Slightly larger heading */
+  font-weight: bold;
+  color: var(--ion-color-dark, #000); /* Darker heading color */
 }
 
 /* Add Schedule Button Styling */
@@ -24,16 +44,40 @@
   display: flex;
   justify-content: center; /* Center the button horizontally */
   margin-bottom: 15px; /* Add space below the button */
+  margin-top: 15px; /* Add space above the button */
 }
 
 .add-schedule-button-container ion-button {
-  --padding-start: 20px; /* Adjust padding */
-  --padding-end: 20px;
-  --padding-top: 10px;
-  --padding-bottom: 10px;
-  --border-radius: 25px; /* Make it pill-shaped */
-  font-size: 1em; /* Adjust font size */
+  --padding-start: 25px; /* Adjust padding */
+  --padding-end: 25px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --border-radius: 28px; /* Make it more pill-shaped */
+  font-size: 1.1em; /* Slightly larger font size */
   font-weight: bold;
   text-transform: none; /* Prevent uppercase text */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12); /* Slightly stronger shadow */
+  --background: var(--ion-color-primary, #3880ff); /* Use primary color */
+  --color: var(--ion-color-primary-contrast, #fff); /* White text */
 }
+
+/* Product Card Styling (already exists, ensure consistency) */
+/* .product-card { ... } */
+/* .product-card-content { ... } */
+/* .product-thumbnail { ... } */
+/* .product-details { ... } */
+/* .product-name { ... } */
+/* .product-price { ... } */
+/* .product-category { ... } */
+/* .product-actions { ... } */
+/* .product-actions ion-icon { ... } */
+
+/* Schedule Card Styling (already exists, ensure consistency) */
+/* .schedule-card { ... } */
+/* .schedule-card ion-card-header { ... } */
+/* .schedule-card ion-card-title { ... } */
+/* .schedule-card ion-card-content { ... } */
+/* .schedule-details { ... } */
+/* .schedule-details p { ... } */
+/* .schedule-actions { ... } */
+/* .schedule-actions ion-button { ... } */

@@ -45,12 +45,14 @@ const ProductsPage: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <div className="products-container">
+        {/* Products Section */}
+        <div className="section-container products-container">
           <h2>Manage Your Products</h2>
           <ProductList />
         </div>
 
-        <div className="schedules-container">
+        {/* Schedules Section */}
+        <div className="section-container schedules-container">
           <h2>Product Schedules</h2>
           {/* Add Schedule Button */}
           <div className="add-schedule-button-container">
@@ -59,7 +61,6 @@ const ProductsPage: React.FC = () => {
               Add New Schedule
             </IonButton>
           </div>
-
 
           {/* List of Schedule Cards */}
           <IonList lines="none"> {/* Remove default list lines */}
