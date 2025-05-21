@@ -3,6 +3,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   border-radius: 8px; /* Rounded corners */
   overflow: hidden; /* Ensure content stays within rounded corners */
+  position: relative; /* Needed for absolute positioning of the oval */
 }
 
 .schedule-card ion-card-header {
@@ -30,6 +31,27 @@
   margin: 2px 0; /* Reduce margin between detail lines */
   font-size: 0.9em;
 }
+
+/* Product Count Oval Styling */
+.product-count-oval {
+  position: absolute; /* Position relative to the card */
+  top: 50%; /* Center vertically */
+  right: 50px; /* Position from the right, adjust as needed */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+  background-color: var(--ion-color-step-200, #cccccc); /* Light grey background */
+  color: var(--ion-color-dark, #000); /* Dark text color */
+  border-radius: 20px; /* Make it oval */
+  padding: 4px 10px; /* Padding inside the oval */
+  font-size: 0.8em; /* Smaller font size */
+  font-weight: bold;
+  min-width: 25px; /* Ensure minimum width for single digits */
+  text-align: center; /* Center the number */
+}
+
+.product-count-oval p {
+  margin: 0; /* Remove default paragraph margin */
+}
+
 
 .schedule-actions {
   flex-shrink: 0; /* Prevent actions from shrinking */

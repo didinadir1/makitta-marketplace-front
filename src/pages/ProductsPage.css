@@ -46,8 +46,11 @@ ion-content {
 }
 
 /* Make IonList background transparent */
-ion-list {
-  --background: transparent;
+.product-section-container ion-list {
+  background: transparent;
+}
+.schedule-section-container ion-list {
+  background: transparent;
 }
 
 

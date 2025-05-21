@@ -1,15 +1,19 @@
-import {IonButton, IonContent, IonHeader, IonIcon, IonList, IonPage, IonTitle, IonToolbar,} from '@ionic/react';
-import {addOutline} from 'ionicons/icons';
+import {
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+} from '@ionic/react';
+import { addOutline } from 'ionicons/icons';
 import React from 'react';
 import ProductList from '../components/products/ProductList';
-import ScheduleCard from '../components/schedules/ScheduleCard'; // Import ScheduleCard
-import {mockSchedules} from '../data/mockSchedules'; // Import mock schedules
-import {Schedule} from '../types/Schedule'; // Import Schedule type
+import ScheduleList from '../components/schedules/ScheduleList'; // Import ScheduleList
 import './ProductsPage.css';
 
 const ProductsPage: React.FC = () => {
-  const schedules: Schedule[] = mockSchedules; // Use mock schedules
-
   const handleAddScheduleClick = () => {
     console.log('Add New Schedule clicked');
     // Implement logic to navigate to schedule form or open modal
@@ -29,7 +33,8 @@ const ProductsPage: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <div className="product-section-container">
-        <ProductList/>
+          <h2 className="section-title">Products</h2> {/* Added title back with class */}
+          <ProductList />
         </div>
         {/* Section Separator */}
         <div className="section-separator"></div>
@@ -45,16 +50,8 @@ const ProductsPage: React.FC = () => {
             </IonButton>
           </div>
 
-          {/* List of Schedule Cards */}
-          <IonList lines="none"> {/* Remove default list lines */}
-            {schedules.map(schedule => (
-              <ScheduleCard
-                key={schedule.id}
-                schedule={schedule}
-                onEditClick={handleEditSchedule}
-              />
-            ))}
-          </IonList>
+          {/* Schedule List Component */}
+          <ScheduleList onEditSchedule={handleEditSchedule} />
         </div>
       </IonContent>
     </IonPage>

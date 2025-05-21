@@ -38,15 +38,22 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               {schedule.startTime} - {schedule.endTime}
             </p>
           </IonText>
-          <IonText color="medium">
+          {/* Removed product count text from here */}
+          {/* <IonText color="medium">
             <p className="schedule-products">
               {schedule.productIds.length} Product(s)
             </p>
-          </IonText>
+          </IonText> */}
           {/* Display days if needed, perhaps in a more compact way */}
           {/* <IonText color="medium">
             <p className="schedule-days">{schedule.days.join(', ')}</p>
           </IonText> */}
+        </div>
+        {/* Product count in oval container */}
+        <div className="product-count-oval">
+          <IonText color="dark">
+            <p>{schedule.productIds.length}</p>
+          </IonText>
         </div>
         {/* Make the entire actions div clickable */}
         <div className="schedule-actions" onClick={handleEditClick}>
