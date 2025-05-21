@@ -19,37 +19,49 @@
   display: flex;
   justify-content: space-between; /* Space out details and actions */
   align-items: center; /* Vertically align items */
-  padding-top: 5px; /* Reduce space above content */
 }
 
 .schedule-details {
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack details vertically */
+  justify-content: center; /* Center the details vertically */
+  padding: 5px; /* Add padding around the details */
+  gap: 20px;
+}
+
+.schedule-details ion-card-title{
+  width: 16ch;
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis;
+}
+
+.schedule-time {
   flex-grow: 1; /* Details take up available space */
   margin-right: 10px; /* Space between details and actions */
 }
 
-.schedule-details p {
+.schedule-time p {
   margin: 2px 0; /* Reduce margin between detail lines */
   font-size: 0.9em;
 }
 
-/* Product Count Oval Styling */
-.product-count-oval {
-  position: absolute; /* Position relative to the card */
-  top: 50%; /* Center vertically */
-  right: 50px; /* Position from the right, adjust as needed */
-  transform: translateY(-50%); /* Adjust for vertical centering */
-  background-color: var(--ion-color-step-200, #cccccc); /* Light grey background */
-  color: var(--ion-color-dark, #000); /* Dark text color */
-  border-radius: 20px; /* Make it oval */
-  padding: 4px 10px; /* Padding inside the oval */
+/* Product Count Display Styling */
+.product-count-display {
+  /* Removed absolute positioning */
+  /* Positioned within the flex container */
+  background-color: transparent; /* Transparent background */
+  border: 1px solid var(--ion-color-step-150, #dcdcdc); /* Very light border */
+  border-radius: 15px; /* Make it oval/pill-shaped */
+  padding: 4px 10px; /* Padding inside */
   font-size: 0.8em; /* Smaller font size */
   font-weight: bold;
-  min-width: 25px; /* Ensure minimum width for single digits */
-  text-align: center; /* Center the number */
+  text-align: center; /* Center the text */
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
-.product-count-oval p {
-  margin: 0; /* Remove default paragraph margin */
+.product-count-display p {
+  font-size: 0.9em;
 }
 
 

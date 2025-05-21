@@ -1,15 +1,7 @@
-import {
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonText,
-  IonButton,
-  IonIcon,
-} from '@ionic/react';
-import { createOutline } from 'ionicons/icons';
+import {IonButton, IonCard, IonCardContent, IonCardTitle, IonIcon, IonText,} from '@ionic/react';
+import {createOutline} from 'ionicons/icons';
 import React from 'react';
-import { Schedule } from '../../types/Schedule';
+import {Schedule} from '../../types/Schedule';
 import './ScheduleCard.css'; // Import the CSS for styling
 
 interface ScheduleCardProps {
@@ -18,9 +10,9 @@ interface ScheduleCardProps {
 }
 
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
-  schedule,
-  onEditClick,
-}) => {
+                                                     schedule,
+                                                     onEditClick,
+                                                   }) => {
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click if card becomes clickable later
     onEditClick(schedule.id);
@@ -28,39 +20,23 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
   return (
     <IonCard className="schedule-card">
-      <IonCardHeader>
-        <IonCardTitle>{schedule.name}</IonCardTitle>
-      </IonCardHeader>
       <IonCardContent>
         <div className="schedule-details">
-          <IonText color="medium">
-            <p className="schedule-time">
-              {schedule.startTime} - {schedule.endTime}
-            </p>
-          </IonText>
-          {/* Removed product count text from here */}
-          {/* <IonText color="medium">
-            <p className="schedule-products">
-              {schedule.productIds.length} Product(s)
-            </p>
-          </IonText> */}
-          {/* Display days if needed, perhaps in a more compact way */}
-          {/* <IonText color="medium">
-            <p className="schedule-days">{schedule.days.join(', ')}</p>
-          </IonText> */}
+          <IonCardTitle>{schedule.name}</IonCardTitle>
+
+          <div className="schedule-time">
+            <IonText color="medium">
+              <p className="schedule-time">
+                {schedule.startTime} - {schedule.endTime}
+              </p>
+            </IonText>
+          </div>
         </div>
-        {/* Product count in oval container */}
-        <div className="product-count-oval">
+        {/* Product count with "x Products" format and styling */}
+        <div className="product-count-display">
           <IonText color="dark">
-            <p>{schedule.productIds.length}</p>
+            <p>{schedule.productIds.length} Products</p>
           </IonText>
-        </div>
-        {/* Make the entire actions div clickable */}
-        <div className="schedule-actions" onClick={handleEditClick}>
-          <IonButton fill="clear" size="small">
-            <IonIcon slot="icon-only" icon={createOutline}></IonIcon>
-            {/* <IonLabel>Edit</IonLabel> Add label if preferred */}
-          </IonButton>
         </div>
       </IonCardContent>
     </IonCard>
