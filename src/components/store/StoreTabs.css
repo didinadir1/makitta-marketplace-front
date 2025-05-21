@@ -5,12 +5,12 @@
   overflow-y: auto;
 }
 
-/* Add Button Container */
-.add-button-container {
+/* Add Button Container (Removed - replaced by FAB) */
+/* .add-button-container {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
-}
+} */
 
 /* Category List Styling */
 .category-list {
@@ -63,4 +63,16 @@
 .tab-label {
   font-size: 14px;
   margin-top: 4px;
+}
+
+/* Floating Action Button (FAB) Styling */
+ion-fab[slot="fixed"] {
+  margin-bottom: 160px; /* Adjust vertical position */
+  margin-right: 30px; /* Adjust horizontal position */
+}
+
+ion-fab-button {
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a more prominent shadow */
+  --background: var(--ion-color-primary); /* Use primary color */
+  --color: var(--ion-color-primary-contrast); /* White icon color */
 }
