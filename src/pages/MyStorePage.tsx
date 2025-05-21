@@ -13,9 +13,9 @@ import { addOutline } from 'ionicons/icons';
 import React from 'react';
 import ProductList from '../components/products/ProductList';
 import ScheduleList from '../components/schedules/ScheduleList'; // Import ScheduleList
-import './ProductsPage.css';
+import './MyStorePage.css';
 
-const ProductsPage: React.FC = () => {
+const MyStorePage: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
   const [presentToast] = useIonToast(); // Hook for presenting toasts
 
@@ -70,7 +70,7 @@ const ProductsPage: React.FC = () => {
     <IonPage>
       <IonHeader translucent={true}>
         <IonToolbar>
-          <IonTitle>Products</IonTitle>
+          <IonTitle>My Store</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -83,7 +83,6 @@ const ProductsPage: React.FC = () => {
 
         {/* Schedules Section */}
         <div className="schedule-section-container">
-          <h2 className="section-title">Schedules</h2>
           {/* Add Schedule Button */}
           <div className="add-schedule-button-container">
             <IonButton onClick={handleAddScheduleClick}>
@@ -103,4 +102,4 @@ const ProductsPage: React.FC = () => {
   );
 };
 
-export default ProductsPage;
+export default MyStorePage;

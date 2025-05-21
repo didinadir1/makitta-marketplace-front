@@ -25,7 +25,7 @@ import ProfileEditPage from './pages/ProfileEditPage'; // Import the new Profile
 import { CartProvider } from './state/cartState'; // Import CartProvider
 import { AppModeProvider, useAppMode } from './state/appModeState'; // Import AppModeProvider
 import DashboardPage from './pages/DashboardPage';
-import ProductsPage from './pages/ProductsPage';
+import MyStorePage from './pages/MyStorePage';
 import OrdersPage from './pages/OrdersPage';
 import { ProductContextProvider } from './state/productState'; // Import AppContextProvider
 
@@ -83,8 +83,8 @@ const TabsContainer: React.FC = () => {
         <Route exact path="/dashboard">
           <DashboardPage />
         </Route>
-        <Route exact path="/products">
-          <ProductsPage />
+        <Route exact path="/MyStore">
+          <MyStorePage />
         </Route>
         <Route exact path="/orders">
           <OrdersPage />
@@ -121,9 +121,9 @@ const TabsContainer: React.FC = () => {
             <IonIcon aria-hidden="true" icon={grid} /> {/* Changed icon */}
             <IonLabel>Dashboard</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="products" href="/products">
+          <IonTabButton tab="MyStore" href="/MyStore">
             <IonIcon aria-hidden="true" icon={fastFood} /> {/* Changed icon */}
-            <IonLabel>Products</IonLabel>
+            <IonLabel>My Store</IonLabel>
           </IonTabButton>
           <IonTabButton tab="orders" href="/orders">
             <IonIcon aria-hidden="true" icon={receipt} /> {/* Changed icon */}
