@@ -45,6 +45,12 @@ ion-content {
   --color: var(--ion-color-primary-contrast, #fff); /* White text */
 }
 
+/* Make IonList background transparent */
+ion-list {
+  --background: transparent;
+}
+
+
 /* Product Card Styling (already exists, ensure consistency) */
 /* .product-card { ... } */
 /* .product-card-content { ... } */
