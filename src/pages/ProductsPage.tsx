@@ -6,6 +6,8 @@ import {
   IonTitle,
   IonToolbar,
   IonButton,
+  useIonAlert, // Import useIonAlert
+  useIonToast, // Import useIonToast
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import React from 'react';
@@ -14,6 +16,9 @@ import ScheduleList from '../components/schedules/ScheduleList'; // Import Sched
 import './ProductsPage.css';
 
 const ProductsPage: React.FC = () => {
+  const [presentAlert] = useIonAlert(); // Hook for presenting alerts
+  const [presentToast] = useIonToast(); // Hook for presenting toasts
+
   const handleAddScheduleClick = () => {
     console.log('Add New Schedule clicked');
     // Implement logic to navigate to schedule form or open modal
@@ -23,6 +28,43 @@ const ProductsPage: React.FC = () => {
     console.log('Edit Schedule clicked for ID:', scheduleId);
     // Implement logic to navigate to schedule form or open modal for editing
   };
+
+  const handleDeleteSchedule = (scheduleId: string) => {
+    presentAlert({
+      header: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this schedule?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            presentToast({
+              message: 'Deletion cancelled',
+              duration: 1500,
+              position: 'bottom',
+              color: 'medium',
+            });
+          },
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            console.log('Deleting schedule with ID:', scheduleId);
+            // Implement actual deletion logic here
+            // For now, just show a success toast
+            presentToast({
+              message: 'Schedule deleted successfully',
+              duration: 1500,
+              position: 'bottom',
+              color: 'success',
+            });
+          },
+        },
+      ],
+    });
+  };
+
 
   return (
     <IonPage>
@@ -51,7 +93,10 @@ const ProductsPage: React.FC = () => {
           </div>
 
           {/* Schedule List Component */}
-          <ScheduleList onEditSchedule={handleEditSchedule} />
+          <ScheduleList
+            onEditSchedule={handleEditSchedule}
+            onDeleteSchedule={handleDeleteSchedule} // Pass delete handler
+          />
         </div>
       </IonContent>
     </IonPage>
