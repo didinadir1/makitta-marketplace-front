@@ -1,5 +1,6 @@
 .schedule-card {
-  margin: 10px; /* Add some margin around the card */
+  margin: 0; /* Remove margin as IonItem will handle spacing */
+  width: 100%; /* Make sure card takes full width */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   border-radius: 8px; /* Rounded corners */
   overflow: hidden; /* Ensure content stays within rounded corners */
@@ -93,9 +94,23 @@ ion-item-option {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Adjust width if needed, default is usually fine */
+  padding: 0 16px; /* Add some padding */
 }
 
 ion-item-option ion-icon {
   font-size: 1.5em; /* Slightly larger icon in options */
+}
+
+/* Make sure the IonItem doesn't add its own styling */
+ion-item.ion-no-padding {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: transparent;
+  --border-style: none;
+}
+
+/* Make sure the sliding item takes full width */
+ion-item-sliding {
+  width: 100%;
+  margin: 10px 0; /* Add vertical margin */
 }
