@@ -6,9 +6,10 @@ import ScheduleCard from './ScheduleCard'; // Import ScheduleCard
 
 interface ScheduleListProps {
   onEditSchedule: (scheduleId: string) => void;
+  onDeleteSchedule?: (scheduleId: string) => void; // Optional delete function
 }
 
-const ScheduleList: React.FC<ScheduleListProps> = ({ onEditSchedule }) => {
+const ScheduleList: React.FC<ScheduleListProps> = ({ onEditSchedule,onDeleteSchedule }) => {
   const schedules: Schedule[] = mockSchedules; // Use mock schedules
 
   return (
@@ -18,6 +19,7 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ onEditSchedule }) => {
           key={schedule.id}
           schedule={schedule}
           onEditClick={onEditSchedule}
+          onDeleteClick={onDeleteSchedule}
         />
       ))}
     </IonList>

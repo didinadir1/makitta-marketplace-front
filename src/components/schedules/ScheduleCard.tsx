@@ -1,12 +1,12 @@
 import {
-  IonCard, 
-  IonCardContent, 
-  IonCardTitle, 
-  IonIcon, 
-  IonItem, 
-  IonItemOption, 
-  IonItemOptions, 
-  IonItemSliding, 
+  IonCard,
+  IonCardContent,
+  IonCardTitle,
+  IonIcon,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
   IonText
 } from '@ionic/react';
 import {createOutline, trashOutline} from 'ionicons/icons';
@@ -55,9 +55,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   return (
     <IonItemSliding>
       {/* Left side swipe options (appears when swiping right-to-left) */}
-      <IonItemOptions side="start">
-        <IonItemOption color="primary" onClick={handleEditClick}>
-          <IonIcon slot="icon-only" icon={createOutline} />
+      <IonItemOptions side="start" className="item-option-start">
+        <IonItemOption color="danger" onClick={handleDeleteClick}>
+          <IonIcon slot="icon-only" icon={trashOutline}/>
         </IonItemOption>
       </IonItemOptions>
 
@@ -65,7 +65,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       <IonItem lines="none" className="ion-no-padding">
         <IonCard className="schedule-card">
           {/* Colored Badge */}
-          <div className="schedule-badge" style={{ backgroundColor: badgeColor }}></div>
+          <div className="schedule-badge" style={{backgroundColor: badgeColor}}></div>
 
           <IonCardContent>
             <div className="schedule-details">
@@ -90,9 +90,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       </IonItem>
 
       {/* Right side swipe options (appears when swiping left-to-right) */}
-      <IonItemOptions side="end">
-        <IonItemOption color="danger" onClick={handleDeleteClick}>
-          <IonIcon slot="icon-only" icon={trashOutline} />
+      <IonItemOptions side="end" className="item-option-end">
+        <IonItemOption color="primary" onClick={handleEditClick}>
+          <IonIcon slot="icon-only" icon={createOutline}/>
         </IonItemOption>
       </IonItemOptions>
     </IonItemSliding>
