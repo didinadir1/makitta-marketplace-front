@@ -4,17 +4,21 @@
   border-radius: 8px; /* Rounded corners */
   overflow: hidden; /* Ensure content stays within rounded corners */
   position: relative; /* Needed for absolute positioning of the oval */
-  display: flex; /* Use flexbox to align badge and content */
+  align-items: stretch; /* Stretch items to fill the container height */
 }
 
 /* Colored Badge Styling */
 .schedule-badge {
   width: 8px; /* Width of the badge */
-  height: 90%; /* Take 90% of the card height */
-  margin: auto 0; /* Vertically center the badge */
+  /* height: 90%; Removed fixed height */
+  /* margin: auto 0; Removed auto margin */
   border-radius: 4px; /* Slightly rounded corners for the badge */
   flex-shrink: 0; /* Prevent the badge from shrinking */
-  margin-left: 5px; /* Space from the left edge of the card */
+  /* margin-left: 5px; Removed margin-left */
+  position: absolute; /* Position the badge absolutely */
+  top: 5%; /* Position from the top (5% from top) */
+  bottom: 5%; /* Position from the bottom (5% from bottom), effectively making it 90% height */
+  left: 1%; /* Position at the left edge */
 }
 
 
@@ -33,6 +37,7 @@
   align-items: center; /* Vertically align items */
   flex-grow: 1; /* Allow content to take up remaining space */
   padding: 10px 15px; /* Add padding to the content */
+  padding-left: 20px; /* Add padding to the left to make space for the badge */
 }
 
 .schedule-details {
