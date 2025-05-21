@@ -1,0 +1,151 @@
+/* Modal styling */
+.product-form-modal {
+    --width: 100%;
+    --border-radius: 16px 16px 0 0;
+    --box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+    --height: 80%;
+}
+
+/* Form styling */
+.form-list {
+    background: transparent;
+    padding: 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+
+.form-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --background: transparent;
+    margin-bottom: 8px;
+    --highlight-height: 1px;
+}
+
+.form-input {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --background: var(--ion-color-light);
+    --border-radius: 8px;
+    --placeholder-color: var(--ion-color-medium);
+    font-size: 16px;
+}
+
+.form-select {
+    width: 100%;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+}
+
+/* Add-ons styling */
+.add-ons-group {
+    margin-bottom: 24px;
+}
+
+.add-ons-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 4px;
+}
+
+.add-on-chip {
+    --background: var(--ion-color-light);
+    --color: var(--ion-color-dark);
+    width: 100%;
+    border-radius: 16px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-on-name {
+    font-weight: 500;
+}
+
+.add-on-price {
+    color: var(--ion-color-medium);
+    font-size: 14px;
+}
+
+.remove-add-on {
+    color: var(--ion-color-danger);
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.add-on-form {
+    padding: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-add-on-button {
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+    height: 100%;
+    margin: 0;
+}
+
+/* Availability toggle */
+.availability-item {
+    --inner-padding-end: 0;
+    --background: var(--ion-color-light);
+    border-radius: 8px;
+}
+
+.availability-toggle {
+    --background: var(--ion-color-medium);
+    --background-checked: var(--ion-color-success);
+    --handle-background: var(--ion-color-light);
+    --handle-background-checked: var(--ion-color-light);
+}
+
+/* Footer styling */
+
+.form-footer-toolbar{
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    --background: var(--ion-color-light);
+    --border-radius: 0 0 16px 16px;
+    padding: 16px;
+}
+
+.cancel-button {
+    --border-radius: 8px;
+    --border-color: var(--ion-color-medium);
+    --background: var(--ion-color-primary-contrast);
+    font-weight: 500;
+}
+
+.save-button {
+    --border-radius: 8px;
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    font-weight: 500;
+}
+
+/* Make sure the footer is always visible */
+ion-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}

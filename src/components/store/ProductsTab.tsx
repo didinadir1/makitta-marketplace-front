@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {IonContent, IonFab, IonFabButton, IonIcon, IonPage, useIonAlert, useIonToast,} from '@ionic/react'; // Import hooks for dialog/toast
 import {addOutline} from 'ionicons/icons';
 import ProductList from '../products/ProductList';
+import ProductFormModal from '../products/ProductFormModal';
+import { Product } from '../../types/Product';
+import { mockProducts } from '../../data/mockProducts';
 import './StoreTabs.css';
 
 interface ProductsTabProps {
@@ -11,10 +14,40 @@ interface ProductsTabProps {
 const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
   const [presentToast] = useIonToast(); // Hook for presenting toasts
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState<Product | undefined>(undefined);
+
+  const handleOpenModal = () => {
+    setCurrentProduct(undefined); // Reset for new product
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentProduct(undefined);
+  };
 
   const handleEditProduct = (productId: string) => {
     console.log('Edit Product clicked for ID:', productId);
-    // Implement logic to navigate to product form or open modal for editing
+    // Find the product to edit
+    const productToEdit = mockProducts.find(p => p.id === productId);
+    if (productToEdit) {
+      setCurrentProduct(productToEdit);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleSaveProduct = (product: Product) => {
+    console.log('Saving product:', product);
+    // Here you would update your state or call an API
+    // For now, just show a success toast
+    presentToast({
+      message: `Product ${currentProduct ? 'updated' : 'added'} successfully`,
+      duration: 1500,
+      position: 'bottom',
+      color: 'success',
+    });
+    setIsModalOpen(false);
   };
 
   const handleDeleteProduct = (productId: string) => {
@@ -55,10 +88,8 @@ const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
 
 
   return (
-    <IonPage> {/* Wrap content in IonPage */}
-      <IonContent fullscreen> {/* Wrap content in IonContent */}
+
         <div className="tab-content">
-          <h2 className="section-title">Manage Your Products</h2> {/* Added section title */}
           <ProductList
             onEditProduct={handleEditProduct}
             onDeleteProduct={handleDeleteProduct} // Pass delete handler
@@ -66,13 +97,19 @@ const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
 
           {/* Floating Action Button for Add Product */}
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
-            <IonFabButton onClick={onAddProductClick}>
+            <IonFabButton onClick={handleOpenModal}>
               <IonIcon icon={addOutline}></IonIcon>
             </IonFabButton>
           </IonFab>
+
+          {/* Product Form Modal */}
+          <ProductFormModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onSave={handleSaveProduct}
+            product={currentProduct}
+          />
         </div>
-      </IonContent>
-    </IonPage>
   );
 };
 

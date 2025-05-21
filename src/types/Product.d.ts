@@ -1,10 +1,14 @@
 export interface Product {
-  imageUrls: string[]; // Array of image URLs
   id: string;
   name: string;
-  image: string;
   description: string;
-  category: string;
+  categoryId: string;
+  imageUrls: string[]; // Array of image URLs
   basePrice: number;
-  addOns: string[];
+  isAvailable: boolean;
+  addOns: Array<{
+    id: string;
+    name: string;
+    price: number;
+  }>;
 }

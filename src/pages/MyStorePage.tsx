@@ -105,7 +105,7 @@ const MyStorePage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader translucent={true}>
-        <IonToolbar>
+        <IonToolbar >
           <IonSegment value={activeTab} onIonChange={e => setActiveTab(e.detail.value as string)}>
             <IonSegmentButton value="products">
               <IonIcon icon={cubeOutline} />
