@@ -19,6 +19,11 @@ const MyStorePage: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
   const [presentToast] = useIonToast(); // Hook for presenting toasts
 
+  const handleAddProductClick = () => {
+    console.log('Add New Product clicked');
+    // Implement logic to navigate to product form or open modal
+  };
+
   const handleAddScheduleClick = () => {
     console.log('Add New Schedule clicked');
     // Implement logic to navigate to schedule form or open modal
@@ -76,6 +81,13 @@ const MyStorePage: React.FC = () => {
       <IonContent fullscreen>
         <div className="product-section-container">
           <h2 className="section-title">Products</h2> {/* Added title back with class */}
+          {/* Add Product Button */}
+          <div className="add-button-container add-product-button-container">
+            <IonButton onClick={handleAddProductClick}>
+              <IonIcon slot="start" icon={addOutline}></IonIcon>
+              Add New Product
+            </IonButton>
+          </div>
           <ProductList />
         </div>
         {/* Section Separator */}
@@ -83,8 +95,9 @@ const MyStorePage: React.FC = () => {
 
         {/* Schedules Section */}
         <div className="schedule-section-container">
+          <h2 className="section-title">Schedules</h2>
           {/* Add Schedule Button */}
-          <div className="add-schedule-button-container">
+          <div className="add-button-container add-schedule-button-container">
             <IonButton onClick={handleAddScheduleClick}>
               <IonIcon slot="start" icon={addOutline}></IonIcon>
               Add New Schedule

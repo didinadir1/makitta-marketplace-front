@@ -24,15 +24,15 @@ ion-content {
 }
 
 
-/* Add Schedule Button Styling */
-.add-schedule-button-container {
+/* Add Button Styling (Common) */
+.add-button-container {
   display: flex;
   justify-content: center; /* Center the button horizontally */
   margin-bottom: 15px; /* Add space below the button */
   margin-top: 15px; /* Add space above the button */
 }
 
-.add-schedule-button-container ion-button {
+.add-button-container ion-button {
   --padding-start: 25px; /* Adjust padding */
   --padding-end: 25px;
   --padding-top: 12px;
@@ -45,12 +45,13 @@ ion-content {
   --color: var(--ion-color-primary-contrast, #fff); /* White text */
 }
 
-/* Make IonList background transparent */
-.product-section-container ion-list {
-  background: transparent;
+/* Specific Button Containers (Inherit common styles) */
+.add-product-button-container {
+  /* Inherits styles from .add-button-container */
 }
-.schedule-section-container ion-list {
-  background: transparent;
+
+.add-schedule-button-container {
+  /* Inherits styles from .add-button-container */
 }
 
 
@@ -74,3 +75,11 @@ ion-content {
 /* .schedule-details p { ... } */
 /* .schedule-actions { ... } */
 /* .schedule-actions ion-button { ... } */
+
+/* Make IonList background transparent */
+.product-section-container ion-list {
+  background: transparent;
+}
+.schedule-section-container ion-list {
+  background: transparent;
+}
