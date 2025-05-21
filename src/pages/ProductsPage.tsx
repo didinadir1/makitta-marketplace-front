@@ -28,13 +28,14 @@ const ProductsPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <div className="product-section-container">
         <ProductList/>
-
+        </div>
         {/* Section Separator */}
         <div className="section-separator"></div>
 
         {/* Schedules Section */}
-        <div>
+        <div className="schedule-section-container">
           <h2 className="section-title">Schedules</h2>
           {/* Add Schedule Button */}
           <div className="add-schedule-button-container">
