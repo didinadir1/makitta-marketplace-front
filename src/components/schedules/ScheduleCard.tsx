@@ -9,6 +9,17 @@ interface ScheduleCardProps {
   onEditClick: (scheduleId: string) => void;
 }
 
+// Define a list of colors for the badges
+const badgeColors = [
+  '#FF6347', // Tomato
+  '#4682B4', // SteelBlue
+  '#32CD32', // LimeGreen
+  '#FFD700', // Gold
+  '#6A5ACD', // SlateBlue
+  '#FF8C00', // DarkOrange
+  '#00CED1', // DarkTurquoise
+];
+
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
                                                      schedule,
                                                      onEditClick,
@@ -18,8 +29,17 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     onEditClick(schedule.id);
   };
 
+  // Determine the color based on the schedule index (for demonstration)
+  // In a real app, you might want a more robust way to assign colors
+  const scheduleIndex = parseInt(schedule.id.replace('sch', ''), 10) - 1; // Simple way to get an index from mock ID
+  const badgeColor = badgeColors[scheduleIndex % badgeColors.length];
+
+
   return (
     <IonCard className="schedule-card">
+      {/* Colored Badge */}
+      <div className="schedule-badge" style={{ backgroundColor: badgeColor }}></div>
+
       <IonCardContent>
         <div className="schedule-details">
           <IonCardTitle>{schedule.name}</IonCardTitle>

@@ -4,7 +4,19 @@
   border-radius: 8px; /* Rounded corners */
   overflow: hidden; /* Ensure content stays within rounded corners */
   position: relative; /* Needed for absolute positioning of the oval */
+  display: flex; /* Use flexbox to align badge and content */
 }
+
+/* Colored Badge Styling */
+.schedule-badge {
+  width: 8px; /* Width of the badge */
+  height: 90%; /* Take 90% of the card height */
+  margin: auto 0; /* Vertically center the badge */
+  border-radius: 4px; /* Slightly rounded corners for the badge */
+  flex-shrink: 0; /* Prevent the badge from shrinking */
+  margin-left: 5px; /* Space from the left edge of the card */
+}
+
 
 .schedule-card ion-card-header {
   padding-bottom: 0; /* Reduce space below title */
@@ -19,6 +31,8 @@
   display: flex;
   justify-content: space-between; /* Space out details and actions */
   align-items: center; /* Vertically align items */
+  flex-grow: 1; /* Allow content to take up remaining space */
+  padding: 10px 15px; /* Add padding to the content */
 }
 
 .schedule-details {
@@ -27,6 +41,8 @@
   justify-content: center; /* Center the details vertically */
   padding: 5px; /* Add padding around the details */
   gap: 20px;
+  flex-grow: 1; /* Allow details to take up space */
+  margin-right: 10px; /* Space between details and count */
 }
 
 .schedule-details ion-card-title{
@@ -37,8 +53,7 @@
 }
 
 .schedule-time {
-  flex-grow: 1; /* Details take up available space */
-  margin-right: 10px; /* Space between details and actions */
+  /* Removed flex-grow and margin-right */
 }
 
 .schedule-time p {
@@ -48,8 +63,6 @@
 
 /* Product Count Display Styling */
 .product-count-display {
-  /* Removed absolute positioning */
-  /* Positioned within the flex container */
   background-color: transparent; /* Transparent background */
   border: 1px solid var(--ion-color-step-150, #dcdcdc); /* Very light border */
   border-radius: 15px; /* Make it oval/pill-shaped */
@@ -58,30 +71,26 @@
   font-weight: bold;
   text-align: center; /* Center the text */
   flex-shrink: 0; /* Prevent shrinking */
+  margin-right: 10px; /* Space between count and actions */
 }
 
 .product-count-display p {
+  margin: 0; /* Remove default paragraph margin */
   font-size: 0.9em;
 }
 
 
-.schedule-actions {
-  flex-shrink: 0; /* Prevent actions from shrinking */
-  display: flex; /* Use flexbox to center content */
-  align-items: center; /* Vertically center the icon */
-  justify-content: center; /* Horizontally center the icon (if needed, though align-items is key here) */
-  padding: 5px; /* Add padding to make the clickable area larger */
-  cursor: pointer; /* Indicate it's clickable */
-  /* Make the entire actions area clickable */
-  width: 40px; /* Give it a fixed width to define the clickable area */
-  height: 100%; /* Make it take the full height of the card content */
+/* Schedule Actions (now within swipe options) */
+/* Removed the .schedule-actions rule as the button is now in IonItemOption */
+
+/* Style for the IonItemOption buttons */
+ion-item-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Adjust width if needed, default is usually fine */
 }
 
-.schedule-actions ion-button {
-  --padding-start: 0; /* Remove button padding */
-  --padding-end: 0;
-  --padding-top: 0;
-  --padding-bottom: 0;
-  margin: 0; /* Remove button margin */
-  font-size: 1.3em; /* Keep the increased icon size */
+ion-item-option ion-icon {
+  font-size: 1.5em; /* Slightly larger icon in options */
 }
