@@ -1,85 +1,52 @@
-/* General Page Styling */
+/* Segment (Tab) Styling */
+ion-segment {
+  --background: var(--ion-color-light);
+  padding: 5px 0 0 0;
+  width: 100%;
+}
+
+ion-segment-button {
+  --indicator-color: var(--ion-color-primary);
+  --color-checked: var(--ion-color-step-50);
+  --color: var(--ion-color-medium);
+  font-size: 14px;
+  text-transform: none;
+  min-height: 40px;
+  padding: 8px;
+}
+
+ion-segment-button ion-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+/* Content Styling */
 ion-content {
   --background: var(--ion-color-light, #f4f5f8); /* Use a light background for the page */
 }
 
-/* Container Styling for Sections */
-
-/* Section Title Styling */
-.section-title {
-  margin-top: 0; /* Remove default top margin */
-  margin-bottom: 15px; /* Add space below heading */
-  font-size: 1.4em; /* Slightly larger heading */
-  font-weight: bold;
-  color: var(--ion-color-dark, #000); /* Darker heading color */
-  padding: 0 15px; /* Add horizontal padding to the title */
-}
-
-
-/* Section Separator */
-.section-separator {
-  height: 1px; /* Height of the separator line */
-  background-color: var(--ion-color-step-150, #dcdcdc); /* Light grey color */
-  margin: 30px 15px; /* Add vertical margin and horizontal padding */
-}
-
-
 /* Add Button Styling (Common) */
 .add-button-container {
   display: flex;
-  justify-content: center; /* Center the button horizontally */
-  margin-bottom: 15px; /* Add space below the button */
-  margin-top: 15px; /* Add space above the button */
+  justify-content: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 .add-button-container ion-button {
-  --padding-start: 25px; /* Adjust padding */
+  --padding-start: 25px;
   --padding-end: 25px;
   --padding-top: 12px;
   --padding-bottom: 12px;
-  --border-radius: 28px; /* Make it more pill-shaped */
-  font-size: 1.1em; /* Slightly larger font size */
+  --border-radius: 28px;
+  font-size: 1.1em;
   font-weight: bold;
-  text-transform: none; /* Prevent uppercase text */
-  --background: var(--ion-color-primary, #3880ff); /* Use primary color */
-  --color: var(--ion-color-primary-contrast, #fff); /* White text */
+  text-transform: none;
+  --background: var(--ion-color-primary, #3880ff);
+  --color: var(--ion-color-primary-contrast, #fff);
 }
-
-/* Specific Button Containers (Inherit common styles) */
-.add-product-button-container {
-  /* Inherits styles from .add-button-container */
-}
-
-.add-schedule-button-container {
-  /* Inherits styles from .add-button-container */
-}
-
-
-/* Product Card Styling (already exists, ensure consistency) */
-/* .product-card { ... } */
-/* .product-card-content { ... } */
-/* .product-thumbnail { ... } */
-/* .product-details { ... } */
-/* .product-name { ... } */
-/* .product-price { ... } */
-/* .product-category { ... } */
-/* .product-actions { ... } */
-/* .product-actions ion-icon { ... } */
-
-/* Schedule Card Styling (already exists, ensure consistency) */
-/* .schedule-card { ... } */
-/* .schedule-card ion-card-header { ... } */
-/* .schedule-card ion-card-title { ... } */
-/* .schedule-card ion-card-content { ... } */
-/* .schedule-details { ... } */
-/* .schedule-details p { ... } */
-/* .schedule-actions { ... } */
-/* .schedule-actions ion-button { ... } */
 
 /* Make IonList background transparent */
-.product-section-container ion-list {
-  background: transparent;
-}
-.schedule-section-container ion-list {
-  background: transparent;
+ion-list {
+  background: transparent !important;
 }

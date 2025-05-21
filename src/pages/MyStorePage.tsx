@@ -1,23 +1,31 @@
 import {
   IonContent,
   IonHeader,
-  IonIcon,
   IonPage,
   IonTitle,
   IonToolbar,
-  IonButton,
-  useIonAlert, // Import useIonAlert
-  useIonToast, // Import useIonToast
+  useIonAlert,
+  useIonToast,
+  IonSegment,
+  IonSegmentButton,
+  IonIcon,
+  IonLabel,
 } from '@ionic/react';
-import { addOutline } from 'ionicons/icons';
-import React from 'react';
-import ProductList from '../components/products/ProductList';
-import ScheduleList from '../components/schedules/ScheduleList'; // Import ScheduleList
+import { 
+  cubeOutline, 
+  calendarOutline, 
+  listOutline 
+} from 'ionicons/icons';
+import React, { useState } from 'react';
+import ProductsTab from '../components/store/ProductsTab';
+import SchedulesTab from '../components/store/SchedulesTab';
+import CategoriesTab from '../components/store/CategoriesTab';
 import './MyStorePage.css';
 
 const MyStorePage: React.FC = () => {
-  const [presentAlert] = useIonAlert(); // Hook for presenting alerts
-  const [presentToast] = useIonToast(); // Hook for presenting toasts
+  const [presentAlert] = useIonAlert();
+  const [presentToast] = useIonToast();
+  const [activeTab, setActiveTab] = useState<string>('products');
 
   const handleAddProductClick = () => {
     console.log('Add New Product clicked');
@@ -27,6 +35,11 @@ const MyStorePage: React.FC = () => {
   const handleAddScheduleClick = () => {
     console.log('Add New Schedule clicked');
     // Implement logic to navigate to schedule form or open modal
+  };
+
+  const handleAddCategoryClick = () => {
+    console.log('Add New Category clicked');
+    // Implement logic to navigate to category form or open modal
   };
 
   const handleEditSchedule = (scheduleId: string) => {
@@ -70,46 +83,47 @@ const MyStorePage: React.FC = () => {
     });
   };
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'products':
+        return <ProductsTab onAddProductClick={handleAddProductClick} />;
+      case 'schedules':
+        return (
+          <SchedulesTab 
+            onAddScheduleClick={handleAddScheduleClick}
+            onEditSchedule={handleEditSchedule}
+            onDeleteSchedule={handleDeleteSchedule}
+          />
+        );
+      case 'categories':
+        return <CategoriesTab onAddCategoryClick={handleAddCategoryClick} />;
+      default:
+        return <ProductsTab onAddProductClick={handleAddProductClick} />;
+    }
+  };
 
   return (
     <IonPage>
       <IonHeader translucent={true}>
         <IonToolbar>
-          <IonTitle>My Store</IonTitle>
+          <IonSegment value={activeTab} onIonChange={e => setActiveTab(e.detail.value as string)}>
+            <IonSegmentButton value="products">
+              <IonIcon icon={cubeOutline} />
+              <IonLabel>Products</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="schedules">
+              <IonIcon icon={calendarOutline} />
+              <IonLabel>Schedules</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="categories">
+              <IonIcon icon={listOutline} />
+              <IonLabel>Categories</IonLabel>
+            </IonSegmentButton>
+          </IonSegment>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <div className="product-section-container">
-          <h2 className="section-title">Products</h2> {/* Added title back with class */}
-          {/* Add Product Button */}
-          <div className="add-button-container add-product-button-container">
-            <IonButton onClick={handleAddProductClick}>
-              <IonIcon slot="start" icon={addOutline}></IonIcon>
-              Add New Product
-            </IonButton>
-          </div>
-          <ProductList />
-        </div>
-        {/* Section Separator */}
-        <div className="section-separator"></div>
-
-        {/* Schedules Section */}
-        <div className="schedule-section-container">
-          <h2 className="section-title">Schedules</h2>
-          {/* Add Schedule Button */}
-          <div className="add-button-container add-schedule-button-container">
-            <IonButton onClick={handleAddScheduleClick}>
-              <IonIcon slot="start" icon={addOutline}></IonIcon>
-              Add New Schedule
-            </IonButton>
-          </div>
-
-          {/* Schedule List Component */}
-          <ScheduleList
-            onEditSchedule={handleEditSchedule}
-            onDeleteSchedule={handleDeleteSchedule} // Pass delete handler
-          />
-        </div>
+        {renderTabContent()}
       </IonContent>
     </IonPage>
   );
