@@ -1,57 +1,91 @@
+/* Style the sliding item container */
+ion-item-sliding {
+    margin: 0 8px; /* Remove margin as IonItem will handle spacing */
+    border-radius: 8px; /* Match card border radius */
+    overflow: hidden; /* Ensure content stays within rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Match card shadow */
+    width: 100%; /* Make sure sliding item takes full width */
+}
+
+/* Style the card itself within the sliding item */
 .product-card {
-  margin: 10px; /* Add some margin around the card */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  border-radius: 8px; /* Rounded corners */
-  overflow: hidden; /* Ensure content stays within rounded corners */
-  cursor: pointer; /* Indicate it's clickable */
+    margin: 0 8px; /* Remove margin as IonItem will handle spacing */
+    width: 100%; /* Make sure card takes full width */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Ensure content stays within rounded corners */
+    position: relative; /* Needed for absolute positioning of the oval */
+    align-items: stretch; /* Stretch items to fill the container height */
 }
 
 .product-card-content {
-  display: flex;
-  align-items: center; /* Vertically align items */
-  padding: 10px; /* Padding inside the card */
+    display: flex;
+    align-items: center; /* Vertically align items */
+    padding: 10px; /* Padding inside the card */
 }
 
 .product-thumbnail {
-  flex: 0 0 40%; /* Thumbnail takes 40% of the width */
-  max-width: 40%;
-  margin-right: 10px; /* Space between thumbnail and details */
+    flex: 0 0 40%; /* Thumbnail takes 40% of the width */
+    max-width: 40%;
+    margin-right: 10px; /* Space between thumbnail and details */
 }
 
 .product-thumbnail ion-img {
-  width: 100%;
-  height: 100px; /* Fixed height for consistency */
-  object-fit: cover; /* Cover the area without distorting aspect ratio */
-  border-radius: 4px; /* Slightly rounded corners for the image */
+    width: 100%;
+    height: 100px; /* Fixed height for consistency */
+    object-fit: cover; /* Cover the area without distorting aspect ratio */
+    border-radius: 4px; /* Slightly rounded corners for the image */
 }
 
 .product-details {
-  flex-grow: 1; /* Details take up the remaining space */
+    flex-grow: 1; /* Details take up the remaining space */
 }
 
 .product-name {
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-bottom: 2px; /* Space below name */
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 2px; /* Space below name */
 }
 
 .product-price {
-  font-size: 1em;
-  margin-bottom: 2px; /* Space below price */
+    font-size: 1em;
+    margin-bottom: 2px; /* Space below price */
 }
 
 .product-category {
-  font-size: 0.8em;
-  margin-top: 0; /* No top margin */
+    font-size: 0.8em;
+    margin-top: 0; /* No top margin */
 }
 
-.product-actions {
-  display: flex;
-  align-items: center;
-  padding: 5px; /* Padding around the icon */
-  cursor: pointer; /* Indicate the icon is clickable */
+/* Product Actions (Removed - replaced by swipe options) */
+/* .product-actions { ... } */
+/* .product-actions ion-icon { ... } */
+
+/* Style for the IonItemOption buttons (consistent with ScheduleCard) */
+ion-item-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px; /* Rounded corners */
+    padding: 0 16px; /* Add some padding */
 }
 
-.product-actions ion-icon {
-  color: var(--ion-color-medium); /* Subtle color for the icon */
+.item-option-start {
+    margin: 0 0 0 8px; /* Remove margin as IonItem will handle spacing */
+}
+
+.item-option-end {
+    margin: 0 8px 0 0; /* Remove margin as IonItem will handle spacing */
+}
+
+ion-item-option ion-icon {
+    font-size: 1.5em; /* Slightly larger icon in options */
+}
+
+/* Make sure the IonItem doesn't add its own styling */
+ion-item.ion-no-padding {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --background: transparent;
+    --border-style: none;
 }
