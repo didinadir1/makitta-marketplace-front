@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   IonButton,
   IonButtons,
+  IonCheckbox,
+  IonChip,
   IonContent,
   IonDatetime,
+  IonDatetimeButton,
   IonFooter,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
   IonModal,
-  IonTitle,
-  IonToolbar,
-  IonCheckbox,
-  IonChip,
   IonText,
-  IonInput
+  IonTitle,
+  IonToolbar
 } from '@ionic/react';
-import { closeOutline, saveOutline } from 'ionicons/icons';
-import { Product } from '../../types/Product';
-import { useProductContext } from '../../state/productState';
-import { Schedule } from '../../types/Schedule';
+import {closeOutline, saveOutline} from 'ionicons/icons';
+import {useProductContext} from '../../state/productState';
+import {Schedule} from '../../types/Schedule';
 import './ScheduleFormModal.css';
 
 interface ScheduleFormModalProps {
@@ -33,13 +33,13 @@ interface ScheduleFormModalProps {
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  onSave,
-  schedule
-}) => {
-  const { products } = useProductContext();
+const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
+                                                               isOpen,
+                                                               onClose,
+                                                               onSave,
+                                                               schedule
+                                                             }) => {
+  const {products} = useProductContext();
   const [name, setName] = useState('');
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [startTime, setStartTime] = useState('08:00');
@@ -67,7 +67,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
   };
 
   const toggleDay = (day: string) => {
-    setSelectedDays(prev => prev.includes(day) 
+    setSelectedDays(prev => prev.includes(day)
       ? prev.filter(d => d !== day)
       : [...prev, day]
     );
@@ -89,7 +89,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
       endTime,
       productIds: selectedProducts
     };
-    
+
     onSave(newSchedule);
     resetForm();
   };
@@ -97,8 +97,8 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
   const isValid = name.trim() && selectedDays.length > 0 && selectedProducts.length > 0;
 
   return (
-    <IonModal 
-      isOpen={isOpen} 
+    <IonModal
+      isOpen={isOpen}
       onDidDismiss={onClose}
       className="schedule-form-modal"
       breakpoints={[0, 0.8, 1]}
@@ -109,7 +109,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
           <IonTitle>{schedule ? 'Edit Schedule' : 'New Schedule'}</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={onClose}>
-              <IonIcon icon={closeOutline} />
+              <IonIcon icon={closeOutline}/>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -147,23 +147,30 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
           {/* Time Selection */}
           <div className="form-section">
             <IonText className="section-label">Active Hours</IonText>
-            <div className="time-pickers">
-              <IonItem>
-                <IonLabel>From</IonLabel>
-                <IonDatetime
-                  presentation="time"
-                  value={startTime}
-                  onIonChange={e => setStartTime(e.detail.value!.split('T')[1].slice(0,5))}
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel>To</IonLabel>
-                <IonDatetime
-                  presentation="time"
-                  value={endTime}
-                  onIonChange={e => setEndTime(e.detail.value!.split('T')[1].slice(0,5))}
-                />
-              </IonItem>
+            <div className="time-selection-container">
+              <div className="time-input-group">
+                <IonDatetimeButton datetime="start-time"></IonDatetimeButton>
+                <IonModal keepContentsMounted={true}>
+                  <IonDatetime
+                    id="start-time"
+                    presentation="time"
+                    value={startTime}
+                    onIonChange={e => setStartTime((e.detail.value! as string).split('T')[1].slice(0, 5))}
+                    className="time-picker"
+                  />
+                </IonModal>
+
+                <IonDatetimeButton datetime="end-time"></IonDatetimeButton>
+                <IonModal keepContentsMounted={true}>
+                  <IonDatetime
+                    id="end-time"
+                    presentation="time"
+                    value={endTime}
+                    onIonChange={e => setEndTime((e.detail.value! as string).split('T')[1].slice(0, 5))}
+                    className="time-picker"
+                  />
+                </IonModal>
+              </div>
             </div>
           </div>
 
@@ -173,10 +180,10 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
             <IonList className="products-list">
               {products.map(product => (
                 <IonItem key={product.id}>
-                  <IonCheckbox 
+                  <IonCheckbox
                     checked={selectedProducts.includes(product.id)}
                     onIonChange={() => toggleProduct(product.id)}
-                    slot="start" 
+                    slot="start"
                   />
                   <IonLabel>{product.name}</IonLabel>
                 </IonItem>
@@ -188,13 +195,13 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
 
       <IonFooter>
         <IonToolbar>
-          <IonButton 
-            expand="block" 
+          <IonButton
+            expand="block"
             onClick={handleSave}
             disabled={!isValid}
             className="save-button"
           >
-            <IonIcon icon={saveOutline} slot="start" />
+            <IonIcon icon={saveOutline} slot="start"/>
             Save Schedule
           </IonButton>
         </IonToolbar>
