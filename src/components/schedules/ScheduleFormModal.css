@@ -1,0 +1,62 @@
+.schedule-form-modal {
+  --border-radius: 16px 16px 0 0;
+  --box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  margin: 20px 0;
+}
+
+.section-label {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+  margin-bottom: 12px;
+}
+
+.days-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.time-pickers {
+  display: grid;
+  gap: 15px;
+}
+
+.products-list {
+  background: transparent;
+  margin-top: 10px;
+}
+
+.products-list ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: transparent;
+}
+
+.save-button {
+  --border-radius: 12px;
+  margin: 16px;
+}
+
+/* Style time picker buttons */
+ion-datetime::part(time-button) {
+  color: var(--ion-color-primary);
+  font-weight: 500;
+}
+
+/* Chip styling */
+ion-chip {
+  transition: all 0.2s ease;
+  --background: var(--ion-color-light);
+  --color: var(--ion-color-medium);
+}
+
+ion-chip[outline="false"] {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
