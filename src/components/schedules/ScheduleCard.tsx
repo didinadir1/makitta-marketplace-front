@@ -12,7 +12,8 @@ import {
 import {createOutline, trashOutline} from 'ionicons/icons';
 import React from 'react';
 import {Schedule} from '../../types/Schedule';
-import './ScheduleCard.css'; // Import the CSS for styling
+import './ScheduleCard.css';
+import dayjs from "dayjs";
 
 interface ScheduleCardProps {
   schedule: Schedule;
@@ -54,7 +55,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
   return (
     <IonItemSliding>
-      {/* Left side swipe options (appears when swiping right-to-left) */}
       <IonItemOptions side="start" className="item-option-start">
         <IonItemOption color="danger" onClick={handleDeleteClick}>
           <IonIcon slot="icon-only" icon={trashOutline}/>
@@ -73,9 +73,15 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
               <div className="schedule-time">
                 <IonText color="medium">
-                  <p className="schedule-time">
-                    {schedule.startTime} - {schedule.endTime}
+                  <p>
+                    {/* Format dates using dayjs */}
+                    {
+                      schedule.dates.map((date, index) => (
+                        index < schedule.dates.length - 1 ? `${dayjs(date).format('DD/MM')}, ` : `${dayjs(date).format('DD/MM')}`
+                      ))
+                    }
                   </p>
+
                 </IonText>
               </div>
             </div>
@@ -89,7 +95,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
         </IonCard>
       </IonItem>
 
-      {/* Right side swipe options (appears when swiping left-to-right) */}
       <IonItemOptions side="end" className="item-option-end">
         <IonItemOption color="primary" onClick={handleEditClick}>
           <IonIcon slot="icon-only" icon={createOutline}/>

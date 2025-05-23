@@ -3,10 +3,8 @@ import {
   IonButton,
   IonButtons,
   IonCheckbox,
-  IonChip,
   IonContent,
   IonDatetime,
-  IonDatetimeButton,
   IonFooter,
   IonHeader,
   IonIcon,
@@ -17,12 +15,16 @@ import {
   IonModal,
   IonText,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  useIonToast,
 } from '@ionic/react';
-import {closeOutline, saveOutline} from 'ionicons/icons';
+import {closeOutline} from 'ionicons/icons';
 import {useProductContext} from '../../state/productState';
 import {Schedule} from '../../types/Schedule';
 import './ScheduleFormModal.css';
+import {z} from 'zod'; // Import Zod
+import {ScheduleFormData, scheduleSchema} from '../../validation/scheduleValidation'; // Import schema
+
 
 interface ScheduleFormModalProps {
   isOpen: boolean;
@@ -31,27 +33,22 @@ interface ScheduleFormModalProps {
   schedule?: Schedule;
 }
 
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
 const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
                                                                isOpen,
                                                                onClose,
                                                                onSave,
                                                                schedule
                                                              }) => {
+  const [presentToast] = useIonToast(); // Hook for presenting toasts
   const {products} = useProductContext();
   const [name, setName] = useState('');
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [startTime, setStartTime] = useState('08:00');
-  const [endTime, setEndTime] = useState('17:00');
+  const [selectedDates, setSelectedDates] = useState<string[]>([]); // State for selected dates
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
 
   useEffect(() => {
     if (schedule) {
       setName(schedule.name);
-      setSelectedDays(schedule.days);
-      setStartTime(schedule.startTime);
-      setEndTime(schedule.endTime);
+      setSelectedDates(schedule.dates); // Initialize with schedule dates
       setSelectedProducts(schedule.productIds);
     } else {
       resetForm();
@@ -60,18 +57,16 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
 
   const resetForm = () => {
     setName('');
-    setSelectedDays([]);
-    setStartTime('08:00');
-    setEndTime('17:00');
+    setSelectedDates([]);
     setSelectedProducts([]);
   };
 
-  const toggleDay = (day: string) => {
-    setSelectedDays(prev => prev.includes(day)
-      ? prev.filter(d => d !== day)
-      : [...prev, day]
-    );
+  const handleDateChange = (event: CustomEvent) => {
+    // IonDatetime value can be a string (single date) or an array of strings (multiple dates)
+    const dates = Array.isArray(event.detail.value) ? event.detail.value : (event.detail.value ? [event.detail.value] : []);
+    setSelectedDates(dates.map(date => date.split('T')[0])); // Format dates to YYYY-MM-DD
   };
+
 
   const toggleProduct = (productId: string) => {
     setSelectedProducts(prev => prev.includes(productId)
@@ -81,20 +76,44 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
   };
 
   const handleSave = () => {
-    const newSchedule: Schedule = {
-      id: schedule?.id || Date.now().toString(),
-      name,
-      days: selectedDays,
-      startTime,
-      endTime,
-      productIds: selectedProducts
+    const scheduleData: ScheduleFormData = {
+      id: schedule?.id, // Include ID if editing
+      name: name.trim(),
+      dates: selectedDates, // Use selected dates
+      productIds: selectedProducts,
     };
 
-    onSave(newSchedule);
-    resetForm();
+    try {
+      // Validate data using Zod schema
+      scheduleSchema.parse(scheduleData);
+
+      // If validation passes, call onSave
+      onSave(scheduleData as Schedule); // Cast back to Schedule type if needed by onSave
+      resetForm();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        // Handle validation errors
+        console.error('Validation errors:', error.errors);
+        // Display the first validation error to the user
+        presentToast({
+          message: error.errors[0].message,
+          duration: 3000,
+          position: 'bottom',
+          color: 'danger',
+        });
+      } else {
+        console.error('An unexpected error occurred:', error);
+        presentToast({
+          message: 'An unexpected error occurred. Please try again.',
+          duration: 3000,
+          position: 'bottom',
+          color: 'danger',
+        });
+      }
+    }
   };
 
-  const isValid = name.trim() && selectedDays.length > 0 && selectedProducts.length > 0;
+  const isValid = name.trim() && selectedDates.length > 0 && selectedProducts.length > 0;
 
   return (
     <IonModal
@@ -102,7 +121,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
       onDidDismiss={onClose}
       className="schedule-form-modal"
       breakpoints={[0, 0.8, 1]}
-      initialBreakpoint={0.8}
+      initialBreakpoint={1}
     >
       <IonHeader className="ion-no-border">
         <IonToolbar>
@@ -118,71 +137,39 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
       <IonContent>
         <IonList lines="full" className="ion-padding-horizontal">
           {/* Name Field */}
-          <IonItem>
-            <IonLabel position="stacked">Schedule Name</IonLabel>
+          <div className="form-section">
+            <IonText className="section-label">Name</IonText>
             <IonInput
               value={name}
               placeholder="e.g., Lunch Hours"
               onIonChange={e => setName(e.detail.value!)}
+              className="form-input"
             />
-          </IonItem>
-
-          {/* Days Selection */}
-          <div className="form-section">
-            <IonText className="section-label">Active Days</IonText>
-            <div className="days-container">
-              {daysOfWeek.map(day => (
-                <IonChip
-                  key={day}
-                  outline={!selectedDays.includes(day)}
-                  color="primary"
-                  onClick={() => toggleDay(day)}
-                >
-                  {day.slice(0, 3)}
-                </IonChip>
-              ))}
-            </div>
           </div>
 
-          {/* Time Selection */}
+          {/* Calendar for Date Selection */}
           <div className="form-section">
-            <IonText className="section-label">Active Hours</IonText>
-            <div className="time-selection-container">
-              <div className="time-input-group">
-                <IonDatetimeButton datetime="start-time"></IonDatetimeButton>
-                <IonModal keepContentsMounted={true}>
-                  <IonDatetime
-                    id="start-time"
-                    presentation="time"
-                    value={startTime}
-                    onIonChange={e => setStartTime((e.detail.value! as string).split('T')[1].slice(0, 5))}
-                    className="time-picker"
-                  />
-                </IonModal>
-
-                <IonDatetimeButton datetime="end-time"></IonDatetimeButton>
-                <IonModal keepContentsMounted={true}>
-                  <IonDatetime
-                    id="end-time"
-                    presentation="time"
-                    value={endTime}
-                    onIonChange={e => setEndTime((e.detail.value! as string).split('T')[1].slice(0, 5))}
-                    className="time-picker"
-                  />
-                </IonModal>
-              </div>
-            </div>
+            <IonText className="section-label">Select Dates</IonText>
+            <IonDatetime
+              presentation="date"
+              multiple={true} // Allow multiple date selection
+              value={selectedDates} // Bind selected dates
+              onIonChange={handleDateChange}
+              className="schedule-calendar"
+            ></IonDatetime>
           </div>
+
 
           {/* Products Selection */}
           <div className="form-section">
             <IonText className="section-label">Apply to Products</IonText>
             <IonList className="products-list">
               {products.map(product => (
-                <IonItem key={product.id}>
+                <IonItem key={product.id}
+                         onClick={() => toggleProduct(product.id)}
+                >
                   <IonCheckbox
                     checked={selectedProducts.includes(product.id)}
-                    onIonChange={() => toggleProduct(product.id)}
                     slot="start"
                   />
                   <IonLabel>{product.name}</IonLabel>
@@ -201,8 +188,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
             disabled={!isValid}
             className="save-button"
           >
-            <IonIcon icon={saveOutline} slot="start"/>
-            Save Schedule
+            Save
           </IonButton>
         </IonToolbar>
       </IonFooter>

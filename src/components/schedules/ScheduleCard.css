@@ -63,6 +63,7 @@
 }
 
 .schedule-time p {
+    height: 40px;
     margin: 2px 0; /* Reduce margin between detail lines */
     font-size: 0.9em;
 }

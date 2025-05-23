@@ -14,7 +14,6 @@ import {
   IonLabel,
   IonList,
   IonModal,
-  IonRow,
   IonSelect,
   IonSelectOption,
   IonTextarea,
@@ -216,39 +215,39 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
               </div>
 
               <IonGrid className="add-on-form">
-                  <IonCol size="5">
-                    <IonItem lines="full" className="form-item">
-                      <IonInput
-                        value={newAddOnName}
-                        onIonChange={e => setNewAddOnName(e.detail.value!)}
-                        placeholder="Name"
-                        className="form-input"
-                      />
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="3">
-                    <IonItem lines="full" className="form-item">
-                      <IonInput
-                        value={newAddOnPrice}
-                        onIonChange={e => setNewAddOnPrice(e.detail.value!)}
-                        placeholder="Price"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        className="form-input"
-                      />
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="2">
-                    <IonButton
-                      expand="block"
-                      onClick={handleAddAddOn}
-                      disabled={!newAddOnName.trim() || !newAddOnPrice.trim()}
-                      className="add-add-on-button"
-                    >
-                      <IonIcon icon={addOutline}/>
-                    </IonButton>
-                  </IonCol>
+                <IonCol size="5">
+                  <IonItem lines="full" className="form-item">
+                    <IonInput
+                      value={newAddOnName}
+                      onIonChange={e => setNewAddOnName(e.detail.value!)}
+                      placeholder="Name"
+                      className="form-input"
+                    />
+                  </IonItem>
+                </IonCol>
+                <IonCol size="3">
+                  <IonItem lines="full" className="form-item">
+                    <IonInput
+                      value={newAddOnPrice}
+                      onIonChange={e => setNewAddOnPrice(e.detail.value!)}
+                      placeholder="Price"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      className="form-input"
+                    />
+                  </IonItem>
+                </IonCol>
+                <IonCol size="2">
+                  <IonButton
+                    expand="block"
+                    onClick={handleAddAddOn}
+                    disabled={!newAddOnName.trim() || !newAddOnPrice.trim()}
+                    className="add-add-on-button"
+                  >
+                    <IonIcon icon={addOutline}/>
+                  </IonButton>
+                </IonCol>
               </IonGrid>
             </div>
 
@@ -269,29 +268,15 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       </IonContent>
 
       <IonFooter>
-        <IonToolbar className="form-footer-toolbar">
-          <IonRow>
-            <IonCol>
-              <IonButton
-                expand="block"
-                fill="outline"
-                onClick={handleCancel}
-                className="cancel-button"
-              >
-                Cancel
-              </IonButton>
-            </IonCol>
-            <IonCol>
-              <IonButton
-                expand="block"
-                onClick={handleSave}
-                disabled={!name.trim() || !categoryId}
-                className="save-button"
-              >
-                Save
-              </IonButton>
-            </IonCol>
-          </IonRow>
+        <IonToolbar>
+          <IonButton
+            expand="block"
+            onClick={handleSave}
+            disabled={!name.trim() || !categoryId}
+            className="save-button"
+          >
+            Save
+          </IonButton>
         </IonToolbar>
       </IonFooter>
     </IonModal>

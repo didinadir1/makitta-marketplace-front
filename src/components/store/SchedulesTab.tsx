@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {IonFab, IonFabButton, IonIcon,} from '@ionic/react';
 import {addOutline} from 'ionicons/icons';
 import ScheduleList from '../schedules/ScheduleList';
 import ScheduleFormModal from '../schedules/ScheduleFormModal';
-import { Schedule } from '../../types/Schedule';
+import {Schedule} from '../../types/Schedule';
 import './StoreTabs.css';
+import {mockSchedules} from "../../data/mockSchedules";
 
 
 interface SchedulesTabProps {
@@ -29,10 +30,11 @@ const SchedulesTab: React.FC<SchedulesTabProps> = ({
 
   const handleEditClick = (scheduleId: string) => {
     onEditSchedule(scheduleId);
-    // You would typically fetch the schedule data here
-    // For now, we'll just open the modal
-    setEditingSchedule(undefined); // Replace with actual schedule data
-    setIsModalOpen(true);
+    const scheduleToEdit = mockSchedules.find(s => s.id === scheduleId);
+    if (scheduleToEdit) {
+      setEditingSchedule(scheduleToEdit);
+      setIsModalOpen(true);
+    }
   };
 
   return (

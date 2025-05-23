@@ -122,7 +122,7 @@
 
 /* Footer styling */
 
-.form-footer-toolbar{
+.form-footer-toolbar {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
     --background: var(--ion-color-light);
     --border-radius: 0 0 16px 16px;
@@ -148,4 +148,9 @@ ion-footer {
     position: sticky;
     bottom: 0;
     z-index: 10;
+}
+
+.save-button {
+    --border-radius: 12px;
+    margin: 16px;
 }
