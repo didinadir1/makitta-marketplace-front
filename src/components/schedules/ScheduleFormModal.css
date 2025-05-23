@@ -111,6 +111,21 @@ ion-datetime-button:hover::part(native) {
     --background: transparent;
 }
 
+/* Styling for category headers and dividers */
+.category-header {
+  --background: var(--ion-color-light); /* Match section background */
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.category-divider {
+  --background: var(--ion-color-step-150, #dcdcdc); /* Light grey divider */
+  height: 1px;
+  margin: 10px 0; /* Space above and below divider */
+}
+
+
 .save-button {
     --border-radius: 12px;
     margin: 16px;
