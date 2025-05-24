@@ -67,7 +67,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
   const handleDateChange = (event: CustomEvent) => {
     // IonDatetime value can be a string (single date) or an array of strings (multiple dates)
     const dates = Array.isArray(event.detail.value) ? event.detail.value : (event.detail.value ? [event.detail.value] : []);
-    setSelectedDates(dates.map(date => date.split('T')[0])); // Format dates to YYYY-MM-DD
+    setSelectedDates(dates.map((date:string) => date.split('T')[0])); // Format dates to YYYY-MM-DD
   };
 
 

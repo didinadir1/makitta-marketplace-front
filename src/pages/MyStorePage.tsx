@@ -1,25 +1,19 @@
 import {
   IonContent,
   IonHeader,
+  IonIcon,
+  IonLabel,
   IonPage,
-  IonTitle,
+  IonSegment,
+  IonSegmentButton,
   IonToolbar,
   useIonAlert,
   useIonToast,
-  IonSegment,
-  IonSegmentButton,
-  IonIcon,
-  IonLabel,
 } from '@ionic/react';
-import { 
-  cubeOutline, 
-  calendarOutline, 
-  listOutline 
-} from 'ionicons/icons';
-import React, { useState } from 'react';
+import {calendarOutline, cubeOutline} from 'ionicons/icons';
+import React, {useState} from 'react';
 import ProductsTab from '../components/store/ProductsTab';
 import SchedulesTab from '../components/store/SchedulesTab';
-import CategoriesTab from '../components/store/CategoriesTab';
 import './MyStorePage.css';
 
 const MyStorePage: React.FC = () => {
@@ -35,11 +29,6 @@ const MyStorePage: React.FC = () => {
   const handleAddScheduleClick = () => {
     console.log('Add New Schedule clicked');
     // Implement logic to navigate to schedule form or open modal
-  };
-
-  const handleAddCategoryClick = () => {
-    console.log('Add New Category clicked');
-    // Implement logic to navigate to category form or open modal
   };
 
   const handleEditSchedule = (scheduleId: string) => {
@@ -86,39 +75,34 @@ const MyStorePage: React.FC = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'products':
-        return <ProductsTab onAddProductClick={handleAddProductClick} />;
+        return <ProductsTab onAddProductClick={handleAddProductClick}/>;
       case 'schedules':
         return (
-          <SchedulesTab 
+          <SchedulesTab
             onAddScheduleClick={handleAddScheduleClick}
             onEditSchedule={handleEditSchedule}
             onDeleteSchedule={handleDeleteSchedule}
           />
         );
-      case 'categories':
-        return <CategoriesTab onAddCategoryClick={handleAddCategoryClick} />;
       default:
-        return <ProductsTab onAddProductClick={handleAddProductClick} />;
+        return <ProductsTab onAddProductClick={handleAddProductClick}/>;
     }
   };
 
   return (
     <IonPage>
       <IonHeader translucent={true}>
-        <IonToolbar >
+        <IonToolbar>
           <IonSegment value={activeTab} onIonChange={e => setActiveTab(e.detail.value as string)}>
             <IonSegmentButton value="products">
-              <IonIcon icon={cubeOutline} />
+              <IonIcon icon={cubeOutline}/>
               <IonLabel>Products</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="schedules">
-              <IonIcon icon={calendarOutline} />
+              <IonIcon icon={calendarOutline}/>
               <IonLabel>Schedules</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton value="categories">
-              <IonIcon icon={listOutline} />
-              <IonLabel>Categories</IonLabel>
-            </IonSegmentButton>
+
           </IonSegment>
         </IonToolbar>
       </IonHeader>

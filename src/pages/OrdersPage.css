@@ -1,0 +1,15 @@
+/* Orders Container */
+.orders-container {
+  padding: 15px;
+}
+
+.orders-container h2 {
+  margin-bottom: 10px;
+  font-size: 1.3em;
+}
+
+/* Style the IonList to remove default padding */
+.orders-container ion-list {
+  padding: 0;
+  background: transparent; /* Ensure list background is transparent */
+}

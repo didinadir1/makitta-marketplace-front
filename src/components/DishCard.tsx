@@ -96,9 +96,9 @@ const DishCard: React.FC<DishCardProps> = ({dish, onClick, isCompact = false}) =
         </IonCardHeader>
         <IonCardContent>
           <div className="dish-tags">
-            {dish.categories.map((tag, index) => (
+            {dish.categories.map(({name}, index) => (
               <IonChip key={index} outline={true} color="primary">
-                {tag}
+                {name}
               </IonChip>
             ))}
           </div>

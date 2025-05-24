@@ -29,7 +29,8 @@ import {Dish} from "../../data/mockDishes";
 interface ProductFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (product: Dish) => void;
+  //todo fix this
+  onSave: (product: Partial<Dish>) => void;
   product?: Dish; // Optional product for editing
 }
 
@@ -111,11 +112,12 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       return;
     }
 
-    const updatedProduct: Dish = {
+    const updatedProduct: Partial<Dish> = {
       id: product?.id || Date.now().toString(), // Use existing ID or generate new one
       name: name.trim(),
       description: description.trim(),
-      categoryId: categoryId,
+      // todo fix this
+      categories: [],
       basePrice: product?.basePrice || "0", // Maintain existing price or set default
       imageUrls: product?.imageUrls || [], // Maintain existing images or set empty
       isAvailable: isAvailable,
