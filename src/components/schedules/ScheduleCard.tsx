@@ -74,12 +74,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               <div className="schedule-time">
                 <IonText color="medium">
                   <p>
-                    {/* Format dates using dayjs */}
-                    {
-                      schedule.dates.map((date, index) => (
-                        index < schedule.dates.length - 1 ? `${dayjs(date).format('DD/MM')}, ` : `${dayjs(date).format('DD/MM')}`
-                      ))
-                    }
+                    {schedule.dates.length} {schedule.dates.length === 1 ? 'Date' : 'Dates'}
                   </p>
 
                 </IonText>
