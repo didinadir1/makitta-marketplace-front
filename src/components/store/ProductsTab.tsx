@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import {IonContent, IonFab, IonFabButton, IonIcon, IonPage, useIonAlert, useIonToast,} from '@ionic/react'; // Import hooks for dialog/toast
+import React, {useState} from 'react';
+import {IonFab, IonFabButton, IonIcon, useIonAlert, useIonToast,} from '@ionic/react'; // Import hooks for dialog/toast
 import {addOutline} from 'ionicons/icons';
 import ProductList from '../products/ProductList';
 import ProductFormModal from '../products/ProductFormModal';
-import { Product } from '../../types/Product';
-import { mockProducts } from '../../data/mockProducts';
 import './StoreTabs.css';
+import {Dish, mockDishes} from "../../data/mockDishes";
 
 interface ProductsTabProps {
   onAddProductClick: () => void;
@@ -15,7 +14,7 @@ const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
   const [presentToast] = useIonToast(); // Hook for presenting toasts
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Product | undefined>(undefined);
+  const [currentProduct, setCurrentProduct] = useState<Dish | undefined>(undefined);
 
   const handleOpenModal = () => {
     setCurrentProduct(undefined); // Reset for new product
@@ -30,14 +29,14 @@ const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
   const handleEditProduct = (productId: string) => {
     console.log('Edit Product clicked for ID:', productId);
     // Find the product to edit
-    const productToEdit = mockProducts.find(p => p.id === productId);
+    const productToEdit = mockDishes.find(p => p.id === productId);
     if (productToEdit) {
       setCurrentProduct(productToEdit);
       setIsModalOpen(true);
     }
   };
 
-  const handleSaveProduct = (product: Product) => {
+  const handleSaveProduct = (product: Dish) => {
     console.log('Saving product:', product);
     // Here you would update your state or call an API
     // For now, just show a success toast
@@ -89,27 +88,27 @@ const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
 
   return (
 
-        <div className="tab-content">
-          <ProductList
-            onEditProduct={handleEditProduct}
-            onDeleteProduct={handleDeleteProduct} // Pass delete handler
-          />
+    <div className="tab-content">
+      <ProductList
+        onEditProduct={handleEditProduct}
+        onDeleteProduct={handleDeleteProduct} // Pass delete handler
+      />
 
-          {/* Floating Action Button for Add Product */}
-          <IonFab vertical="bottom" horizontal="end" slot="fixed">
-            <IonFabButton onClick={handleOpenModal}>
-              <IonIcon icon={addOutline}></IonIcon>
-            </IonFabButton>
-          </IonFab>
+      {/* Floating Action Button for Add Product */}
+      <IonFab vertical="bottom" horizontal="end" slot="fixed">
+        <IonFabButton onClick={handleOpenModal}>
+          <IonIcon icon={addOutline}></IonIcon>
+        </IonFabButton>
+      </IonFab>
 
-          {/* Product Form Modal */}
-          <ProductFormModal
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            onSave={handleSaveProduct}
-            product={currentProduct}
-          />
-        </div>
+      {/* Product Form Modal */}
+      <ProductFormModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSaveProduct}
+        product={currentProduct}
+      />
+    </div>
   );
 };
 

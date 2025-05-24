@@ -22,15 +22,15 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import {addOutline, closeOutline, removeOutline} from 'ionicons/icons';
-import {Product} from '../../types/Product';
 import {mockCategories} from '../../data/mockCategories';
 import './ProductFormModal.css';
+import {Dish} from "../../data/mockDishes";
 
 interface ProductFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (product: Product) => void;
-  product?: Product; // Optional product for editing
+  onSave: (product: Dish) => void;
+  product?: Dish; // Optional product for editing
 }
 
 interface AddOn {
@@ -61,7 +61,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     if (product) {
       setName(product.name);
       setDescription(product.description || '');
-      setCategoryId(product.categoryId);
+      // todo fix this
+      // setCategoryId(product.categoryId);
       setIsAvailable(product.isAvailable);
       // Initialize add-ons if they exist
       if (product.addOns) {
@@ -110,12 +111,12 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       return;
     }
 
-    const updatedProduct: Product = {
+    const updatedProduct: Dish = {
       id: product?.id || Date.now().toString(), // Use existing ID or generate new one
       name: name.trim(),
       description: description.trim(),
       categoryId: categoryId,
-      basePrice: product?.basePrice || 0, // Maintain existing price or set default
+      basePrice: product?.basePrice || "0", // Maintain existing price or set default
       imageUrls: product?.imageUrls || [], // Maintain existing images or set empty
       isAvailable: isAvailable,
       addOns: addOns,
@@ -186,6 +187,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   className="form-select"
                   interface="action-sheet"
                   interfaceOptions={{cssClass: "form-action-sheet"}}
+                  multiple
                 >
                   {mockCategories.map(category => (
                     <IonSelectOption key={category.id} value={category.id}>

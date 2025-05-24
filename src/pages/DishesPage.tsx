@@ -22,7 +22,7 @@ const DishesPage: React.FC = () => {
     const lowercasedFilter = searchText.toLowerCase();
     const filteredData = dishes.filter(dish => {
       return dish.name.toLowerCase().includes(lowercasedFilter) ||
-             dish.tags.some(tag => tag.toLowerCase().includes(lowercasedFilter));
+             dish.categories.some(({name}) => name.toLowerCase().includes(lowercasedFilter));
     });
     setFilteredDishes(filteredData);
   }, [searchText, dishes]);
@@ -36,7 +36,7 @@ const DishesPage: React.FC = () => {
       setFilteredDishes(newMockDishes.filter(dish => { // Re-apply filter if searchText exists
         const lowercasedFilter = searchText.toLowerCase();
         return dish.name.toLowerCase().includes(lowercasedFilter) ||
-               dish.tags.some(tag => tag.toLowerCase().includes(lowercasedFilter));
+               dish.categories.some(({name}) => name.toLowerCase().includes(lowercasedFilter));
       }));
       console.log('Async operation has ended');
       event.detail.complete();

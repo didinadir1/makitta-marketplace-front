@@ -94,10 +94,10 @@ const CartPage: React.FC = () => {
                       <div className="item-details">
                         <IonLabel className="item-name">{item.dish.name}</IonLabel>
                         <IonText color="medium" className="item-unit-price"> {/* Display unit price */}
-                          Unit Price: {item.dish.price}
+                          Unit Price: {item.dish.basePrice}
                         </IonText>
                         <IonText color="dark" className="item-total-price"> {/* Display item total price */}
-                          Total: ${(parseFloat(item.dish.price.replace('$', '')) * item.quantity).toFixed(2)}
+                          Total: ${(parseFloat(item.dish.basePrice.replace('$', '')) * item.quantity).toFixed(2)}
                         </IonText>
                       </div>
                       <div className="item-quantity-controls">

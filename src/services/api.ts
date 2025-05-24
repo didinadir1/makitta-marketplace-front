@@ -1,9 +1,8 @@
-import { mockProducts } from '../data/mockProducts';
-import { mockCategories } from '../data/mockCategories';
-import { mockSchedules } from '../data/mockSchedules';
-import {Product} from "../types/Product";
+import {mockCategories} from '../data/mockCategories';
+import {mockSchedules} from '../data/mockSchedules';
 import {Category} from "../types/Category";
 import {Schedule} from "../types/Schedule";
+import {Dish, mockDishes} from "../data/mockDishes";
 
 // Simulate an API call with a delay
 const simulateApiCall = <T>(data: T): Promise<T> => {
@@ -14,8 +13,8 @@ const simulateApiCall = <T>(data: T): Promise<T> => {
   });
 };
 
-export const fetchProducts = (): Promise<Product[]> => {
-  return simulateApiCall(mockProducts);
+export const fetchProducts = (): Promise<Dish[]> => {
+  return simulateApiCall(mockDishes);
 };
 
 export const fetchCategories = (): Promise<Category[]> => {

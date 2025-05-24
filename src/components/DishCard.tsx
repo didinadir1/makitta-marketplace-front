@@ -87,7 +87,7 @@ const DishCard: React.FC<DishCardProps> = ({dish, onClick, isCompact = false}) =
         <IonCardHeader>
           <div className="dish-title-price">
             <IonCardTitle>{dish.name}</IonCardTitle>
-            <IonBadge color="success" className="dish-price">{dish.price}</IonBadge>
+            <IonBadge color="success" className="dish-price">{dish.basePrice}</IonBadge>
           </div>
           <div className="dish-rating"> {/* Keep this structure for styling */}
             {renderRatingStars(dish.rating)}
@@ -96,7 +96,7 @@ const DishCard: React.FC<DishCardProps> = ({dish, onClick, isCompact = false}) =
         </IonCardHeader>
         <IonCardContent>
           <div className="dish-tags">
-            {dish.tags.map((tag, index) => (
+            {dish.categories.map((tag, index) => (
               <IonChip key={index} outline={true} color="primary">
                 {tag}
               </IonChip>

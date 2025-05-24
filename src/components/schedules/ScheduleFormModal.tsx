@@ -10,16 +10,15 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonItemGroup,
   IonLabel,
   IonList,
+  IonListHeader,
   IonModal,
   IonText,
   IonTitle,
   IonToolbar,
   useIonToast,
-  IonListHeader,
-  IonItemDivider,
-  IonItemGroup, // Import IonItemGroup
 } from '@ionic/react';
 import {closeOutline} from 'ionicons/icons';
 import {useProductContext} from '../../state/productState';
@@ -27,7 +26,7 @@ import {Schedule} from '../../types/Schedule';
 import './ScheduleFormModal.css';
 import {z} from 'zod'; // Import Zod
 import {ScheduleFormData, scheduleSchema} from '../../validation/scheduleValidation'; // Import schema
-import { mockCategories } from '../../data/mockCategories'; // Import mockCategories to get category names
+import {mockCategories} from '../../data/mockCategories'; // Import mockCategories to get category names
 
 
 interface ScheduleFormModalProps {
@@ -87,7 +86,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
       productIds: selectedProducts,
     };
 
-     try {
+    try {
       // Validate data using Zod schema
       scheduleSchema.parse(scheduleData);
 
@@ -107,7 +106,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
         });
       } else {
         console.error('An unexpected error occurred:', error);
-         presentToast({
+        presentToast({
           message: 'An unexpected error occurred. Please try again.',
           duration: 3000,
           position: 'bottom',
@@ -121,7 +120,9 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
 
   // Group products by category
   const productsGroupedByCategory = mockCategories.reduce((acc, category) => {
-    const productsInCategory = products.filter(product => product.categoryId === category.id);
+    const productsInCategory = products.filter(product =>
+      product.categories.some(({id}) => id === category.id)
+    );
     if (productsInCategory.length > 0) {
       acc[category.name] = productsInCategory;
     }
@@ -194,10 +195,7 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
                       <IonLabel>{product.name}</IonLabel>
                     </IonItem>
                   ))}
-                  {/* Add a divider after each category except the last one */}
-                  {categoryName !== Object.keys(productsGroupedByCategory)[Object.keys(productsGroupedByCategory).length - 1] && (
-                    <IonItemDivider className="category-divider"></IonItemDivider>
-                  )}
+
                 </IonItemGroup>
               ))}
             </IonList>
@@ -216,7 +214,6 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
             Save
           </IonButton>
         </IonToolbar>
-      </IonToolbar>
       </IonFooter>
     </IonModal>
   );

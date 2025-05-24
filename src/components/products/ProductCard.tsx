@@ -11,11 +11,11 @@ import {
 } from '@ionic/react';
 import {createOutline, trashOutline} from 'ionicons/icons';
 import React from 'react';
-import {Product} from '../../types/Product'; // Assuming Product type is defined here
-import './ProductCard.css'; // Import the CSS for styling
+import './ProductCard.css';
+import {Dish} from "../../data/mockDishes"; // Import the CSS for styling
 
 interface ProductCardProps {
-  product: Product;
+  product: Dish;
   onEditClick: (productId: string) => void;
   onDeleteClick?: (productId: string) => void; // Optional delete handler
 }
@@ -71,12 +71,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   <h3 className="product-name">{product.name}</h3>
                 </IonText>
                 <IonText color="secondary">
-                  <p className="product-price">${product.basePrice.toFixed(2)}</p>{' '}
+                  <p className="product-price">${parseFloat(product.basePrice).toFixed(2)}</p>{' '}
                   {/* Format price */}
                 </IonText>
                 <IonText color="medium">
                   {/* You might want to map category ID to a name here */}
-                  <p className="product-category">{product.category}</p>
+                  {/*todo fix : display all categories*/}
+                  <p className="product-category">{product.categories[0].name}</p>
                 </IonText>
               </IonLabel>
             </div>

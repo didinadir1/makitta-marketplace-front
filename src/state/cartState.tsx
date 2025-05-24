@@ -53,7 +53,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCartItems([]);
   };
 
-  const total = cartItems.reduce((sum, item) => sum + parseFloat(item.dish.price.replace('$', '')) * item.quantity, 0);
+  const total = cartItems.reduce((sum, item) => sum + parseFloat(item.dish.basePrice.replace('$', '')) * item.quantity, 0);
 
   return (
     <CartContext.Provider value={{ cartItems, total, addItem, removeItem, updateItemQuantity, clearCart }}>

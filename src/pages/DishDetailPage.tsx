@@ -117,7 +117,7 @@ const DishDetailPage: React.FC = () => {
         <div className="dish-detail-content">
           <div className="dish-detail-header-section">
             <IonCardTitle className="dish-detail-name">{dish.name}</IonCardTitle>
-            <IonBadge color="success" className="dish-detail-price">{dish.price}</IonBadge> {/* Price remains here */}
+            <IonBadge color="success" className="dish-detail-price">{dish.basePrice}</IonBadge> {/* Price remains here */}
           </div>
 
           <div className="dish-detail-meta-section">
@@ -138,9 +138,9 @@ const DishDetailPage: React.FC = () => {
           </div>
 
           <div className="dish-detail-tags-section">
-            {dish.tags.map((tag, index) => (
+            {dish.categories.map(({name}, index) => (
               <IonChip key={index} outline={true} color="primary">
-                {tag}
+                {name}
               </IonChip>
             ))}
           </div>
