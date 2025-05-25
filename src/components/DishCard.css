@@ -5,6 +5,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* Ensure image corners are rounded with the card */
+    background: var(--ion-color-light); /* Explicit background */
 }
 
 /* Default styles for the image slider container */
