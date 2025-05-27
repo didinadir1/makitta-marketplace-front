@@ -76,7 +76,7 @@ const SignupPage: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage className="page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -96,143 +96,132 @@ const SignupPage: React.FC = () => {
       </IonHeader>
 
       {/* Form Box */}
+      <IonText className="step-header">
+        <h2>{currentStep === 1 ? "Personal Information" : "Store Information"}</h2>
+        <p>{currentStep === 1 ? "Create your restaurant manager account" : "Tell us about your restaurant"}</p>
+      </IonText>
 
       {/* Step 1: Personal Information */}
       {currentStep === 1 && (
-        <>
-          <IonText className="step-header">
-            <h2>Personal Information</h2>
-            <p>Create your restaurant manager account</p>
-          </IonText>
-          <IonList className="signup-form">
-            <IonItem lines="full">
-              <IonLabel position="stacked">Email</IonLabel>
-              <IonInput
-                type="email"
-                value={userData.email}
-                onIonChange={e => setUserData({...userData, email: e.detail.value!})}
-                placeholder="restaurant@example.com" // Example placeholder
-                required
-              ></IonInput>
-            </IonItem>
+        <IonList className="signup-form">
+          <IonItem lines="full">
+            <IonLabel position="stacked">Email</IonLabel>
+            <IonInput
+              type="email"
+              value={userData.email}
+              onIonChange={e => setUserData({...userData, email: e.detail.value!})}
+              placeholder="restaurant@example.com" // Example placeholder
+              required
+            ></IonInput>
+          </IonItem>
 
-            <IonItem lines="full">
-              <IonLabel position="stacked">Phone Number</IonLabel>
-              <IonInput
-                type="tel"
-                placeholder="+1 234 567 890"
-                value={userData.phone}
-                onIonChange={e => setUserData({...userData, phone: e.detail.value!})}
-                required
-              ></IonInput>
-            </IonItem>
+          <IonItem lines="full">
+            <IonLabel position="stacked">Phone Number</IonLabel>
+            <IonInput
+              type="tel"
+              placeholder="+1 234 567 890"
+              value={userData.phone}
+              onIonChange={e => setUserData({...userData, phone: e.detail.value!})}
+              required
+            ></IonInput>
+          </IonItem>
 
-            <IonItem lines="full">
-              <IonLabel position="stacked">First Name</IonLabel>
-              <IonInput
-                type="text"
-                value={userData.firstName}
-                onIonChange={e => setUserData({...userData, firstName: e.detail.value!})}
-                placeholder="John" // Example placeholder
-                required
+          <IonItem lines="full">
+            <IonLabel position="stacked">First Name</IonLabel>
+            <IonInput
+              type="text"
+              value={userData.firstName}
+              onIonChange={e => setUserData({...userData, firstName: e.detail.value!})}
+              placeholder="John" // Example placeholder
+              required
 
-              ></IonInput>
-            </IonItem>
+            ></IonInput>
+          </IonItem>
 
-            <IonItem lines="full">
-              <IonLabel position="stacked">Last Name</IonLabel>
-              <IonInput
-                type="text"
-                value={userData.lastName}
-                onIonChange={e => setUserData({...userData, lastName: e.detail.value!})}
-                placeholder="Doe" // Example placeholder
-                required
+          <IonItem lines="full">
+            <IonLabel position="stacked">Last Name</IonLabel>
+            <IonInput
+              type="text"
+              value={userData.lastName}
+              onIonChange={e => setUserData({...userData, lastName: e.detail.value!})}
+              placeholder="Doe" // Example placeholder
+              required
 
-              ></IonInput>
-            </IonItem>
+            ></IonInput>
+          </IonItem>
 
-            <IonItem lines="full">
-              <IonLabel position="stacked">Password</IonLabel>
-              <IonInput
-                type="password"
-                value={userData.password}
-                onIonChange={e => setUserData({...userData, password: e.detail.value!})}
-                placeholder="Enter a strong password" // Example placeholder
-                required
+          <IonItem lines="full">
+            <IonLabel position="stacked">Password</IonLabel>
+            <IonInput
+              type="password"
+              value={userData.password}
+              onIonChange={e => setUserData({...userData, password: e.detail.value!})}
+              placeholder="Enter a strong password" // Example placeholder
+              required
 
-              ></IonInput>
-            </IonItem>
+            ></IonInput>
+          </IonItem>
 
-            <IonItem lines="full">
-              <IonLabel position="stacked">Confirm Password</IonLabel>
-              <IonInput
-                type="password"
-                value={userData.confirmPassword}
-                onIonChange={e => setUserData({...userData, confirmPassword: e.detail.value!})}
-                placeholder="Confirm your password" // Example placeholder
-                required
+          <IonItem lines="full">
+            <IonLabel position="stacked">Confirm Password</IonLabel>
+            <IonInput
+              type="password"
+              value={userData.confirmPassword}
+              onIonChange={e => setUserData({...userData, confirmPassword: e.detail.value!})}
+              placeholder="Confirm your password" // Example placeholder
+              required
 
-              ></IonInput>
-            </IonItem>
-            <div className="button-container">
-              <IonButton expand="block" onClick={handleNextStep} className="action-button">
-                Continue to Store Details
-                <IonIcon icon={arrowBack} slot="end" className="flip"/>
-              </IonButton>
-            </div>
-          </IonList>
-        </>
+            ></IonInput>
+          </IonItem>
+          <IonButton expand="block" onClick={handleNextStep} className="action-button">
+            Continue to Store Details
+            <IonIcon icon={arrowBack} slot="end" className="flip"/>
+          </IonButton>
+        </IonList>
       )}
 
       {/* Step 2: Store Details */}
       {currentStep === 2 && (
-        <>
-          <IonText className="step-header">
-            <h2>Store Information</h2>
-            <p>Tell us about your restaurant</p>
-          </IonText>
-          <IonList className="signup-form">
-            <IonItem lines="full">
-              <IonLabel position="stacked">Store Name</IonLabel>
-              <IonInput
-                type="text"
-                value={storeData.storeName}
-                onIonChange={e => setStoreData({...storeData, storeName: e.detail.value!})}
-                placeholder="The Cozy Corner Cafe" // Example placeholder
-                required
 
-              ></IonInput>
-            </IonItem>
+        <IonList className="signup-form">
+          <IonItem lines="full">
+            <IonLabel position="stacked">Store Name</IonLabel>
+            <IonInput
+              type="text"
+              value={storeData.storeName}
+              onIonChange={e => setStoreData({...storeData, storeName: e.detail.value!})}
+              placeholder="The Cozy Corner Cafe" // Example placeholder
+              required
 
-            <IonItem lines="full">
-              <IonLabel position="stacked">Address</IonLabel>
-              <IonInput
-                type="text"
-                value={storeData.address}
-                onIonChange={e => setStoreData({...storeData, address: e.detail.value!})}
-                placeholder="123 Main St, Anytown" // Example placeholder
-                required
+            ></IonInput>
+          </IonItem>
 
-              ></IonInput>
-            </IonItem>
+          <IonItem lines="full">
+            <IonLabel position="stacked">Address</IonLabel>
+            <IonInput
+              type="text"
+              value={storeData.address}
+              onIonChange={e => setStoreData({...storeData, address: e.detail.value!})}
+              placeholder="123 Main St, Anytown" // Example placeholder
+              required
 
-            <IonItem lines="full">
-              <IonLabel position="stacked">Description</IonLabel>
-              <IonTextarea
-                value={storeData.description}
-                onIonChange={e => setStoreData({...storeData, description: e.detail.value!})}
-                placeholder="Tell us about your store (cuisine, atmosphere, etc.)" // Example placeholder
-                rows={4}
+            ></IonInput>
+          </IonItem>
 
-              ></IonTextarea>
-            </IonItem>
-            <div className="button-container">
-              <IonButton expand="block" size="large" onClick={handleSubmit}>
-                {currentStep < 2 ? 'Next' : 'Sign Up'}
-              </IonButton>
-            </div>
-          </IonList>
-        </>
+          <IonItem lines="full">
+            <IonLabel position="stacked">Description</IonLabel>
+            <IonTextarea
+              value={storeData.description}
+              onIonChange={e => setStoreData({...storeData, description: e.detail.value!})}
+              placeholder="Tell us about your store (cuisine, atmosphere, etc.)" // Example placeholder
+              rows={4}
+
+            ></IonTextarea>
+          </IonItem>
+          <IonButton expand="block" size="large" onClick={handleSubmit}>
+            {currentStep < 2 ? 'Next' : 'Sign Up'}
+          </IonButton>
+        </IonList>
       )}
 
 

@@ -1,3 +1,6 @@
+.page {
+  overflow: auto;
+}
 .step-header {
   text-align: center;
 }
@@ -37,14 +40,6 @@ ion-textarea {
   --padding-bottom: 12px;
 }
 
-.signup-page-content {
-  --background: var(--ion-background-color); /* Use app background color */
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Align to top */
-  padding-top: 20px; /* Reduced padding top */
-}
-
 .signup-title {
   font-size: 1.6em;
   font-weight: bold;
@@ -54,20 +49,18 @@ ion-textarea {
 }
 
 .signup-form {
-  background: transparent; /* Ensure list background is transparent */
+  background: var(--ion-color-light);
   padding: 20px;
   max-width: 500px; /* Limit width on larger screens */
   box-shadow: 0 4px 8px  rgba(var(--ion-color-dark-rgb), 0.1); /* Subtle shadow */
   border-radius: 8px; /* Rounded corners */
   margin: 20px;
-  overflow: scroll;
 }
 
 .signup-form ion-item {
   --padding-start: 0;
   --inner-padding-end: 0;
   --background: transparent;
-  margin-bottom: 15px; /* Space between form items */
 }
 
 .signup-form ion-label {
@@ -91,10 +84,6 @@ ion-textarea {
   --highlight-color: var(--ion-color-primary); /* Highlight color when focused */
 }
 
-/* Button Container */
-.button-container {
-  margin-top: 20px; /* Space above the button */
-}
 
 .button-container ion-button {
   --border-radius: 10px;

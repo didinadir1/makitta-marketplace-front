@@ -31,6 +31,7 @@ import { ProductContextProvider } from './state/productState'; // Import AppCont
 import EntryPage from './pages/EntryPage'; // Import the new EntryPage
 import LoginPage from './pages/LoginPage'; // Import the new LoginPage
 import SignupPage from './pages/SignupPage'; // Import the new SignupPage
+import { useLocation } from 'react-router-dom'; // Import useLocation
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -68,6 +69,10 @@ setupIonicReact();
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
   const { isRestaurantMode } = useAppMode();
+  const location = useLocation(); // Get the current location
+
+  // Determine if the tab bar should be visible
+  const showTabBar = location.pathname !== '/entry' && location.pathname !== '/login' && location.pathname !== '/signup';
 
   return (
     <IonTabs>
@@ -134,9 +139,7 @@ const TabsContainer: React.FC = () => {
       </IonRouterOutlet>
 
       {/* Conditional Tab Bars */}
-      {/* The tab bars should only be visible when NOT on the entry or login pages */}
-      {/* This logic might need refinement based on actual authentication state */}
-      {window.location.pathname !== '/entry' && window.location.pathname !== '/login' && window.location.pathname !== '/signup' && (
+      {showTabBar && (
         isRestaurantMode() ? (
           // Restaurant mode tabs
           <IonTabBar slot="bottom">
