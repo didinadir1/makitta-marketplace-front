@@ -1,9 +1,9 @@
 .order-card {
   margin: 15px; /* Add margin around the card */
   border-radius: 12px; /* More rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* More prominent shadow */
+  box-shadow: 0 4px 8px rgba(var(--ion-color-dark-rgb), 0.1); /* More prominent shadow */
   overflow: hidden; /* Ensure content stays within rounded corners */
-  background: var(--ion-background-color, #fff); /* White background */
+  color: var(--ion-color-dark);
   position: relative; /* Needed for potential absolute positioning */
   /* Add ticket-like styling */
   border: 1px solid var(--ion-color-step-150, #dcdcdc); /* Light border */

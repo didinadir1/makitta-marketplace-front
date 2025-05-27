@@ -136,7 +136,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   return (
     <IonModal isOpen={isOpen} onDidDismiss={handleCancel} className="product-form-modal" initialBreakpoint={1}
               breakpoints={[0, 0.25, 0.5, 0.8, 1]}>
-      <IonHeader className="ion-no-border">
+      <IonHeader>
         <IonToolbar>
           <IonTitle>{product ? 'Edit Product' : 'Add Product'}</IonTitle>
           <IonButtons slot="end">
@@ -272,7 +272,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       </IonContent>
 
       <IonFooter>
-        <IonToolbar>
           <IonButton
             expand="block"
             onClick={handleSave}
@@ -281,7 +280,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           >
             Save
           </IonButton>
-        </IonToolbar>
       </IonFooter>
     </IonModal>
   );

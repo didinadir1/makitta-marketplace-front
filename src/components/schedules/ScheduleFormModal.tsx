@@ -204,7 +204,6 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
       </IonContent>
 
       <IonFooter>
-        <IonToolbar>
           <IonButton
             expand="block"
             onClick={handleSave}
@@ -213,7 +212,6 @@ const ScheduleFormModal: React.FC<ScheduleFormModalProps> = ({
           >
             Save
           </IonButton>
-        </IonToolbar>
       </IonFooter>
     </IonModal>
   );

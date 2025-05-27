@@ -1,12 +1,10 @@
 .schedule-form-modal {
     --border-radius: 16px 16px 0 0;
-    --box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+    --box-shadow: 0 -4px 16px rgba(var(--ion-color-dark-rgb), 0.1);
 }
 
 .form-section {
-    background: var(--ion-color-light);
     margin: 20px 0;
-    padding: 0 15px; /* Add padding to the section */
     border-radius: 8px; /* Rounded corners for sections */
 }
 
@@ -14,7 +12,7 @@
     display: block;
     font-size: 0.9em;
     font-weight: 500;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 
 .form-input {
@@ -34,14 +32,14 @@
 }
 
 .schedule-calendar::part(calendar-day) {
-  /* Style individual calendar days if needed */
+    /* Style individual calendar days if needed */
 }
 
 .schedule-calendar::part(calendar-day-active) {
-  /* Style selected calendar days */
-  background-color: var(--ion-color-primary);
-  color: var(--ion-color-primary-contrast);
-  border-radius: 50%; /* Make selected days rounded */
+    /* Style selected calendar days */
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+    border-radius: 50%; /* Make selected days rounded */
 }
 
 
@@ -79,31 +77,6 @@ ion-datetime-button:hover::part(native) {
     background: var(--ion-color-step-50);
 }
 
-.time-picker {
-    --background: var(--ion-color-light);
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-}
-
-.time-picker::part(time-button) {
-    color: var(--ion-color-primary);
-    font-weight: 500;
-}
-
-.time-picker::part(wheel-item) {
-    color: var(--ion-color-medium);
-}
-
-.time-picker::part(wheel-item active) {
-    color: var(--ion-color-dark);
-    font-weight: 600;
-}
-
-.products-list {
-    background: transparent;
-    margin-top: 10px;
-}
 
 .products-list ion-item {
     --padding-start: 0;
@@ -113,22 +86,21 @@ ion-datetime-button:hover::part(native) {
 
 /* Styling for category headers and dividers */
 .category-header {
-  --background: var(--ion-color-light); /* Match section background */
-  font-weight: bold;
-  padding-top: 10px;
-  padding-bottom: 5px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(var(--ion-color-dark-rgb), 0.8);
+    margin-bottom: 12px;
+    height: 10px;
 }
 
-.category-divider {
-  --background: var(--ion-color-step-150, #dcdcdc); /* Light grey divider */
-  height: 1px;
-  margin: 10px 0; /* Space above and below divider */
-}
 
+ion-footer {
+    --background: var(--ion-color-light);
+    box-shadow: 0 -2px 4px rgba(var(--ion-color-dark-rgb), 0.1); /* Subtle shadow for depth */
+}
 
 .save-button {
     --border-radius: 12px;
-    margin: 16px;
+    margin: 20px 20px 35px;
 }
 
 /* Style time picker buttons */

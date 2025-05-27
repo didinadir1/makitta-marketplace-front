@@ -3,7 +3,7 @@
 .restaurant-card {
   margin: 15px 0; /* Increased margin for better separation */
   border-radius: 12px; /* More rounded corners */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Stronger shadow */
+  box-shadow: 0 4px 12px rgba(var(--ion-color-dark-rgb), 0.1); /* Stronger shadow */
   overflow: hidden;
   background: var(--ion-color-light); /* Explicit background */
 }

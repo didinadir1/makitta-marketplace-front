@@ -7,7 +7,7 @@ ion-segment {
 
 ion-segment-button {
   --indicator-color: var(--ion-color-primary);
-  --color-checked: var(--ion-color-step-50);
+  --color-checked: var(--ion-color-primary-contrast);
   --color: var(--ion-color-medium);
   font-size: 14px;
   text-transform: none;

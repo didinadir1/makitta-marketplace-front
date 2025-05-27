@@ -1,6 +1,5 @@
 /* Basic styling for the page */
 ion-content {
-  --background: var(--ion-color-light); /* Use a light background */
   --padding-bottom: 20px; /* Adjusted padding bottom */
 }
 
@@ -41,13 +40,13 @@ ion-content {
 /* Main Content Area */
 .dish-detail-content {
   padding: 20px 16px; /* Increased top padding */
-  background: var(--ion-color-light);
+  background: var(--ion-background-color);
   position: relative;
   z-index: 1;
   margin-top: -30px; /* More overlap with the image */
   border-top-left-radius: 25px; /* More rounded top corners */
   border-top-right-radius: 25px;
-  box-shadow: 0 -8px 15px rgba(0, 0, 0, 0.15); /* Stronger shadow for separation */
+  box-shadow: 0 -8px 15px rgba(var(--ion-color-dark-rgb), 0.15); /* Stronger shadow for separation */
 }
 
 /* Header Section (Name and Price) */
@@ -197,9 +196,9 @@ ion-content {
 
 .review-card {
   margin: 12px 0; /* Increased space between review cards */
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Stronger shadow for review cards */
+  box-shadow: 0 3px 8px rgba(var(--ion-color-dark-rgb), 0.1); /* Stronger shadow for review cards */
   border-radius: 10px; /* More rounded review cards */
-  --background: var(--ion-color-step-50, #f2f2f2); /* Slightly different background for cards */
+  --background: var(--ion-color-light); /* Slightly different background for cards */
 }
 
 .review-card ion-card-content {

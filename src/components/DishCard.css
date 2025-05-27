@@ -3,7 +3,7 @@
 .dish-card {
     margin: 10px 0; /* Adjust margin as needed */
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(var(--ion-color-dark-rgb), 0.1);
     overflow: hidden; /* Ensure image corners are rounded with the card */
     background: var(--ion-color-light); /* Explicit background */
 }
@@ -166,7 +166,7 @@
 .dish-card.compact {
   margin: 0; /* Remove margin when in compact mode */
   border-radius: 8px; /* Slightly less rounded */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* Lighter shadow */
+  box-shadow: 0 1px 4px rgba(var(--ion-color-dark-rgb), 0.08); /* Lighter shadow */
   width: 100%; /* Ensure card takes full width of its slide */
   display: flex; /* Use flexbox for internal layout */
   flex-direction: column; /* Stack content vertically */

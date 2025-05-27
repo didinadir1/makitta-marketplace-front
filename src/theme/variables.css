@@ -10,6 +10,8 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-primary-contrast-rgb: 255, 255, 255;
     --ion-color-primary-shade: #0d4332;
     --ion-color-primary-tint: #275e4e;
+    --ion-color-primary-light: #2b7a5c;
+    --ion-color-primary-lighter: #3a9a6d;
 
     /** secondary - Spicy Orange (#FF6B35) **/
     --ion-color-secondary: #FF6B35;
@@ -68,8 +70,8 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-medium-tint: #989898;
 
     /** light - Cream White **/
-    --ion-color-light: #F8F4E6;
-    --ion-color-light-rgb: 248, 244, 230;
+    --ion-color-light: #ffffff;
+    --ion-color-light-rgb: 255, 255, 255;
     --ion-color-light-contrast: #000000;
     --ion-color-light-contrast-rgb: 0, 0, 0;
     --ion-color-light-shade: #dad7cc;
@@ -81,15 +83,19 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-step-150: #d9d9d9;
 
     /* Tab bar, header and searchbar customization */
-    --ion-tab-bar-background: var(--ion-color-primary);
-    --ion-tab-bar-color: rgba(255, 255, 255, 0.6);
-    --ion-tab-bar-color-selected: #ffffff;
-    
+    --ion-tab-bar-background: var(--ion-color-light);
+    --ion-tab-bar-color:var(--ion-color-primary-shade);
+    --ion-tab-bar-color-selected: var(--ion-color-primary-lighter);
+
     --ion-header-background: var(--ion-color-primary);
     --ion-header-text-color: var(--ion-color-primary-contrast);
-    
+
     --ion-searchbar-background: var(--ion-color-light);
     --ion-searchbar-color: var(--ion-color-dark);
+
+    --ion-background-color: #fffefc; /* Dark background for the app */
+    --ion-background-color-rgb: 255, 255, 255;
+
 }
 
 /*
@@ -97,10 +103,13 @@ http://ionicframework.com/docs/theming/ */
  * -----------------------------------------------------
  */
 
-body.dark-theme {
+@media (prefers-color-scheme: dark) {
+    :root.ios,
+    :root.md {
     --ion-color-primary: #1A7A5E;
     --ion-color-primary-rgb: 26, 122, 94;
     --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-contrast-rgb: 255, 255, 255;
     --ion-color-primary-shade: #176b53;
     --ion-color-primary-tint: #31876e;
 
@@ -134,7 +143,8 @@ body.dark-theme {
     --ion-color-danger-shade: #e05a4b;
     --ion-color-danger-tint: #ff7566;
 
-    --ion-color-dark: #1A1A1A;
+    --ion-color-dark: #ffffff;
+    --ion-color-dark-rgb: 255, 255, 255;
     --ion-color-light: #2E2E2E;
 
     /* Dark theme step colors */
@@ -146,14 +156,14 @@ body.dark-theme {
     --ion-tab-bar-background: var(--ion-color-primary);
     --ion-tab-bar-color: rgba(255, 255, 255, 0.6);
     --ion-tab-bar-color-selected: #ffffff;
-    
+
     --ion-header-background: var(--ion-color-primary);
     --ion-header-text-color: var(--ion-color-primary-contrast);
-    
-    --ion-searchbar-background: var(--ion-color-dark);
-    --ion-searchbar-color: var(--ion-color-light);
-    
-    /* Additional dark theme searchbar styling */
-    --ion-searchbar-cancel-button-color: var(--ion-color-light);
-    --ion-searchbar-search-icon-color: var(--ion-color-medium);
+
+    --ion-background-color: #000000; /* Dark background for the app */
+    }
+}
+
+ion-content {
+    --background: var(--ion-background-color);
 }

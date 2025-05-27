@@ -2,8 +2,14 @@
 .product-form-modal {
     --width: 100%;
     --border-radius: 16px 16px 0 0;
-    --box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+    --box-shadow: 0 -4px 16px rgba(var(--ion-color-dark-rgb), 0.1);
     --height: 80%;
+}
+
+ion-toolbar {
+    --background: var(--ion-color-light);
+    --border-radius: 16px 16px 0 0;
+    box-shadow: 0 -2px 10px rgba(var(--ion-color-dark-rgb), 0.05);
 }
 
 /* Form styling */
@@ -33,14 +39,15 @@
 }
 
 .form-input {
-    --padding-start: 12px;
-    --padding-end: 12px;
-    --padding-top: 12px;
-    --padding-bottom: 12px;
-    --background: var(--ion-color-light);
-    --border-radius: 8px;
-    --placeholder-color: var(--ion-color-medium);
+    padding-start: 12px;
+    padding-end: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background: var(--ion-color-light);
+    border-radius: 8px;
+    placeholder-color: var(--ion-color-medium);
     font-size: 16px;
+    margin-top: 12px;
 }
 
 .form-select {
@@ -49,18 +56,14 @@
     --padding-end: 12px;
     --padding-top: 12px;
     --padding-bottom: 12px;
+    margin-top: 12px;
 }
 
-/* Add-ons styling */
-.add-ons-group {
-    margin-bottom: 24px;
-}
 
 .add-ons-list {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 12px;
     padding: 4px;
 }
 
@@ -109,7 +112,7 @@
 /* Availability toggle */
 .availability-item {
     --inner-padding-end: 0;
-    --background: var(--ion-color-light);
+    --background:transparent;
     border-radius: 8px;
 }
 
@@ -117,40 +120,18 @@
     --background: var(--ion-color-medium);
     --background-checked: var(--ion-color-success);
     --handle-background: var(--ion-color-light);
-    --handle-background-checked: var(--ion-color-light);
+    --handle-background-checked: var();
 }
 
 /* Footer styling */
 
-.form-footer-toolbar {
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+ion-footer{
     --background: var(--ion-color-light);
-    --border-radius: 0 0 16px 16px;
-    padding: 16px;
+    box-shadow: 0 -2px 4px rgba(var(--ion-color-dark-rgb), 0.1); /* Subtle shadow for depth */
 }
-
-.cancel-button {
-    --border-radius: 8px;
-    --border-color: var(--ion-color-medium);
-    --background: var(--ion-color-primary-contrast);
-    font-weight: 500;
-}
-
-.save-button {
-    --border-radius: 8px;
-    --background: var(--ion-color-primary);
-    --color: var(--ion-color-primary-contrast);
-    font-weight: 500;
-}
-
-/* Make sure the footer is always visible */
-ion-footer {
-    position: sticky;
-    bottom: 0;
-    z-index: 10;
-}
-
 .save-button {
     --border-radius: 12px;
-    margin: 16px;
+    margin: 20px 20px 35px;
 }
+
+
