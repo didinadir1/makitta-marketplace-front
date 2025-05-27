@@ -30,6 +30,7 @@ import OrdersPage from './pages/OrdersPage';
 import { ProductContextProvider } from './state/productState'; // Import AppContextProvider
 import EntryPage from './pages/EntryPage'; // Import the new EntryPage
 import LoginPage from './pages/LoginPage'; // Import the new LoginPage
+import SignupPage from './pages/SignupPage'; // Import the new SignupPage
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -78,6 +79,10 @@ const TabsContainer: React.FC = () => {
         {/* Login page for restaurants */}
         <Route exact path="/login">
           <LoginPage />
+        </Route>
+         {/* Signup page for restaurants */}
+        <Route exact path="/signup">
+          <SignupPage />
         </Route>
 
         {/* Normal mode routes */}
@@ -131,7 +136,7 @@ const TabsContainer: React.FC = () => {
       {/* Conditional Tab Bars */}
       {/* The tab bars should only be visible when NOT on the entry or login pages */}
       {/* This logic might need refinement based on actual authentication state */}
-      {window.location.pathname !== '/entry' && window.location.pathname !== '/login' && (
+      {window.location.pathname !== '/entry' && window.location.pathname !== '/login' && window.location.pathname !== '/signup' && (
         isRestaurantMode() ? (
           // Restaurant mode tabs
           <IonTabBar slot="bottom">

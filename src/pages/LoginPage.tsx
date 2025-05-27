@@ -48,8 +48,8 @@ const LoginPage: React.FC = () => {
 
   const handleSignupClick = () => {
     console.log('Signup clicked');
-    // Implement logic to navigate to the signup page
-    // history.push('/signup'); // Example navigation
+    // Navigate to the signup page
+    history.push('/signup');
   };
 
   return (
