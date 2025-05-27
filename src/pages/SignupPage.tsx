@@ -76,7 +76,7 @@ const SignupPage: React.FC = () => {
   };
 
   return (
-    <IonPage className="page">
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

@@ -72,8 +72,8 @@ const LoginPage: React.FC = () => {
           <IonText className="login-subtitle">
             <p>Sign in to manage your restaurant</p>
           </IonText>
-
-          <IonList className="login-form">
+          <div className="login-form">
+          <IonList>
             <IonItem lines="full">
               <IonLabel position="stacked">Email</IonLabel>
               <IonInput
@@ -98,6 +98,7 @@ const LoginPage: React.FC = () => {
           <IonButton expand="block" size="large" onClick={handleLogin} className="login-button">
             Login
           </IonButton>
+          </div>
           <div className="signup-text">
             <IonText color="medium">
               Don't have an account?{' '}
