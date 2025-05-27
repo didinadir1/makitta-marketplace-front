@@ -28,13 +28,16 @@ const EntryPage: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen className="entry-page-content">
+        <div className="entry-background"></div> {/* Background element for gradient/animation */}
         <div className="entry-container">
-          <IonText className="app-title">
-            <h1>Your App Name</h1> {/* Replace with your app title */}
-          </IonText>
-          <IonText className="app-subtitle">
-            <p>Choose how you want to use the app</p>
-          </IonText>
+          <div className="app-branding">
+            <IonText className="app-title">
+              <h1>Your App Name</h1> {/* Replace with your app title */}
+            </IonText>
+            <IonText className="app-subtitle">
+              <p>Choose how you want to use the app</p>
+            </IonText>
+          </div>
 
           <div className="choice-buttons">
             <IonButton expand="block" size="large" onClick={handleOrderClick} className="choice-button">

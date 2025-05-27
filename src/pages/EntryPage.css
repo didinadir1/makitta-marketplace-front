@@ -1,34 +1,77 @@
+/* Entry Page Content */
 .entry-page-content {
-  --background: var(--ion-color-primary); /* Use primary color as background */
+  --background: none; /* Remove default background to use custom background element */
+  position: relative; /* Needed for absolute positioning of background and container */
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  overflow: hidden; /* Hide overflow from animations */
 }
 
+/* Background Element with Gradient */
+.entry-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: gradient-animation 15s ease infinite; /* Background animation */
+  background-size: 200% 200%; /* Ensure gradient covers area for animation */
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+/* Container for Content */
 .entry-container {
+  position: relative; /* Position above the background */
+  z-index: 1; /* Ensure it's above the background */
   padding: 20px;
   max-width: 400px; /* Limit width on larger screens */
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space out branding and buttons */
+  height: 80%; /* Adjust height to position elements */
 }
 
-.app-title {
-  color: var(--ion-color-primary-contrast); /* White text for title */
-  font-size: 2.5em;
+/* App Branding (Title and Subtitle) */
+.app-branding {
+  margin-bottom: auto; /* Push buttons to the bottom */
+  padding-top: 20%; /* Add space from the top */
+  animation: fade-in 1s ease-out; /* Fade-in animation */
+}
+
+.app-title h1 {
+  font-size: 2.8em; /* Larger title */
   font-weight: bold;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0; /* Adjust margin */
 }
 
-.app-subtitle {
-  color: rgba(var(--ion-color-primary-contrast-rgb), 0.8); /* Slightly transparent white for subtitle */
-  font-size: 1.1em;
-  margin-bottom: 40px;
+.app-subtitle p {
+  font-size: 1.2em; /* Larger subtitle */
+  margin: 0; /* Adjust margin */
 }
 
+/* Choice Buttons */
 .choice-buttons {
   display: flex;
   flex-direction: column;
   gap: 15px; /* Space between buttons */
+  margin-top: auto; /* Push buttons to the bottom */
+  padding-bottom: 20%; /* Add space from the bottom */
+  animation: slide-up 1s ease-out; /* Slide-up animation */
 }
 
 .choice-button {
@@ -38,6 +81,7 @@
   font-size: 1.1em;
   font-weight: bold;
   text-transform: none; /* Prevent uppercase */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
 }
 
 .choice-button ion-icon {
@@ -46,6 +90,28 @@
 
 /* Style for the outline button */
 .choice-button[fill="outline"] {
-  --border-color: var(--ion-color-primary-contrast); /* White border */
-  --color: var(--ion-color-primary-contrast); /* White text */
+  --background: transparent; /* Transparent background for outline */
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
