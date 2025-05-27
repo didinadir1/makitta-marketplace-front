@@ -1,96 +1,91 @@
-.page {
-  overflow: auto;
+.signup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    overflow: auto;
 }
+
 .step-header {
-  text-align: center;
+    text-align: center;
+    vertical-align: top;
+
 }
 
 .step-header h2 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--ion-color-primary);
-  margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    margin-bottom: 0.5rem;
 }
 
 .step-header p {
-  color: var(--ion-color-medium);
-  margin: 0;
-}
-
-
-.action-button {
-  --border-radius: 12px;
-  margin-top: 1.5rem;
-  font-weight: 600;
-  text-transform: none;
-  height: 48px;
-}
-
-.flip {
-  transform: scaleX(-1);
+    color: var(--ion-color-medium);
+    margin: 0;
 }
 
 ion-progress-bar {
-  --progress-background: var(--ion-color-primary);
-  height: 3px;
+    --progress-background: var(--ion-color-primary);
+    height: 3px;
 }
 
 ion-textarea {
-  --padding-top: 12px;
-  --padding-bottom: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
 }
 
 .signup-title {
-  font-size: 1.6em;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: var(--ion-color-dark);
-  text-align: center;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--ion-color-dark);
+    text-align: center;
 }
 
 .signup-form {
-  background: var(--ion-color-light);
-  padding: 20px;
-  max-width: 500px; /* Limit width on larger screens */
-  box-shadow: 0 4px 8px  rgba(var(--ion-color-dark-rgb), 0.1); /* Subtle shadow */
-  border-radius: 8px; /* Rounded corners */
-  margin: 20px;
+    padding: 30px;
+    background: var(--ion-color-light) !important; /* Light background for the form */
+    width: 320px; /* Limit width on larger screens */
+    box-shadow: 0 4px 8px rgba(var(--ion-color-dark-rgb), 0.3); /* Subtle shadow */
+    border-radius: 8px; /* Rounded corners */
+    margin: 20px;
+    align-self: center;
 }
 
 .signup-form ion-item {
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  --background: transparent;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --background: transparent;
 }
 
 .signup-form ion-label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 0.9em;
+    font-weight: bold;
 }
 
 .signup-form ion-input,
 .signup-form ion-textarea {
-  --padding-start: 12px; /* Add padding for outline style */
-  --padding-end: 12px; /* Add padding for outline style */
-  --padding-top: 12px; /* Add padding for outline style */
-  --padding-bottom: 12px; /* Add padding for outline style */
-  font-size: 1em;
-  --background: var(--ion-color-light); /* Background for outline input */
-  --border-radius: 8px; /* Rounded corners for outline input */
-  --placeholder-color: var(--ion-color-medium);
-  --border-color: var(--ion-color-step-150); /* Border color for outline */
-  --border-width: 1px; /* Border width for outline */
-  --highlight-color: var(--ion-color-primary); /* Highlight color when focused */
+    --padding-start: 12px; /* Add padding for outline style */
+    --padding-end: 12px; /* Add padding for outline style */
+    --padding-top: 12px; /* Add padding for outline style */
+    --padding-bottom: 12px; /* Add padding for outline style */
+    font-size: 1em;
+    --border-radius: 8px; /* Rounded corners for outline input */
+    --placeholder-color: var(--ion-color-medium);
+    --border-color: var(--ion-color-step-150); /* Border color for outline */
+    --border-width: 1px; /* Border width for outline */
+    --highlight-color: var(--ion-color-primary); /* Highlight color when focused */
 }
 
 
-.button-container ion-button {
-  --border-radius: 10px;
-  --padding-top: 15px;
-  --padding-bottom: 15px;
-  font-size: 1.1em;
-  font-weight: bold;
-  text-transform: none;
+.signup-form ion-button {
+    --border-radius: 12px;
+    text-transform: none;
+    height: 48px;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 20px 20px 100px;
+    width: fit-content;
+    align-self: center;
 }
 
