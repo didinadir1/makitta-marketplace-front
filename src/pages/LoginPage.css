@@ -98,3 +98,16 @@
 .google-login-button ion-icon {
   font-size: 1.5em;
 }
+
+/* Signup text styling */
+.signup-text {
+  margin-top: 40px;
+  font-size: 0.9em;
+}
+
+.signup-link {
+  color: var(--ion-color-primary); /* Use primary color for the link */
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline; /* Add underline to indicate it's a link */
+}
