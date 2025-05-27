@@ -1,6 +1,6 @@
 import {
   IonButton,
-  IonButtons,
+  IonButtons, IonContent,
   IonHeader,
   IonIcon,
   IonInput,
@@ -94,6 +94,7 @@ const SignupPage: React.FC = () => {
         </IonToolbar>
         <IonProgressBar value={currentStep / 2}/>
       </IonHeader>
+      <IonContent>
       <div className="signup-content">
 
       <IonText className="step-header">
@@ -228,7 +229,7 @@ const SignupPage: React.FC = () => {
         </>
       )}
       </div>
-
+      </IonContent>
     </IonPage>
   );
 };
