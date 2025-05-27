@@ -1,7 +1,6 @@
 
 .step-header {
   text-align: center;
-  margin-bottom: 2rem;
 }
 
 .step-header h2 {
@@ -55,38 +54,13 @@ ion-textarea {
   text-align: center;
 }
 
-/* Step Indicator */
-.step-indicator {
-  display: flex;
-  justify-content: center; /* Center the indicator */
-  align-items: center;
-  margin-bottom: 30px;
-  font-size: 0.9em;
-}
-
-
-
-
-/* Form Box */
-.signup-form-box {
-}
-
-
-/* Form Steps */
-.form-step {
-  /* Add animation for step transitions if desired */
-  flex-grow: 1; /* Allow form step to take available space */
-}
-
 .signup-form {
   background: transparent; /* Ensure list background is transparent */
-  margin-bottom: 20px; /* Space below the form list */
   padding: 20px;
   max-width: 500px; /* Limit width on larger screens */
-  width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0 4px 8px  rgba(var(--ion-color-dark-rgb), 0.8); /* Subtle shadow */
   border-radius: 8px; /* Rounded corners */
-  overflow: hidden; /* Ensure content stays within rounded corners */
+  margin: 20px;
 }
 
 .signup-form ion-item {
