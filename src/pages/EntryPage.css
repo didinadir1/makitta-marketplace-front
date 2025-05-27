@@ -38,12 +38,11 @@
   position: relative; /* Position above the background */
   z-index: 1; /* Ensure it's above the background */
   padding: 20px;
-  max-width: 400px; /* Limit width on larger screens */
-  width: 100%;
+    max-width: 400px; /* Limit width on larger screens */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Space out branding and buttons */
-  height: 80%; /* Adjust height to position elements */
+  justify-content: start; /* Space out branding and buttons */
+    margin: auto;
 }
 
 /* App Branding (Title and Subtitle) */
@@ -69,7 +68,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px; /* Space between buttons */
-  margin-top: auto; /* Push buttons to the bottom */
+  margin-top: 50%; /* Push buttons to the bottom */
   padding-bottom: 20%; /* Add space from the bottom */
   animation: slide-up 1s ease-out; /* Slide-up animation */
 }
