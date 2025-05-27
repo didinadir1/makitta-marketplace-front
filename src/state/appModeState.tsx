@@ -4,6 +4,7 @@ type AppMode = 'normal' | 'restaurant';
 
 interface AppModeContextType {
   mode: AppMode;
+  setMode: (mode: AppMode) => void; // Added setMode function
   toggleMode: () => void;
   isRestaurantMode: () => boolean;
 }
@@ -11,24 +12,24 @@ interface AppModeContextType {
 const AppModeContext = createContext<AppModeContextType | undefined>(undefined);
 
 export const AppModeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [mode, setMode] = useState<AppMode>('normal');
+  // Initialize mode based on a default or stored value (e.g., from local storage)
+  // For now, default to 'normal' or 'restaurant' based on initial route or other logic
+  const [mode, setMode] = useState<AppMode>('normal'); // Default to 'normal'
 
   const toggleMode = () => {
-    setMode(prevMode => prevMode === 'normal' ? 'restaurant' : 'normal');
+    setMode(prevMode => (prevMode === 'normal' ? 'restaurant' : 'normal'));
   };
 
-  const isRestaurantMode = () => {
-    return mode === 'restaurant';
-  };
+  const isRestaurantMode = () => mode === 'restaurant';
 
   return (
-    <AppModeContext.Provider value={{ mode, toggleMode, isRestaurantMode }}>
+    <AppModeContext.Provider value={{ mode, setMode, toggleMode, isRestaurantMode }}>
       {children}
     </AppModeContext.Provider>
   );
 };
 
-export const useAppMode = (): AppModeContextType => {
+export const useAppMode = () => {
   const context = useContext(AppModeContext);
   if (context === undefined) {
     throw new Error('useAppMode must be used within an AppModeProvider');

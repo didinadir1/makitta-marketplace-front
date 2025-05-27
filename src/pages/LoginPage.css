@@ -1,0 +1,100 @@
+.login-page-content {
+  --background: var(--ion-background-color); /* Use app background color */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align to top */
+  text-align: center;
+  padding-top: 60px; /* Add padding to clear the header */
+}
+
+.login-container {
+  padding: 20px;
+  max-width: 400px; /* Limit width on larger screens */
+  width: 100%;
+}
+
+.login-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--ion-color-dark);
+}
+
+.login-subtitle {
+  font-size: 1em;
+  color: var(--ion-color-medium);
+  margin-bottom: 30px;
+}
+
+.login-form {
+  margin-bottom: 20px;
+  background: transparent; /* Ensure list background is transparent */
+}
+
+.login-form ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: transparent;
+  margin-bottom: 15px; /* Space between form items */
+}
+
+.login-form ion-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+}
+
+.login-form ion-input {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  font-size: 1em;
+}
+
+.login-button {
+  --border-radius: 10px;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: none;
+  margin-top: 20px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--ion-color-step-150);
+}
+
+.divider:not(:empty)::before {
+  margin-right: .25em;
+}
+
+.divider:not(:empty)::after {
+  margin-left: .25em;
+}
+
+.google-login-button {
+  --border-radius: 10px;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: none;
+  --border-color: var(--ion-color-medium); /* Subtle border */
+  --color: var(--ion-color-dark); /* Dark text */
+}
+
+.google-login-button ion-icon {
+  font-size: 1.5em;
+}

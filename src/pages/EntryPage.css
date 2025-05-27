@@ -1,0 +1,51 @@
+.entry-page-content {
+  --background: var(--ion-color-primary); /* Use primary color as background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.entry-container {
+  padding: 20px;
+  max-width: 400px; /* Limit width on larger screens */
+  width: 100%;
+}
+
+.app-title {
+  color: var(--ion-color-primary-contrast); /* White text for title */
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.app-subtitle {
+  color: rgba(var(--ion-color-primary-contrast-rgb), 0.8); /* Slightly transparent white for subtitle */
+  font-size: 1.1em;
+  margin-bottom: 40px;
+}
+
+.choice-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between buttons */
+}
+
+.choice-button {
+  --border-radius: 10px; /* Rounded corners for buttons */
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: none; /* Prevent uppercase */
+}
+
+.choice-button ion-icon {
+  font-size: 1.5em;
+}
+
+/* Style for the outline button */
+.choice-button[fill="outline"] {
+  --border-color: var(--ion-color-primary-contrast); /* White border */
+  --color: var(--ion-color-primary-contrast); /* White text */
+}
