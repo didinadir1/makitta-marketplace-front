@@ -1,8 +1,8 @@
 /* Tab Content Styling */
 .tab-content {
-  padding: 16px 0;
-  height: 105%;
-  overflow-y: auto;
+    padding: 16px 0;
+    height: 105%;
+    overflow-y: auto;
 }
 
 /* Add Button Container (Removed - replaced by FAB) */
@@ -14,65 +14,65 @@
 
 /* Category List Styling */
 .category-list {
-  margin-top: 10px;
-  background: transparent;
+    margin-top: 10px;
+    background: transparent;
 }
 
 .category-item {
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --padding-top: 12px;
-  --padding-bottom: 12px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  --background: var(--ion-color-light);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    --background: var(--ion-color-light);
 }
 
 .category-avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .category-color-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
 }
 
 .category-chip {
-  margin-right: 0;
+    margin-right: 0;
 }
 
 /* Tab Bar Styling */
 .store-tabs {
-  --background: var(--ion-color-light);
+    --background: var(--ion-color-light);
 }
 
 .store-tab-button {
-  --color: var(--ion-color-medium);
-  --color-selected: var(--ion-color-primary);
-  font-weight: 500;
+    --color: var(--ion-color-medium);
+    --color-selected: var(--ion-color-primary);
+    font-weight: 500;
 }
 
 .store-tab-button ion-icon {
-  font-size: 24px;
+    font-size: 24px;
 }
 
 /* Tab Label */
 .tab-label {
-  font-size: 14px;
-  margin-top: 4px;
+    font-size: 14px;
+    margin-top: 4px;
 }
 
 /* Floating Action Button (FAB) Styling */
 ion-fab[slot="fixed"] {
-  margin-bottom: 160px; /* Adjust vertical position */
-  margin-right: 30px; /* Adjust horizontal position */
+    margin-bottom: 160px; /* Adjust vertical position */
+    margin-right: 30px; /* Adjust horizontal position */
 }
 
 ion-fab-button {
-  --box-shadow: 0 4px 8px rgba(var(--ion-color-dark-rgb), 0.2); /* Add a more prominent shadow */
-  --background: var(--ion-color-primary); /* Use primary color */
-  --color: var(--ion-color-primary-contrast); /* White icon color */
+    --box-shadow: 0 4px 8px rgba(var(--ion-color-text-rgb), 0.2); /* Add a more prominent shadow */
+    --background: var(--ion-color-primary); /* Use primary color */
+    --color: var(--ion-color-primary-contrast); /* White icon color */
 }

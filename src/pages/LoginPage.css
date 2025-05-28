@@ -14,7 +14,7 @@
     font-size: 1.8em;
     font-weight: bold;
     margin-bottom: 10px;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-text);
 }
 
 .login-subtitle {
@@ -27,7 +27,7 @@
     padding: 20px;
     margin-bottom: 20px;
     background: var(--ion-color-light); /* Light background for the form */
-    box-shadow: 0 4px 8px rgba(var(--ion-color-dark-rgb), 0.3); /* Subtle shadow */
+    box-shadow: 0 4px 8px rgba(var(--ion-color-text-rgb), 0.3); /* Subtle shadow */
     border-radius: 10px; /* Rounded corners */
 }
 
@@ -91,9 +91,9 @@
     font-size: 1.1em;
     font-weight: bold;
     text-transform: none;
-    --color: var(--ion-color-dark); /* Dark text */
+    --color: var(--ion-color-text); /* Dark text */
     background: var(--ion-color-light); /* Light background for the form */
-    box-shadow: 0 4px 8px rgba(var(--ion-color-dark-rgb), 0.3); /* Subtle shadow */
+    box-shadow: 0 4px 8px rgba(var(--ion-color-text-rgb), 0.3); /* Subtle shadow */
     border-radius: 10px; /* Rounded corners */
 }
 

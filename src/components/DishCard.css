@@ -3,7 +3,7 @@
 .dish-card {
     margin: 10px 0; /* Adjust margin as needed */
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(var(--ion-color-dark-rgb), 0.1);
+    box-shadow: 0 2px 8px rgba(var(--ion-color-text-rgb), 0.1);
     overflow: hidden; /* Ensure image corners are rounded with the card */
     background: var(--ion-color-light); /* Explicit background */
 }
@@ -23,30 +23,30 @@
 /* Swiper pagination styling for DishCard */
 /* Targeting the Swiper pagination element directly within the container */
 .dish-card:not(.compact) .swiper-pagination {
-  bottom: 10px !important; /* Position pagination inside the image area */
-  left: 0; /* Ensure it spans the full width */
-  width: 100%;
-  display: flex; /* Use flexbox to center bullets */
-  justify-content: center; /* Center bullets horizontally */
-  align-items: center;
-  z-index: 10; /* Ensure it's above the image */
+    bottom: 10px !important; /* Position pagination inside the image area */
+    left: 0; /* Ensure it spans the full width */
+    width: 100%;
+    display: flex; /* Use flexbox to center bullets */
+    justify-content: center; /* Center bullets horizontally */
+    align-items: center;
+    z-index: 10; /* Ensure it's above the image */
 }
 
 .dish-card:not(.compact) .swiper-pagination-bullet {
-  background: var(--ion-color-light); /* Use a light color for visibility on images */
-  opacity: 0.8;  /* Slightly less opaque */
-  width: 8px; /* Explicit width */
-  height: 8px; /* Explicit height */
-  margin: 0 4px; /* Space between bullets */
-  border-radius: 50%; /* Make them round */
-  transition: opacity 0.3s ease;
+    background: var(--ion-color-light); /* Use a light color for visibility on images */
+    opacity: 0.8; /* Slightly less opaque */
+    width: 8px; /* Explicit width */
+    height: 8px; /* Explicit height */
+    margin: 0 4px; /* Space between bullets */
+    border-radius: 50%; /* Make them round */
+    transition: opacity 0.3s ease;
 }
 
 .dish-card:not(.compact) .swiper-pagination-bullet-active {
-  background: var(--ion-color-light);
-  opacity: 1;
-  width: 10px; /* Slightly larger active bullet */
-  height: 10px;
+    background: var(--ion-color-light);
+    opacity: 1;
+    width: 10px; /* Slightly larger active bullet */
+    height: 10px;
 }
 
 
@@ -65,7 +65,7 @@
 .dish-title-price ion-card-title {
     font-size: 1.2em;
     font-weight: bold;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-text);
     margin: 0;
 }
 
@@ -84,20 +84,20 @@
 
 
 .dish-rating {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px; /* Add some space below rating */
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; /* Add some space below rating */
 }
 
 .dish-rating ion-icon {
-  font-size: 1em;
-  margin-right: 2px; /* Space between stars */
+    font-size: 1em;
+    margin-right: 2px; /* Space between stars */
 }
 
 .dish-rating .rating-text {
-  margin-left: 6px; /* Space between stars and text */
-  font-size: 0.9em;
-  color: var(--ion-color-medium);
+    margin-left: 6px; /* Space between stars and text */
+    font-size: 0.9em;
+    color: var(--ion-color-text-tint);
 }
 
 .dish-card ion-card-content {
@@ -126,7 +126,7 @@
     gap: 15px; /* Space between info items */
     flex-wrap: wrap;
     font-size: 0.9em;
-    color: var(--ion-color-dark-tint);
+    color: var(--ion-color-text-tint);
 }
 
 .dish-info .info-item {
@@ -137,102 +137,102 @@
 .dish-info .info-item ion-icon {
     margin-right: 4px;
     font-size: 1em;
-    color: var(--ion-color-medium);
+    color: var(--ion-color-text-tint);
 }
 
 /* Add to Cart Button on Card */
 .add-to-cart-button-card {
-  position: absolute; /* Position absolutely */
-  bottom: 10px; /* Distance from bottom */
-  right: 10px; /* Distance from right */
-  --padding-start: 8px; /* Adjust padding for round button */
-  --padding-end: 8px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-  --border-radius: 50%; /* Make it round */
-  height: 50px; /* Fixed height for round button */
-  width: 50px; /* Fixed width for round button */
-  --background: var(--ion-color-primary);
-  --color: var(--ion-color-primary-contrast);
-  z-index: 5; /* Ensure it's above other content */
+    position: absolute; /* Position absolutely */
+    bottom: 10px; /* Distance from bottom */
+    right: 10px; /* Distance from right */
+    --padding-start: 8px; /* Adjust padding for round button */
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    --border-radius: 50%; /* Make it round */
+    height: 50px; /* Fixed height for round button */
+    width: 50px; /* Fixed width for round button */
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    z-index: 5; /* Ensure it's above other content */
 }
 
 .add-to-cart-button-card ion-icon {
-  font-size: 1.3em; /* Icon size */
+    font-size: 1.3em; /* Icon size */
 }
 
 
 /* --- Compact Styling for Restaurant Detail Page --- */
 .dish-card.compact {
-  margin: 0; /* Remove margin when in compact mode */
-  border-radius: 8px; /* Slightly less rounded */
-  box-shadow: 0 1px 4px rgba(var(--ion-color-dark-rgb), 0.08); /* Lighter shadow */
-  width: 100%; /* Ensure card takes full width of its slide */
-  display: flex; /* Use flexbox for internal layout */
-  flex-direction: column; /* Stack content vertically */
-  background: var(--ion-color-step-50, #f2f2f2); /* Add a subtle background */
+    margin: 0; /* Remove margin when in compact mode */
+    border-radius: 8px; /* Slightly less rounded */
+    box-shadow: 0 1px 4px rgba(var(--ion-color-text-rgb), 0.08); /* Lighter shadow */
+    width: 100%; /* Ensure card takes full width of its slide */
+    display: flex; /* Use flexbox for internal layout */
+    flex-direction: column; /* Stack content vertically */
+    background: var(--ion-color-step-50, #f2f2f2); /* Add a subtle background */
 }
 
 .dish-card.compact .dish-image-container { /* Use the new container */
-  width: 100%;
-  /* Use padding-top trick for square aspect ratio */
-  padding-top: 100%; /* Makes the height equal to the width */
-  height: 0; /* Reset height */
-  position: relative; /* Needed for absolute positioning of image */
-  overflow: hidden; /* Hide overflow */
-  border-top-left-radius: 8px; /* Match card border radius */
-  border-top-right-radius: 8px;
+    width: 100%;
+    /* Use padding-top trick for square aspect ratio */
+    padding-top: 100%; /* Makes the height equal to the width */
+    height: 0; /* Reset height */
+    position: relative; /* Needed for absolute positioning of image */
+    overflow: hidden; /* Hide overflow */
+    border-top-left-radius: 8px; /* Match card border radius */
+    border-top-right-radius: 8px;
 }
 
 .dish-card.compact .dish-image {
-  position: absolute; /* Position image absolutely within the padded container */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    position: absolute; /* Position image absolutely within the padded container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 
 .dish-card.compact ion-card-header {
-  padding: 8px 10px 4px 10px; /* Reduced padding */
-  flex-shrink: 0; /* Prevent header from shrinking */
+    padding: 8px 10px 4px 10px; /* Reduced padding */
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .dish-card.compact .dish-title-price {
-  margin-bottom: 0; /* Remove bottom margin */
-  flex-direction: column; /* Stack title and price vertically */
-  align-items: flex-start; /* Align items to the start */
+    margin-bottom: 0; /* Remove bottom margin */
+    flex-direction: column; /* Stack title and price vertically */
+    align-items: flex-start; /* Align items to the start */
 }
 
 .dish-card.compact .dish-title-price ion-card-title {
-  font-size: 1em; /* Smaller title */
-  white-space: nowrap; /* Prevent wrapping */
-  overflow: hidden; /* Hide overflow */
-  text-overflow: ellipsis; /* Add ellipsis */
-  width: 100%; /* Ensure it takes full width */
-  font-weight: normal; /* Less bold title */
-  color: var(--ion-color-dark);
+    font-size: 1em; /* Smaller title */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis */
+    width: 100%; /* Ensure it takes full width */
+    font-weight: normal; /* Less bold title */
+    color: var(--ion-color-text);
 }
 
 .dish-card.compact .dish-price {
-  font-size: 0.8em; /* Smaller price */
-  padding: 2px 5px; /* Reduced padding */
-  min-width: auto; /* Allow width to be determined by content */
-  align-self: flex-end; /* Align price to the end */
-  margin-top: 4px; /* Space between title and price */
-  --background: var(--ion-color-success-tint); /* Lighter success color */
-  --color: var(--ion-color-success-contrast);
+    font-size: 0.8em; /* Smaller price */
+    padding: 2px 5px; /* Reduced padding */
+    min-width: auto; /* Allow width to be determined by content */
+    align-self: flex-end; /* Align price to the end */
+    margin-top: 4px; /* Space between title and price */
+    --background: var(--ion-color-success-tint); /* Lighter success color */
+    --color: var(--ion-color-success-contrast);
 }
 
 .dish-card.compact .dish-rating,
 .dish-card.compact ion-card-content {
-  display: none; /* Hide rating and content in compact mode */
+    display: none; /* Hide rating and content in compact mode */
 }
 
 
 /* Swiper pagination styling for compact DishCard */
 /* Hide pagination in compact mode */
 .dish-card.compact .swiper-pagination {
-  display: none;
+    display: none;
 }

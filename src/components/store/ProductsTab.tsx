@@ -36,7 +36,7 @@ const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
     }
   };
 
-  const handleSaveProduct = (product: Dish) => {
+  const handleSaveProduct = (product: Partial<Dish>) => {
     console.log('Saving product:', product);
     // Here you would update your state or call an API
     // For now, just show a success toast

@@ -16,8 +16,7 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
-  IonToast, // Import IonToast
-  useIonToast, // Import useIonToast hook
+  useIonToast,
 } from '@ionic/react';
 import {useParams} from 'react-router';
 import {mockDishes} from '../data/mockDishes';
@@ -28,7 +27,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import '@ionic/react/css/ionic-swiper.css';
 import './DishDetailPage.css';
-import { useCart } from '../state/cartState'; // Import the useCart hook
+import {useCart} from '../state/cartState'; // Import the useCart hook
 
 interface DishDetailParams {
   id: string;
@@ -37,7 +36,7 @@ interface DishDetailParams {
 const DishDetailPage: React.FC = () => {
   const {id} = useParams<DishDetailParams>();
   const dish = mockDishes.find(d => d.id === id);
-  const { addItem } = useCart(); // Use the addItem function from the cart state
+  const {addItem} = useCart(); // Use the addItem function from the cart state
   const [presentToast] = useIonToast(); // Use the useIonToast hook
 
   if (!dish) {
@@ -107,7 +106,7 @@ const DishDetailPage: React.FC = () => {
             >
               {dish.imageUrls.map((url, index) => (
                 <SwiperSlide key={index}>
-                <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-detail-image"/>
+                  <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-detail-image"/>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -117,7 +116,8 @@ const DishDetailPage: React.FC = () => {
         <div className="dish-detail-content">
           <div className="dish-detail-header-section">
             <IonCardTitle className="dish-detail-name">{dish.name}</IonCardTitle>
-            <IonBadge color="success" className="dish-detail-price">{dish.basePrice}</IonBadge> {/* Price remains here */}
+            <IonBadge color="success"
+                      className="dish-detail-price">{dish.basePrice}</IonBadge> {/* Price remains here */}
           </div>
 
           <div className="dish-detail-meta-section">
@@ -147,10 +147,11 @@ const DishDetailPage: React.FC = () => {
 
           {/* Moved Add to Cart button here */}
           <div className="add-to-cart-section">
-             <IonButton expand="block" size="large" className="add-to-cart-button" onClick={handleAddToCart}> {/* Added onClick handler */}
-                <IonIcon icon={cartOutline} slot="start" /> {/* Changed icon */}
-                Add to Cart
-              </IonButton>
+            <IonButton expand="block" size="large" className="add-to-cart-button"
+                       onClick={handleAddToCart}> {/* Added onClick handler */}
+              <IonIcon icon={cartOutline} slot="start"/> {/* Changed icon */}
+              Add to Cart
+            </IonButton>
           </div>
 
 

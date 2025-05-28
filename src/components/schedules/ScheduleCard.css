@@ -1,7 +1,7 @@
 .schedule-card {
     margin: 0 8px; /* Remove margin as IonItem will handle spacing */
     width: 100%; /* Make sure card takes full width */
-    box-shadow: 0 2px 4px rgba(var(--ion-color-dark-rgb), 0.1); /* Subtle shadow */
+    box-shadow: 0 2px 4px rgba(var(--ion-color-text-rgb), 0.1); /* Subtle shadow */
     border-radius: 8px; /* Rounded corners */
     overflow: hidden; /* Ensure content stays within rounded corners */
     position: relative; /* Needed for absolute positioning of the oval */
@@ -31,7 +31,7 @@
 .schedule-card ion-card-title {
     font-size: 1.1em;
     font-weight: bold;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-text);
 }
 
 .schedule-card ion-card-content {
@@ -103,6 +103,7 @@ ion-item-option {
 .item-option-start {
     margin: 0 0 0 8px; /* Remove margin as IonItem will handle spacing */
 }
+
 .item-option-end {
     margin: 0 8px 0 0; /* Remove margin as IonItem will handle spacing */
 }

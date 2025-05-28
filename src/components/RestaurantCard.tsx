@@ -37,19 +37,19 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) =>
     <div onClick={() => onClick(restaurant.id)}> {/* Call onClick with restaurant ID */}
       <IonCard className="restaurant-card">
         {restaurant.imageUrls.length > 0 && (
-            <Swiper
-              modules={[Pagination]}
-              pagination={{clickable: true}}
-              initialSlide={0}
-              speed={400}
-              className="restaurant-slides"
-            >
-              {restaurant.imageUrls.map((url, index) => (
-                <SwiperSlide key={index}>
-                  <IonImg src={url} alt={`${restaurant.name} image ${index + 1}`} className="restaurant-image"/>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+          <Swiper
+            modules={[Pagination]}
+            pagination={{clickable: true}}
+            initialSlide={0}
+            speed={400}
+            className="restaurant-slides"
+          >
+            {restaurant.imageUrls.map((url, index) => (
+              <SwiperSlide key={index}>
+                <IonImg src={url} alt={`${restaurant.name} image ${index + 1}`} className="restaurant-image"/>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         )}
 
         <IonCardContent className="restaurant-card-content"> {/* Content area below image */}
@@ -63,11 +63,11 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) =>
 
           <div className="restaurant-meta-info">
             <div className="info-item">
-              <IonIcon icon={locationOutline} slot="start" color="medium"/>
+              <IonIcon icon={locationOutline} slot="start"/>
               <span>{restaurant.distance}</span>
             </div>
             <div className={`info-item restaurant-status ${restaurant.status.toLowerCase()}`}>
-              <IonIcon icon={businessOutline} slot="start" color="medium"/>
+              <IonIcon icon={businessOutline} slot="start"/>
               <span>{restaurant.status}</span>
             </div>
           </div>

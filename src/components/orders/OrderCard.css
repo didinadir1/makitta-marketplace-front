@@ -1,104 +1,104 @@
 .order-card {
-  margin: 15px; /* Add margin around the card */
-  border-radius: 12px; /* More rounded corners */
-  box-shadow: 0 4px 8px rgba(var(--ion-color-dark-rgb), 0.1); /* More prominent shadow */
-  overflow: hidden; /* Ensure content stays within rounded corners */
-  color: var(--ion-color-dark);
-  position: relative; /* Needed for potential absolute positioning */
-  /* Add ticket-like styling */
-  border: 1px solid var(--ion-color-step-150, #dcdcdc); /* Light border */
+    margin: 15px; /* Add margin around the card */
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 4px 8px rgba(var(--ion-color-text-rgb), 0.1); /* More prominent shadow */
+    overflow: hidden; /* Ensure content stays within rounded corners */
+    color: var(--ion-color-text);
+    position: relative; /* Needed for potential absolute positioning */
+    /* Add ticket-like styling */
+    border: 1px solid var(--ion-color-step-150, #dcdcdc); /* Light border */
 }
 
 /* Add a pseudo-element for the dashed border effect */
 .order-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100px; /* Adjust based on header height */
-  height: 1px;
-  background: repeating-linear-gradient(to right, var(--ion-color-step-150, #dcdcdc) 0, var(--ion-color-step-150, #dcdcdc) 5px, transparent 5px, transparent 10px);
-  z-index: 1; /* Ensure it's above content */
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100px; /* Adjust based on header height */
+    height: 1px;
+    background: repeating-linear-gradient(to right, var(--ion-color-step-150, #dcdcdc) 0, var(--ion-color-step-150, #dcdcdc) 5px, transparent 5px, transparent 10px);
+    z-index: 1; /* Ensure it's above content */
 }
 
 
 .order-card-header {
-  padding: 15px; /* Padding inside the header */
+    padding: 15px; /* Padding inside the header */
 }
 
 .order-header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .order-code {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: var(--ion-color-dark);
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--ion-color-text);
 }
 
 .order-status-chip {
-  font-size: 0.8em;
-  font-weight: bold;
-  padding: 4px 8px;
-  height: auto; /* Allow height to adjust */
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 4px 8px;
+    height: auto; /* Allow height to adjust */
 }
 
 .order-time {
-  font-size: 0.8em;
-  color: var(--ion-color-medium);
+    font-size: 0.8em;
+    color: var(--ion-color-medium);
 }
 
 .order-card-content {
-  padding: 15px; /* Padding inside the content */
-  padding-top: 25px; /* Add space to clear the dashed line */
+    padding: 15px; /* Padding inside the content */
+    padding-top: 25px; /* Add space to clear the dashed line */
 }
 
 .order-items {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .items-list-title {
-  font-weight: bold;
-  margin-bottom: 5px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .order-items ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .order-items li {
-  font-size: 0.9em;
-  color: var(--ion-color-dark);
-  margin-bottom: 3px;
+    font-size: 0.9em;
+    color: var(--ion-color-text);
+    margin-bottom: 3px;
 }
 
 .order-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid var(--ion-color-step-150, #dcdcdc); /* Separator above total */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--ion-color-step-150, #dcdcdc); /* Separator above total */
 }
 
 .total-label {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .total-value {
-  font-size: 1.1em;
-  font-weight: bold;
+    font-size: 1.1em;
+    font-weight: bold;
 }
 
 .order-actions {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .order-actions ion-button {
-  margin-bottom: 10px; /* Space between action buttons */
+    margin-bottom: 10px; /* Space between action buttons */
 }

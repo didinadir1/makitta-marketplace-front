@@ -7,15 +7,15 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonItem,
   IonLabel,
   IonList,
   IonPage,
   IonText,
   IonTitle,
   IonToolbar,
-  IonItem, // Import IonItem
+  useIonAlert,
   useIonRouter,
-  useIonAlert, // Import useIonAlert hook
 } from '@ionic/react';
 import React from 'react';
 import {useCart} from '../state/cartState'; // Import the cart hook
@@ -85,7 +85,8 @@ const CartPage: React.FC = () => {
           <>
             <IonList lines="none" className="cart-items-list">
               {cartItems.map(item => (
-                <IonItem key={item.dish.id} onClick={() => handleItemClick(item.dish.id)} detail={false} className="cart-item-container"> {/* Wrap in IonItem */}
+                <IonItem key={item.dish.id} onClick={() => handleItemClick(item.dish.id)} detail={false}
+                         className="cart-item-container"> {/* Wrap in IonItem */}
                   <IonCard className="cart-item-card">
                     <IonCardContent className="cart-item-content">
                       {item.dish.imageUrls && item.dish.imageUrls.length > 0 && (
@@ -102,12 +103,18 @@ const CartPage: React.FC = () => {
                       </div>
                       <div className="item-quantity-controls">
                         <IonButton fill="clear" size="small"
-                                   onClick={(e) => { e.stopPropagation(); handleUpdateQuantity(item.dish.id, item.quantity, item.quantity - 1); }}> {/* Use handleUpdateQuantity */}
+                                   onClick={(e) => {
+                                     e.stopPropagation();
+                                     handleUpdateQuantity(item.dish.id, item.quantity, item.quantity - 1);
+                                   }}> {/* Use handleUpdateQuantity */}
                           <IonIcon icon={removeOutline}/>
                         </IonButton>
-                        <IonBadge color="light" className="item-quantity">{item.quantity}</IonBadge>
+                        <IonBadge className="item-quantity">{item.quantity}</IonBadge>
                         <IonButton fill="clear" size="small"
-                                   onClick={(e) => { e.stopPropagation(); handleUpdateQuantity(item.dish.id, item.quantity, item.quantity + 1); }}> {/* Use handleUpdateQuantity */}
+                                   onClick={(e) => {
+                                     e.stopPropagation();
+                                     handleUpdateQuantity(item.dish.id, item.quantity, item.quantity + 1);
+                                   }}> {/* Use handleUpdateQuantity */}
                           <IonIcon icon={addOutline}/>
                         </IonButton>
                       </div>

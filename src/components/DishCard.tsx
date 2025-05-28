@@ -104,11 +104,11 @@ const DishCard: React.FC<DishCardProps> = ({dish, onClick, isCompact = false}) =
           </div>
           <div className="dish-info">
             <div className="info-item">
-              <IonIcon icon={locationOutline} slot="start" color="medium"/>
+              <IonIcon icon={locationOutline} slot="start"/>
               <span>{dish.distance}</span>
             </div>
             <div className="info-item">
-              <IonIcon icon={timeOutline} slot="start" color="medium"/>
+              <IonIcon icon={timeOutline} slot="start"/>
               <span>{dish.timeToReady}</span>
             </div>
           </div>

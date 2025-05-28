@@ -1,6 +1,6 @@
 .schedule-form-modal {
     --border-radius: 16px 16px 0 0;
-    --box-shadow: 0 -4px 16px rgba(var(--ion-color-dark-rgb), 0.1);
+    --box-shadow: 0 -4px 16px rgba(var(--ion-color-text-rgb), 0.1);
 }
 
 .form-section {
@@ -87,7 +87,7 @@ ion-datetime-button:hover::part(native) {
 /* Styling for category headers and dividers */
 .category-header {
     font-weight: bold;
-    border-bottom: 1px solid rgba(var(--ion-color-dark-rgb), 0.8);
+    border-bottom: 1px solid rgba(var(--ion-color-text-rgb), 0.8);
     margin-bottom: 12px;
     height: 10px;
 }
@@ -95,7 +95,7 @@ ion-datetime-button:hover::part(native) {
 
 ion-footer {
     --background: var(--ion-color-light);
-    box-shadow: 0 -2px 4px rgba(var(--ion-color-dark-rgb), 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 -2px 4px rgba(var(--ion-color-text-rgb), 0.1); /* Subtle shadow for depth */
 }
 
 .save-button {

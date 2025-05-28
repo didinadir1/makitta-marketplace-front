@@ -1,198 +1,198 @@
 /* Styles for the Dashboard Page */
 
 ion-content {
-  --background: var(--ion-color-light);
+    --background: var(--ion-color-light);
 }
 
 .dashboard-container {
-  padding: 16px;
+    padding: 16px;
 }
 
 .dashboard-container h2 {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: var(--ion-color-dark);
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: var(--ion-color-text);
 }
 
 /* Metrics Section */
 .metrics-section {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .metrics-cards {
-  display: flex;
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
-  gap: 15px; /* Space between cards */
-  padding-bottom: 10px; /* Add padding for scrollbar */
-  /* Hide scrollbar for a cleaner look */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+    display: flex;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    gap: 15px; /* Space between cards */
+    padding-bottom: 10px; /* Add padding for scrollbar */
+    /* Hide scrollbar for a cleaner look */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 .metrics-cards::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+    display: none; /* Chrome, Safari, Opera */
 }
 
 
 .metric-card {
-  min-width: 160px; /* Slightly increased minimum width */
-  flex-shrink: 0; /* Prevent cards from shrinking */
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(var(--ion-color-dark-rgb), 0.08);
-  --background: var(--ion-color-light); /* Make background whiter */
+    min-width: 160px; /* Slightly increased minimum width */
+    flex-shrink: 0; /* Prevent cards from shrinking */
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(var(--ion-color-text-rgb), 0.08);
+    --background: var(--ion-color-light); /* Make background whiter */
 }
 
 .metric-card ion-card-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
 }
 
 .metric-icon {
-  font-size: 1.8em;
-  margin-bottom: 8px;
+    font-size: 1.8em;
+    margin-bottom: 8px;
 }
 
 .metric-label {
-  font-size: 0.9em;
-  color: var(--ion-color-medium);
-  margin-bottom: 4px;
+    font-size: 0.9em;
+    color: var(--ion-color-medium);
+    margin-bottom: 4px;
 }
 
 .metric-value h3 {
-  font-size: 1.3em;
-  font-weight: bold;
-  margin: 0;
-  color: var(--ion-color-dark);
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 0;
+    color: var(--ion-color-text);
 }
 
 /* Styling for the change indicator */
 .metric-change {
-  display: flex;
-  align-items: center;
-  font-size: 0.9em;
-  margin-top: 5px; /* Space above the change indicator */
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    margin-top: 5px; /* Space above the change indicator */
 }
 
 .metric-change ion-icon {
-  font-size: 1em;
-  margin-right: 4px;
+    font-size: 1em;
+    margin-right: 4px;
 }
 
 .metric-change.positive ion-icon {
-  color: var(--ion-color-success);
+    color: var(--ion-color-success);
 }
 
 .metric-change.negative ion-icon {
-  color: var(--ion-color-danger);
+    color: var(--ion-color-danger);
 }
 
 
 /* Top Selling Items Section */
 .top-selling-section {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .top-selling-list {
-  background: transparent;
-  padding: 0;
-  margin: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 .top-selling-item {
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  --inner-border-width: 0;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(var(--ion-color-dark-rgb), 0.05);
-  --background: var(--ion-color-light); /* Make background whiter */
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --inner-border-width: 0;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(var(--ion-color-text-rgb), 0.05);
+    --background: var(--ion-color-light); /* Make background whiter */
 }
 
 .top-selling-item ion-icon[slot="start"] {
-  font-size: 1.5em;
-  margin-right: 15px;
+    font-size: 1.5em;
+    margin-right: 15px;
 }
 
 .top-selling-item ion-label h4 {
-  font-size: 1em;
-  font-weight: bold;
-  margin: 0 0 4px 0;
-  color: var(--ion-color-dark);
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0 0 4px 0;
+    color: var(--ion-color-text);
 }
 
 .top-selling-item ion-label p {
-  font-size: 0.9em;
-  color: var(--ion-color-medium);
-  margin: 0;
+    font-size: 0.9em;
+    color: var(--ion-color-medium);
+    margin: 0;
 }
 
 .top-selling-item ion-badge {
-  font-size: 0.8em;
-  padding: 4px 8px;
-  border-radius: 12px;
+    font-size: 0.8em;
+    padding: 4px 8px;
+    border-radius: 12px;
 }
 
 
 /* Recent Orders Section */
 .recent-orders-section {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .recent-orders-list {
-  background: transparent;
-  padding: 0;
-  margin: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 .order-card {
-  margin: 0 0 10px 0; /* Space between order cards */
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(var(--ion-color-dark-rgb), 0.08);
-  --background: var(--ion-color-light); /* Make background whiter */
+    margin: 0 0 10px 0; /* Space between order cards */
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(var(--ion-color-text-rgb), 0.08);
+    --background: var(--ion-color-light); /* Make background whiter */
 }
 
 .order-card-content {
-  padding: 12px;
+    padding: 12px;
 }
 
 .order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
 .order-id {
-  font-size: 1.1em;
-  font-weight: bold;
-  color: var(--ion-color-dark);
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--ion-color-text);
 }
 
 .order-status {
-  font-size: 0.8em;
-  padding: 3px 6px;
-  border-radius: 10px;
+    font-size: 0.8em;
+    padding: 3px 6px;
+    border-radius: 10px;
 }
 
 .order-details {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 0.9em;
-  color: var(--ion-color-dark-tint);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    color: var(--ion-color-text-tint);
 }
 
 .order-time {
-  display: flex;
-  align-items: center;
-  font-size: 0.85em;
-  color: var(--ion-color-medium);
+    display: flex;
+    align-items: center;
+    font-size: 0.85em;
+    color: var(--ion-color-medium);
 }
 
 .order-time ion-icon {
-  margin-right: 5px;
-  font-size: 1em;
+    margin-right: 5px;
+    font-size: 1em;
 }
