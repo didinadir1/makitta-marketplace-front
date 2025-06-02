@@ -63,13 +63,17 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 setupIonicReact();
+const queryClient = new QueryClient()
+
 
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
   const { isRestaurantMode } = useAppMode();
   const location = useLocation(); // Get the current location
+
 
   // Determine if the tab bar should be visible
   const showTabBar = location.pathname !== '/entry' && location.pathname !== '/login' && location.pathname !== '/signup';
@@ -198,6 +202,7 @@ const TabsContainer: React.FC = () => {
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
+      <QueryClientProvider client={queryClient}>
       <AppModeProvider>
         <CartProvider>
           <ProductContextProvider> {/* Wrap with AppContextProvider */}
@@ -205,6 +210,7 @@ const App: React.FC = () => (
           </ProductContextProvider>
         </CartProvider>
       </AppModeProvider>
+      </QueryClientProvider>
     </IonReactRouter>
   </IonApp>
 );

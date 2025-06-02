@@ -15,17 +15,17 @@ import {
   useIonLoading,
   useIonToast,
 } from '@ionic/react';
-import { logoGoogle } from 'ionicons/icons'; // Google icon
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useAuth } from '../lib/actions/users'; // Import useAuth hook
-import { useAppMode } from '../state/appModeState'; // Hook to set app mode
+import {logoGoogle} from 'ionicons/icons'; // Google icon
+import React, {useState} from 'react';
+import {useHistory} from 'react-router-dom';
+import {getRedirectPath, useAuth} from '../lib/actions/users'; // Import useAuth hook
+import {useAppMode} from '../state/appModeState'; // Hook to set app mode
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
   const history = useHistory();
-  const { setMode } = useAppMode(); // Use setMode to change app mode
-  const { login, loginWithGoogle } = useAuth(); // Use the useAuth hook
+  const {setMode} = useAppMode(); // Use setMode to change app mode
+  const {login, loginWithGoogle} = useAuth(); // Use the useAuth hook
   const [present, dismiss] = useIonLoading();
   const [presentToast] = useIonToast();
 
@@ -38,17 +38,13 @@ const LoginPage: React.FC = () => {
       duration: 0,
     });
     try {
-      const response = await login({ email, password });
+      const response = await login({email, password});
       await dismiss();
       // The useAuth hook handles session creation and cart transfer on success.
       // It also handles navigation based on actorType.
       // If the login function returns a location (for OAuth), handle the redirect.
       if (response && response.location) {
-        window.location.href = response.location;
-      } else {
-        // Assuming the useAuth hook handles navigation on successful email/password login
-        // based on the user's role. If not, you would add navigation logic here.
-        // Example: history.push(getRedirectPath(response.actorType));
+        history.push(getRedirectPath(response.actorType));
       }
     } catch (error: any) {
       await dismiss();
@@ -155,7 +151,7 @@ const LoginPage: React.FC = () => {
           </div>
 
           <IonButton expand="block" size="large" fill="outline" onClick={handleGoogleLogin}
-            className="google-login-button">
+                     className="google-login-button">
             <IonIcon slot="start" icon={logoGoogle}></IonIcon>
             Continue with Google
           </IonButton>

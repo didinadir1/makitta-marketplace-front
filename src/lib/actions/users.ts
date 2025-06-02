@@ -258,7 +258,7 @@ export const createRestaurant = async (input: CreateRestaurantDTO) => {
 };
 
 
-const getRedirectPath = (actorType: UserRole): string => {
+export const getRedirectPath = (actorType: UserRole): string => {
   switch (actorType) {
     case "restaurant":
       return "/dashboard"; // Example path for restaurant admin
