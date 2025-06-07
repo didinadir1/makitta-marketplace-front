@@ -8,16 +8,16 @@ import {getAuthHeaders} from "../data";
 const CART_ID_KEY = '_cart_id';
 
 export const getCartId = async () => {
-  const {value} = await medusaStorage.get(CART_ID_KEY);
+  const {value} = await (await medusaStorage).get(CART_ID_KEY);
   return value;
 };
 
 export const setCartId = async (cartId: string) => {
-  await medusaStorage.set(CART_ID_KEY, cartId);
+  await (await medusaStorage).set(CART_ID_KEY, cartId);
 };
 
 export const removeCartId = async () => {
-  await medusaStorage.remove(CART_ID_KEY);
+  await (await medusaStorage).remove(CART_ID_KEY);
 };
 
 // Cart functions

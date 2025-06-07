@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import {Redirect, Route, useLocation} from 'react-router-dom'; // Import useLocation
 import {
   IonApp,
   IonIcon,
@@ -9,11 +9,8 @@ import {
   IonTabs,
   setupIonicReact
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import {
-  restaurant, business, person, cart,
-  grid, fastFood, receipt, chatbubble // Changed to filled icons
-} from 'ionicons/icons'; // Added restaurant mode icons
+import {IonReactRouter} from '@ionic/react-router';
+import {business, cart, chatbubble, fastFood, grid, person, receipt, restaurant} from 'ionicons/icons'; // Added restaurant mode icons
 import DishesPage from './pages/DishesPage';
 import RestaurantPage from './pages/RestaurantPage';
 import MessagesPage from './pages/MessagesPage';
@@ -22,18 +19,15 @@ import DishDetailPage from './pages/DishDetailPage';
 import RestaurantDetailPage from './pages/RestaurantDetailPage';
 import CartPage from './pages/CartPage'; // Import the new CartPage
 import ProfileEditPage from './pages/ProfileEditPage'; // Import the new ProfileEditPage
-import { CartProvider } from './state/cartState'; // Import CartProvider
-import { AppModeProvider, useAppMode } from './state/appModeState'; // Import AppModeProvider
+import {CartProvider} from './state/cartState'; // Import CartProvider
+import {AppModeProvider, useAppMode} from './state/appModeState'; // Import AppModeProvider
 import DashboardPage from './pages/DashboardPage';
 import MyStorePage from './pages/MyStorePage';
 import OrdersPage from './pages/OrdersPage';
-import { ProductContextProvider } from './state/productState'; // Import AppContextProvider
+import {ProductContextProvider} from './state/productState'; // Import AppContextProvider
 import EntryPage from './pages/EntryPage'; // Import the new EntryPage
 import LoginPage from './pages/LoginPage'; // Import the new LoginPage
 import SignupPage from './pages/SignupPage'; // Import the new SignupPage
-import { useLocation } from 'react-router-dom'; // Import useLocation
-
-
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -56,7 +50,6 @@ import '@ionic/react/css/display.css';
  * For more info, please see:
  * https://ionicframework.com/docs/theming/dark-mode
  */
-
 /* import '@ionic/react/css/palettes/dark.always.css'; */
 /* import '@ionic/react/css/palettes/dark.class.css'; */
 import '@ionic/react/css/palettes/dark.system.css';
@@ -64,6 +57,8 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {useEffect} from "react";
+import {SocialLogin} from "@capgo/capacitor-social-login";
 
 setupIonicReact();
 const queryClient = new QueryClient()
@@ -71,8 +66,19 @@ const queryClient = new QueryClient()
 
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
-  const { isRestaurantMode } = useAppMode();
+  const {isRestaurantMode} = useAppMode();
   const location = useLocation(); // Get the current location
+
+  useEffect(() => {
+    SocialLogin.initialize(
+      {
+        google: {
+          iOSClientId: "1079130558258-iqole135c63rblcsl6edp27509ei0hej.apps.googleusercontent.com",
+          webClientId:"1079130558258-q2liqaor41kmm36c73gvpp7jjmb98ddj.apps.googleusercontent.com"
+        }
+      }
+    )
+  }, []);
 
 
   // Determine if the tab bar should be visible
@@ -83,62 +89,62 @@ const TabsContainer: React.FC = () => {
       <IonRouterOutlet>
         {/* Entry point */}
         <Route exact path="/entry">
-          <EntryPage />
+          <EntryPage/>
         </Route>
         {/* Login page for restaurants */}
         <Route exact path="/login">
-          <LoginPage />
+          <LoginPage/>
         </Route>
-         {/* Signup page for restaurants */}
+        {/* Signup page for restaurants */}
         <Route exact path="/signup">
-          <SignupPage />
+          <SignupPage/>
         </Route>
 
         {/* Normal mode routes */}
         <Route exact path="/dishes">
-          <DishesPage />
+          <DishesPage/>
         </Route>
         <Route exact path="/restaurants">
-          <RestaurantPage />
+          <RestaurantPage/>
         </Route>
         <Route exact path="/cart">
-          <CartPage />
+          <CartPage/>
         </Route>
 
         {/* Restaurant mode routes */}
         {/* MyStorePage now handles its own nested routes */}
         <Route path="/MyStore">
-          <MyStorePage />
+          <MyStorePage/>
         </Route>
         <Route exact path="/dashboard">
-          <DashboardPage />
+          <DashboardPage/>
         </Route>
         <Route exact path="/orders">
-          <OrdersPage />
+          <OrdersPage/>
         </Route>
         <Route exact path="/messages">
-          <MessagesPage />
+          <MessagesPage/>
         </Route>
 
         {/* Common routes */}
         <Route exact path="/profile">
-          <ProfilePage />
+          <ProfilePage/>
         </Route>
         <Route exact path="/profile/edit">
-          <ProfileEditPage />
+          <ProfileEditPage/>
         </Route>
-         {/* Dish and Restaurant Detail pages might be needed in both modes,
+        {/* Dish and Restaurant Detail pages might be needed in both modes,
              or you might want separate detail pages for restaurant mode.
              Keeping them outside conditional rendering for now. */}
         <Route exact path="/dish/:id">
-          <DishDetailPage />
+          <DishDetailPage/>
         </Route>
         <Route exact path="/restaurant/:id">
-          <RestaurantDetailPage />
+          <RestaurantDetailPage/>
         </Route>
         {/* Default redirect to the entry page */}
         <Route exact path="/">
-          <Redirect to="/entry" />
+          <Redirect to="/entry"/>
         </Route>
       </IonRouterOutlet>
 
@@ -148,24 +154,24 @@ const TabsContainer: React.FC = () => {
           // Restaurant mode tabs
           <IonTabBar slot="bottom">
             <IonTabButton tab="dashboard" href="/dashboard">
-              <IonIcon aria-hidden="true" icon={grid} /> {/* Changed icon */}
+              <IonIcon aria-hidden="true" icon={grid}/> {/* Changed icon */}
               <IonLabel>Dashboard</IonLabel>
             </IonTabButton>
             {/* MyStore tab now points to the base path */}
             <IonTabButton tab="MyStore" href="/MyStore">
-              <IonIcon aria-hidden="true" icon={fastFood} /> {/* Changed icon */}
+              <IonIcon aria-hidden="true" icon={fastFood}/> {/* Changed icon */}
               <IonLabel>My Store</IonLabel>
             </IonTabButton>
             <IonTabButton tab="orders" href="/orders">
-              <IonIcon aria-hidden="true" icon={receipt} /> {/* Changed icon */}
+              <IonIcon aria-hidden="true" icon={receipt}/> {/* Changed icon */}
               <IonLabel>Orders</IonLabel>
             </IonTabButton>
             <IonTabButton tab="messages" href="/messages">
-              <IonIcon aria-hidden="true" icon={chatbubble} /> {/* Changed icon */}
+              <IonIcon aria-hidden="true" icon={chatbubble}/> {/* Changed icon */}
               <IonLabel>Messages</IonLabel>
             </IonTabButton>
             <IonTabButton tab="profile" href="/profile">
-              <IonIcon aria-hidden="true" icon={person} />
+              <IonIcon aria-hidden="true" icon={person}/>
               <IonLabel>Profile</IonLabel>
             </IonTabButton>
           </IonTabBar>
@@ -173,23 +179,23 @@ const TabsContainer: React.FC = () => {
           // Normal mode tabs
           <IonTabBar slot="bottom">
             <IonTabButton tab="dishes" href="/dishes">
-              <IonIcon aria-hidden="true" icon={restaurant} />
+              <IonIcon aria-hidden="true" icon={restaurant}/>
               <IonLabel>Dishes</IonLabel>
             </IonTabButton>
             <IonTabButton tab="restaurants" href="/restaurants">
-              <IonIcon aria-hidden="true" icon={business} />
+              <IonIcon aria-hidden="true" icon={business}/>
               <IonLabel>Restaurants</IonLabel>
             </IonTabButton>
             <IonTabButton tab="cart" href="/cart">
-              <IonIcon aria-hidden="true" icon={cart} />
+              <IonIcon aria-hidden="true" icon={cart}/>
               <IonLabel>Cart</IonLabel>
             </IonTabButton>
             <IonTabButton tab="messages" href="/messages">
-              <IonIcon aria-hidden="true" icon={chatbubble} /> {/* Changed icon */}
+              <IonIcon aria-hidden="true" icon={chatbubble}/> {/* Changed icon */}
               <IonLabel>Messages</IonLabel>
             </IonTabButton>
             <IonTabButton tab="profile" href="/profile">
-              <IonIcon aria-hidden="true" icon={person} />
+              <IonIcon aria-hidden="true" icon={person}/>
               <IonLabel>Profile</IonLabel>
             </IonTabButton>
           </IonTabBar>
@@ -203,13 +209,13 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <QueryClientProvider client={queryClient}>
-      <AppModeProvider>
-        <CartProvider>
-          <ProductContextProvider> {/* Wrap with AppContextProvider */}
-            <TabsContainer />
-          </ProductContextProvider>
-        </CartProvider>
-      </AppModeProvider>
+        <AppModeProvider>
+          <CartProvider>
+            <ProductContextProvider> {/* Wrap with AppContextProvider */}
+              <TabsContainer/>
+            </ProductContextProvider>
+          </CartProvider>
+        </AppModeProvider>
       </QueryClientProvider>
     </IonReactRouter>
   </IonApp>

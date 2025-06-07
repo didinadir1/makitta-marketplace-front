@@ -6,6 +6,7 @@ import {useCart} from "./carts";
 import {useHistory} from "react-router-dom";
 import {CreateRestaurantDTO} from "../../types/restaurant";
 import {getAuthHeaders, useSession} from "../data";
+import {GoogleLoginResponseOnline, SocialLogin} from "@capgo/capacitor-social-login";
 
 
 export interface SignupFormData {
@@ -146,29 +147,38 @@ export const useAuth = () => {
     const {email, password, provider} = data;
 
     try {
-      const response: { token: string; actorType: UserRole; location?: string } =
+      const response: {
+        token?: string; actorType?: UserRole;
+        location?: string;
+        profile?: {
+          email: string;
+          first_name?: string;
+          last_name?: string;
+        }
+        verifyPassword?: boolean;
+      } =
         await sdk.client.fetch("/auth/login", {
           method: "POST",
-          body: JSON.stringify({
+          body: {
             email,
             password,
             provider: provider ?? "emailpass",
-          }),
+          },
           headers: {
             "Content-Type": "application/json",
           },
         });
 
-      if (typeof response === "object" && response.location) {
-        // Handle OAuth redirect - this should be done in the component
-        // window.location.href = response.location;
+      if (response && response.verifyPassword) {
         return response; // Return response to handle redirect in component
       }
 
-      await createSession(response.token);
-      await transferCart(); // Transfer cart after successful login
+      if (response && response.token) {
+        await createSession(response.token);
+        transferCart(); // Transfer cart after successful login
 
-      return response;
+        return response;
+      }
     } catch (error) {
       console.error("Login error:", error);
       throw new Error("Login failed. Please check your credentials.");
@@ -177,34 +187,44 @@ export const useAuth = () => {
 
   const loginWithGoogle = async () => {
     // Construct the callback URL client-side
-    const callbackUrl = `${window.location.origin}/auth/callback/google/`;
+    const {result} = await SocialLogin.login({
+      provider: "google",
+      options: {
+        scopes: ['email', 'profile'],
+      }
+    }) as { result: GoogleLoginResponseOnline }
+    console.log("Google login result:", result);
+    if (result.idToken) {
+      const response: {
+        token?: string;
+        actorType?: UserRole,
+        profile?: {
+          email: string;
+          first_name?: string;
+          last_name?: string;
+        }
+        verifyPassword?: boolean;
+      } =
+        await sdk.client.fetch("/auth/login/google", {
+          method: "POST",
+          body: {
+            idToken: result.idToken
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-    const response: { token: string; actorType: UserRole; location?: string } =
-      await sdk.client.fetch("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({
-          provider: "google",
-          callback_url: callbackUrl,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      if (response.token) await createSession(response.token);
+      transferCart();
 
-    if (typeof response === "object" && response.location) {
-      // Redirect to Google for authentication
-      window.location.href = response.location;
-      return response; // Return response to indicate redirect
+      return response;
     }
 
-    // This part might not be reached for OAuth flows that involve redirects
-    // but included for completeness if the API changes.
-    await createSession(response.token);
-    // await transferCart(); // Transfer cart after successful login (if no redirect)
-    return response;
   }
 
   const logout = async () => {
+    await SocialLogin.logout({provider: "google"});
     await destroySession();
     // You might also want to clear the cart on logout depending on requirements
     // await clearCart(); // Assuming clearCart is available
@@ -258,7 +278,7 @@ export const createRestaurant = async (input: CreateRestaurantDTO) => {
 };
 
 
-export const getRedirectPath = (actorType: UserRole): string => {
+export const getRedirectPath = (actorType?: UserRole): string => {
   switch (actorType) {
     case "restaurant":
       return "/dashboard"; // Example path for restaurant admin

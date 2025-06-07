@@ -8,16 +8,16 @@ const createSession = async (token: string) => {
     return;
   }
   // In a real app, you might want to store expiration time too
-  await medusaStorage.set(JWT_TOKEN_KEY, token);
+  await (await medusaStorage).set(JWT_TOKEN_KEY, token);
 };
 
 const retrieveSession = async () => {
-  const token = await medusaStorage.get(JWT_TOKEN_KEY);
+  const token = await (await medusaStorage).get(JWT_TOKEN_KEY);
   return token ? token : null;
 };
 
 const destroySession = async () => {
-  await medusaStorage.remove(JWT_TOKEN_KEY);
+  await (await medusaStorage).remove(JWT_TOKEN_KEY);
 };
 
 // Helper to get auth headers from stored token

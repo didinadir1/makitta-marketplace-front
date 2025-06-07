@@ -19,12 +19,11 @@ import {logoGoogle} from 'ionicons/icons'; // Google icon
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {getRedirectPath, useAuth} from '../lib/actions/users'; // Import useAuth hook
-import {useAppMode} from '../state/appModeState'; // Hook to set app mode
 import './LoginPage.css';
+import {encode} from "base64-url";
 
 const LoginPage: React.FC = () => {
   const history = useHistory();
-  const {setMode} = useAppMode(); // Use setMode to change app mode
   const {login, loginWithGoogle} = useAuth(); // Use the useAuth hook
   const [present, dismiss] = useIonLoading();
   const [presentToast] = useIonToast();
@@ -40,11 +39,11 @@ const LoginPage: React.FC = () => {
     try {
       const response = await login({email, password});
       await dismiss();
-      // The useAuth hook handles session creation and cart transfer on success.
       // It also handles navigation based on actorType.
-      // If the login function returns a location (for OAuth), handle the redirect.
-      if (response && response.location) {
-        history.push(getRedirectPath(response.actorType));
+      if (response?.actorType) {
+        history.push(getRedirectPath(response?.actorType));
+      } else if (response?.verifyPassword) {
+        history.push(`verify-password?email=${encode(JSON.stringify(email))}`);
       }
     } catch (error: any) {
       await dismiss();
@@ -64,14 +63,17 @@ const LoginPage: React.FC = () => {
     });
     try {
       const response = await loginWithGoogle();
-      await dismiss();
-      // The loginWithGoogle function handles the redirect to Google.
-      // The callback URL will handle the rest of the login process.
-      if (response && response.location) {
-        // Redirect already handled by the hook
-      } else {
-        // This case is unlikely for OAuth, but handle if needed
+      if (response) {
+        const {actorType, profile, verifyPassword} = response;
+        if (actorType)
+          history.push(getRedirectPath(response.actorType));
+        else if (verifyPassword) {
+          history.push(`verify-password?email=${encode(JSON.stringify(profile?.email))}`);
+        }
       }
+
+      await dismiss();
+
     } catch (error: any) {
       await dismiss();
       console.error('Google login failed:', error);
@@ -81,6 +83,8 @@ const LoginPage: React.FC = () => {
         color: 'danger',
       });
     }
+
+
   };
 
   const handleBackClick = () => {
