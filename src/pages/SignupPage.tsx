@@ -14,46 +14,49 @@ import {
   IonToolbar
 } from '@ionic/react';
 import {arrowBack, arrowForward} from 'ionicons/icons';
-import React, {useState} from 'react';
+import React from 'react';
 import {useHistory} from 'react-router-dom';
 import './SignupPage.css';
-import {useAuth} from "../lib/actions";
+import {useForm, Controller} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
 
-interface UserData {
-  email: string;
-  phone: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  actorType?: string;
-  confirmedPassword: string;
-}
+// Define the Zod schema for personal information
+const personalInfoSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  phone: z.string().min(10, "Phone number is required"), // Basic phone validation
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
+  confirmedPassword: z.string().min(8, "Confirm password is required"),
+}).refine((data) => data.password === data.confirmedPassword, {
+  message: "Passwords don't match",
+  path: ["confirmedPassword"], // Set the error on the confirmedPassword field
+});
 
+type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 
 const SignupPage: React.FC = () => {
   const history = useHistory();
-  const [currentStep, setCurrentStep] = useState(1);
-  const {signup} = useAuth(); // Use the useAuth hook
-
-  const [userData, setUserData] = useState<UserData>({
-    email: '',
-    phone: '',
-    first_name: '',
-    last_name: '',
-    password: '',
-    actor_type: 'restaurant',
-    confirmed_password: ''
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<PersonalInfoFormData>({
+    resolver: zodResolver(personalInfoSchema),
+    defaultValues: {
+      email: '',
+      phone: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      confirmedPassword: ''
+    }
   });
 
-  const handleSingup = () => {
-    if (validateUserData()) {
-      setCurrentStep(2);
-    }
-  };
-
-  const validateUserData = (): boolean => {
-    // Add validation logic
-    return true;
+  const onSubmit = (data: PersonalInfoFormData) => {
+    // Navigate to the store registration page, passing user data
+    history.push('/store-registration', {userData: data});
   };
 
   return (
@@ -67,90 +70,120 @@ const SignupPage: React.FC = () => {
           </IonButtons>
           <IonTitle>Create Account</IonTitle>
         </IonToolbar>
+        {/* You might want to add a progress bar here */}
       </IonHeader>
       <IonContent>
         <div className="signup-content">
-
           <IonText className="step-header">
-            <h2>{currentStep === 1 ? "Personal Information" : "Store Information"}</h2>
-            <p>{currentStep === 1 ? "Create your restaurant manager account" : "Tell us about your restaurant"}</p>
+            <h2>Personal Information</h2>
+            <p>Create your restaurant manager account</p>
           </IonText>
-          <IonList>
-            <div className="signup-form">
-              <IonItem lines="full">
-                <IonLabel position="stacked">Email</IonLabel>
-                <IonInput
-                  type="email"
-                  value={userData.email}
-                  onIonChange={e => setUserData({...userData, email: e.detail.value!})}
-                  placeholder="restaurant@example.com" // Example placeholder
-                  required
-                ></IonInput>
-              </IonItem>
 
-              <IonItem lines="full">
-                <IonLabel position="stacked">Phone Number</IonLabel>
-                <IonInput
-                  type="tel"
-                  placeholder="+1 234 567 890"
-                  value={userData.phone}
-                  onIonChange={e => setUserData({...userData, phone: e.detail.value!})}
-                  required
-                ></IonInput>
-              </IonItem>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <IonList>
+              <div className="signup-form">
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({field}) => (
+                    <IonItem lines="full">
+                      <IonLabel position="stacked">Email</IonLabel>
+                      <IonInput
+                        type="email"
+                        {...field}
+                        placeholder="restaurant@example.com"
+                      />
+                      {errors.email && <IonText color="danger">{errors.email.message}</IonText>}
+                    </IonItem>
+                  )}
+                />
 
-              <IonItem lines="full">
-                <IonLabel position="stacked">First Name</IonLabel>
-                <IonInput
-                  type="text"
-                  value={userData.firstName}
-                  onIonChange={e => setUserData({...userData, firstName: e.detail.value!})}
-                  placeholder="John" // Example placeholder
-                  required
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({field}) => (
+                    <IonItem lines="full">
+                      <IonLabel position="stacked">Phone Number</IonLabel>
+                      <IonInput
+                        type="tel"
+                        {...field}
+                        placeholder="+1 234 567 890"
+                      />
+                      {errors.phone && <IonText color="danger">{errors.phone.message}</IonText>}
+                    </IonItem>
+                  )}
+                />
 
-                ></IonInput>
-              </IonItem>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({field}) => (
+                    <IonItem lines="full">
+                      <IonLabel position="stacked">First Name</IonLabel>
+                      <IonInput
+                        type="text"
+                        {...field}
+                        placeholder="John"
+                      />
+                      {errors.firstName && <IonText color="danger">{errors.firstName.message}</IonText>}
+                    </IonItem>
+                  )}
+                />
 
-              <IonItem lines="full">
-                <IonLabel position="stacked">Last Name</IonLabel>
-                <IonInput
-                  type="text"
-                  value={userData.lastName}
-                  onIonChange={e => setUserData({...userData, lastName: e.detail.value!})}
-                  placeholder="Doe" // Example placeholder
-                  required
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({field}) => (
+                    <IonItem lines="full">
+                      <IonLabel position="stacked">Last Name</IonLabel>
+                      <IonInput
+                        type="text"
+                        {...field}
+                        placeholder="Doe"
+                      />
+                      {errors.lastName && <IonText color="danger">{errors.lastName.message}</IonText>}
+                    </IonItem>
+                  )}
+                />
 
-                ></IonInput>
-              </IonItem>
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({field}) => (
+                    <IonItem lines="full">
+                      <IonLabel position="stacked">Password</IonLabel>
+                      <IonInput
+                        type="password"
+                        {...field}
+                        placeholder="Enter a strong password"
+                      />
+                      {errors.password && <IonText color="danger">{errors.password.message}</IonText>}
+                    </IonItem>
+                  )}
+                />
 
-              <IonItem lines="full">
-                <IonLabel position="stacked">Password</IonLabel>
-                <IonInput
-                  type="password"
-                  value={userData.password}
-                  onIonChange={e => setUserData({...userData, password: e.detail.value!})}
-                  placeholder="Enter a strong password" // Example placeholder
-                  required
-
-                ></IonInput>
-              </IonItem>
-
-              <IonItem lines="full">
-                <IonLabel position="stacked">Confirm Password</IonLabel>
-                <IonInput
-                  type="password"
-                  value={userData.confirmedPassword}
-                  onIonChange={e => setUserData({...userData, confirmedPassword: e.detail.value!})}
-                  placeholder="Confirm your password"
-                  required
-
-                ></IonInput>
-              </IonItem>
-            </div>
-          </IonList>
-          <IonButton expand="block" onClick={handleSingup} className="action-button">
-            Signup
-          </IonButton>
+                <Controller
+                  name="confirmedPassword"
+                  control={control}
+                  render={({field}) => (
+                    <IonItem lines="full">
+                      <IonLabel position="stacked">Confirm Password</IonLabel>
+                      <IonInput
+                        type="password"
+                        {...field}
+                        placeholder="Confirm your password"
+                      />
+                      {errors.confirmedPassword && <IonText color="danger">{errors.confirmedPassword.message}</IonText>}
+                    </IonItem>
+                  )}
+                />
+              </div>
+            </IonList>
+            <IonButton expand="block" type="submit" className="action-button">
+              Continue to Store Details
+              <IonIcon icon={arrowForward} slot="end"/>
+            </IonButton>
+          </form>
         </div>
       </IonContent>
     </IonPage>
