@@ -10,6 +10,7 @@ ion-content {
     background: var(--ion-color-primary); /* Use primary color for header background */
     display: flex;
     align-items: center;
+    height: 200px;
     justify-content: space-between; /* Space out info and button */
     color: var(--ion-color-primary-contrast); /* Text color for header */
 }
@@ -72,6 +73,7 @@ ion-content {
     background: var(--ion-color-light); /* Ensure background is light */
     position: relative;
     z-index: 1;
+    height: 100%;
     box-shadow: 0 -5px 10px rgba(var(--ion-color-text-rgb), 0.1); /* Subtle shadow */
 }
 
@@ -118,7 +120,6 @@ ion-content {
 .profile-menu-list .logout-item {
     --background: transparent; /* Ensure background is transparent */
     margin-top: 20px; /* Add space above logout item */
-    border-top: 1px solid var(--ion-color-step-100, #e6e6e6); /* Separator above logout */
     padding-top: 20px; /* Add padding above logout label */
 }
 

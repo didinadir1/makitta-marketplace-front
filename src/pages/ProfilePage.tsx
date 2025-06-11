@@ -2,24 +2,20 @@ import {
   IonAvatar,
   IonButton,
   IonContent,
-  IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonToggle,
   useIonAlert,
   useIonRouter,
 } from '@ionic/react'; // Added IonToggle
-import React, { useEffect } from 'react';
-import { useAppMode } from '../state/appModeState';
+import React from 'react';
+import {useAppMode} from '../state/appModeState';
 import './ProfilePage.css';
 import {mockUser} from '../data/mockUser'; // Import mock user data
 import {
-  chevronForwardOutline,
   createOutline,
   helpCircleOutline,
   informationCircleOutline,
@@ -31,7 +27,7 @@ import {
 const ProfilePage: React.FC = () => {
   const router = useIonRouter(); // Get the router hook
   const [presentAlert] = useIonAlert(); // Use the useIonAlert hook
-  const { mode, toggleMode, isRestaurantMode } = useAppMode();
+  const {mode, toggleMode, isRestaurantMode} = useAppMode();
 
   const handleEditClick = () => {
     router.push('/profile/edit'); // Navigate to the profile edit page
@@ -81,11 +77,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonTitle>Profile</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+
       <IonContent fullscreen>
         <div className="profile-header"> {/* Use a div for the header area */}
           <div className="profile-info-container"> {/* Container for avatar and name */}
@@ -107,8 +99,8 @@ const ProfilePage: React.FC = () => {
           <IonList lines="full" className="profile-menu-list">
             <IonItem>
               <IonLabel>Restaurant Mode</IonLabel>
-              <IonToggle 
-                checked={isRestaurantMode()} 
+              <IonToggle
+                checked={isRestaurantMode()}
                 onIonChange={toggleMode}
                 color="primary"
               />
@@ -133,7 +125,8 @@ const ProfilePage: React.FC = () => {
               <IonLabel>About App</IonLabel>
               {/* Removed explicit chevron icon */}
             </IonItem>
-            <IonItem button onClick={handleLogoutClick} className="logout-item" detail={false}> {/* detail={false} for logout */}
+            <IonItem button onClick={handleLogoutClick} className="logout-item"
+                     detail={false}> {/* detail={false} for logout */}
               <IonIcon icon={logOutOutline} slot="start" color="danger"/>
               <IonLabel color="danger">Log Out</IonLabel>
             </IonItem>
