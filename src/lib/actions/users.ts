@@ -1,6 +1,6 @@
 import {sdk} from "../config";
 import {useQueryClient} from "@tanstack/react-query";
-import {CreateDriverDTO, UserRole} from "../../types/user";
+import {CreateUserDTO, UserRole} from "../../types/user";
 import {FetchError} from "@medusajs/js-sdk";
 import {useCart} from "./carts";
 import {useHistory} from "react-router-dom";
@@ -15,11 +15,7 @@ export interface SignupFormData {
   last_name: string
   phone: string
   password: string
-  user_type: UserRole
-  restaurant_name?: string
-  restaurant_address?: string
-  restaurant_description?: string
-  image_url?: string
+  actor_type: UserRole
 }
 
 export interface LoginFormData {
@@ -35,21 +31,15 @@ export const useAuth = () => {
   const history = useHistory(); // For client-side navigation
   const {transferCart} = useCart(); // Assuming transferCart is also a hook/mutation
 
-  const signUp = async (data: SignupFormData) => {
+  const signup = async (data: SignupFormData) => {
     const {
-      user_type,
+      actor_type,
       password,
       last_name,
       first_name,
       phone,
-      email,
-      restaurant_name,
-      restaurant_address,
-      restaurant_description,
-      image_url,
+      email
     } = data;
-
-    const actor_type = user_type;
 
     try {
       // Register the user identity
@@ -60,41 +50,13 @@ export const useAuth = () => {
 
       await createSession(token)
 
-      // Create the specific user type (customer, restaurant admin, driver)
-      const headers = {
-        ...(await getAuthHeaders()),
-      };
-
-      if (actor_type === "customer") {
-        await sdk.store.customer.create(
-          {
-            email,
-            first_name,
-            last_name,
-            phone,
-          },
-          {},
-          headers
-        );
-      } else if (actor_type === "restaurant") {
-        await createRestaurant({
-          email,
-          first_name,
-          last_name,
-          phone,
-          name: restaurant_name!,
-          address: restaurant_address!,
-          description: restaurant_description,
-          image_url,
-        });
-      } else if (actor_type === "driver") {
-        await createDriver({
-          email,
-          first_name,
-          last_name,
-          phone,
-        });
-      }
+      await createUser({
+        email,
+        first_name,
+        last_name,
+        phone,
+        actor_type,
+      });
 
       // Log in the newly created user
       const loginToken = await sdk.auth.login(actor_type, "emailpass", {
@@ -208,7 +170,9 @@ export const useAuth = () => {
         await sdk.client.fetch("/auth/login/google", {
           method: "POST",
           body: {
-            idToken: result.idToken
+            idToken: result.idToken,
+            // todo: handle actorType dynamically based on user selection
+            actorType: "restaurant"
           },
           headers: {
             "Content-Type": "application/json",
@@ -234,7 +198,7 @@ export const useAuth = () => {
   }
 
   return {
-    signUp,
+    signup,
     login,
     loginWithGoogle,
     logout,
@@ -243,11 +207,11 @@ export const useAuth = () => {
 
 
 // Function to create a driver (can be called from a mutation)
-export const createDriver = async (input: CreateDriverDTO) => {
+export const createUser = async (input: CreateUserDTO) => {
   const headers = await getAuthHeaders();
   return await sdk.client.fetch("/store/users", {
     method: "POST",
-    body: JSON.stringify(input),
+    body: input,
     headers: {
       "Content-Type": "application/json",
       ...headers,

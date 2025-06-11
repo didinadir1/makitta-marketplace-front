@@ -20,6 +20,7 @@
     "@capacitor/keyboard": "7.0.1",
     "@capacitor/status-bar": "7.0.1",
     "@capgo/capacitor-social-login": "^7.6.7",
+    "@hookform/resolvers": "^5.1.1",
     "@ionic/react": "^8.5.0",
     "@ionic/react-router": "^8.5.0",
     "@ionic/storage": "^4.0.0",
@@ -33,9 +34,11 @@
     "ionicons": "^7.4.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.57.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "swiper": "^11.2.6"
+    "swiper": "^11.2.6",
+    "zod": "^3.25.57"
   },
   "devDependencies": {
     "@capacitor/cli": "7.2.0",

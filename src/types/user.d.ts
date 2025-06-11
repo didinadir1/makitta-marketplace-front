@@ -15,12 +15,6 @@ export interface RestaurantAdminDTO {
   updated_at: Date;
 }
 
-export interface CreateRestaurantAdminDTO {
-  email: string;
-  first_name: string;
-  last_name: string;
-  restaurant_id: string;
-}
 
 export interface CreateAdminInviteDTO {
   resadm_id: string;
@@ -46,11 +40,12 @@ export interface DeliveryDriverDTO {
   driver_id: string;
 }
 
-export interface CreateDriverDTO {
+export interface CreateUserDTO {
   first_name: string;
   last_name: string;
   email: string;
   phone: string;
+  actor_type: UserRole;
   avatar_url?: string;
 }
 

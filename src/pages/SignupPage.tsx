@@ -17,16 +17,18 @@ import {arrowBack, arrowForward} from 'ionicons/icons';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import './SignupPage.css';
-import {useForm, Controller} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
+import {useAuth} from "../lib/actions";
 
 // Define the Zod schema for personal information
 const personalInfoSchema = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number is required"), // Basic phone validation
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  actor_type: z.enum(["restaurant", "driver", "customer"]),
   password: z.string().min(8, "Password must be at least 8 characters long"),
   confirmedPassword: z.string().min(8, "Confirm password is required"),
 }).refine((data) => data.password === data.confirmedPassword, {
@@ -38,6 +40,7 @@ type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 
 const SignupPage: React.FC = () => {
   const history = useHistory();
+  const {signup} = useAuth();
   const {
     control,
     handleSubmit,
@@ -47,16 +50,16 @@ const SignupPage: React.FC = () => {
     defaultValues: {
       email: '',
       phone: '',
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
+      actor_type: 'restaurant',
       password: '',
       confirmedPassword: ''
     }
   });
 
-  const onSubmit = (data: PersonalInfoFormData) => {
-    // Navigate to the store registration page, passing user data
-    history.push('/store-registration', {userData: data});
+  const onSubmit = async (data: PersonalInfoFormData) => {
+    await signup(data)
   };
 
   return (
@@ -115,7 +118,7 @@ const SignupPage: React.FC = () => {
                 />
 
                 <Controller
-                  name="firstName"
+                  name="first_name"
                   control={control}
                   render={({field}) => (
                     <IonItem lines="full">
@@ -125,13 +128,13 @@ const SignupPage: React.FC = () => {
                         {...field}
                         placeholder="John"
                       />
-                      {errors.firstName && <IonText color="danger">{errors.firstName.message}</IonText>}
+                      {errors.first_name && <IonText color="danger">{errors.first_name.message}</IonText>}
                     </IonItem>
                   )}
                 />
 
                 <Controller
-                  name="lastName"
+                  name="last_name"
                   control={control}
                   render={({field}) => (
                     <IonItem lines="full">
@@ -141,7 +144,7 @@ const SignupPage: React.FC = () => {
                         {...field}
                         placeholder="Doe"
                       />
-                      {errors.lastName && <IonText color="danger">{errors.lastName.message}</IonText>}
+                      {errors.last_name && <IonText color="danger">{errors.last_name.message}</IonText>}
                     </IonItem>
                   )}
                 />
@@ -180,7 +183,7 @@ const SignupPage: React.FC = () => {
               </div>
             </IonList>
             <IonButton expand="block" type="submit" className="action-button">
-              Continue to Store Details
+              Sign Up
               <IonIcon icon={arrowForward} slot="end"/>
             </IonButton>
           </form>

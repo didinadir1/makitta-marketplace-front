@@ -1,7 +1,7 @@
-import { sdk } from "../config";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {DeliveryDTO, DeliveryStatus} from "../../types/delivery";
+import {sdk} from "../config";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {getAuthHeaders} from "../data";
+import {DeliveryDTO, DeliveryStatus} from "../../types/delivery";
 
 
 // Helper function for claiming delivery (called by useProceedDelivery or directly)
@@ -9,11 +9,11 @@ const claimDelivery = async (
   deliveryId: string,
   driverId: string,
 ): Promise<DeliveryDTO> => {
-  const { delivery } = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/claim`,
     {
       method: "POST",
-      body: JSON.stringify({ driver_id: driverId }),
+      body: JSON.stringify({driver_id: driverId}),
       headers: {
         "Content-Type": "application/json",
         ...await getAuthHeaders(),
@@ -24,12 +24,11 @@ const claimDelivery = async (
 };
 
 
-
 // Helper function for picking up delivery (called by useProceedDelivery or directly)
 const pickUpDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const { delivery } = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/pick-up`,
     {
       method: "POST",
@@ -46,7 +45,7 @@ const pickUpDelivery = async (
 const completeDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const { delivery } = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/complete`,
     {
       method: "POST",
@@ -63,7 +62,7 @@ const completeDelivery = async (
 const acceptDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const { delivery } = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/accept`,
     {
       method: "POST",
@@ -81,7 +80,7 @@ const acceptDelivery = async (
 const prepareDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const { delivery } = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/prepare`,
     {
       method: "POST",
@@ -98,7 +97,7 @@ const prepareDelivery = async (
 const preparationReady = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const { delivery } = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/ready`,
     {
       method: "POST",
@@ -114,7 +113,7 @@ const preparationReady = async (
 export const useDeliveryActions = () => {
   const queryClient = useQueryClient();
 
-  const proceedDeliveryMutation =useMutation({
+  const proceedDeliveryMutation = useMutation({
     mutationFn: async ({
                          delivery,
                          driverId, // Pass driverId if needed for claiming
@@ -152,7 +151,7 @@ export const useDeliveryActions = () => {
       throw new Error("Delivery is not in a state that can be proceeded");
     },
     onSuccess: (updatedDelivery) => {
-      queryClient.invalidateQueries({ queryKey: ["deliveries"] });
+      queryClient.invalidateQueries({queryKey: ["deliveries"]});
       // Optionally update the specific delivery in cache
       queryClient.setQueryData(
         ["delivery", updatedDelivery.id],
@@ -163,7 +162,7 @@ export const useDeliveryActions = () => {
       console.error("Error proceeding delivery:", error);
     },
   });
-  const passDeliveryMutation =useMutation({
+  const passDeliveryMutation = useMutation({
     mutationFn: async ({
                          deliveryId,
                          driverId,
@@ -181,10 +180,10 @@ export const useDeliveryActions = () => {
           driver_id: driverId,
         }),
       });
-      return { message: "Delivery passed" };
+      return {message: "Delivery passed"};
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deliveries"] });
+      queryClient.invalidateQueries({queryKey: ["deliveries"]});
       // Optionally remove the delivery from the driver's list in cache
     },
     onError: (error) => {
@@ -192,9 +191,9 @@ export const useDeliveryActions = () => {
       throw new Error("Error passing delivery");
     },
   });
-  const declineDeliveryMutation =useMutation({
+  const declineDeliveryMutation = useMutation({
     mutationFn: async (deliveryId: string) => {
-      const { delivery } = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+      const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
         `/store/deliveries/${deliveryId}/decline`,
         {
           method: "POST",
@@ -207,7 +206,7 @@ export const useDeliveryActions = () => {
       return delivery;
     },
     onSuccess: (updatedDelivery) => {
-      queryClient.invalidateQueries({ queryKey: ["deliveries"] });
+      queryClient.invalidateQueries({queryKey: ["deliveries"]});
       queryClient.setQueryData(
         ["delivery", updatedDelivery.id],
         updatedDelivery

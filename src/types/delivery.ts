@@ -1,16 +1,17 @@
 import {CartDTO, CartLineItemDTO, OrderDTO, OrderLineItemDTO} from "@medusajs/types";
 import {RestaurantDTO} from "./user";
 
-export enum DeliveryStatus {
-  PENDING = "pending",
-  RESTAURANT_DECLINED = "restaurant_declined",
-  RESTAURANT_ACCEPTED = "restaurant_accepted",
-  PICKUP_CLAIMED = "pickup_claimed",
-  RESTAURANT_PREPARING = "restaurant_preparing",
-  READY_FOR_PICKUP = "ready_for_pickup",
-  IN_TRANSIT = "in_transit",
-  DELIVERED = "delivered",
-}
+export const DeliveryStatus = {
+  PENDING: "pending",
+  RESTAURANT_DECLINED: "restaurant_declined",
+  RESTAURANT_ACCEPTED: "restaurant_accepted",
+  PICKUP_CLAIMED: "pickup_claimed",
+  RESTAURANT_PREPARING: "restaurant_preparing",
+  READY_FOR_PICKUP: "ready_for_pickup",
+  IN_TRANSIT: "in_transit",
+  DELIVERED: "delivered",
+} as const;
+
 export interface DeliveryDTO {
   id: string;
   transaction_id: string;
@@ -29,6 +30,7 @@ export interface DeliveryDTO {
 export type DeliveryItemDTO = (CartLineItemDTO | OrderLineItemDTO) & {
   quantity: number;
 };
+
 export interface CreateDeliveryDTO {
   restaurant_id: string;
   cart_id: string;

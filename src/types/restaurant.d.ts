@@ -29,6 +29,7 @@ export interface CreateRestaurantDTO {
   is_open?: boolean;
 }
 
+
 export type UpdateRestaurantDTO = Partial<CreateRestaurantDTO>;
 
 export interface RestaurantProductDTO {
