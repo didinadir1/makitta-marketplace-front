@@ -1,8 +1,18 @@
-import { IonContent, IonHeader, IonPage, IonSearchbar, IonTitle, IonToolbar, IonList, IonRefresher, IonRefresherContent, RefresherEventDetail, useIonRouter } from '@ionic/react';
-import { chevronDownCircleOutline } from 'ionicons/icons';
-import React, { useState, useEffect } from 'react';
+import {
+  IonContent,
+  IonHeader,
+  IonList,
+  IonPage,
+  IonRefresher,
+  IonRefresherContent,
+  IonSearchbar,
+  IonToolbar,
+  RefresherEventDetail,
+} from '@ionic/react';
+import {chevronDownCircleOutline} from 'ionicons/icons';
+import React, {useEffect, useState} from 'react';
 import DishCard from '../components/DishCard';
-import { mockDishes, Dish } from '../data/mockDishes';
+import {Dish, mockDishes} from '../data/mockDishes';
 import './DishesPage.css';
 
 const DishesPage: React.FC = () => {
@@ -10,7 +20,6 @@ const DishesPage: React.FC = () => {
   const [dishes, setDishes] = useState<Dish[]>([]
   );
   const [filteredDishes, setFilteredDishes] = useState<Dish[]>([]);
-  const router = useIonRouter(); // Get the router hook
 
   useEffect(() => {
     // Simulate fetching data
@@ -22,7 +31,7 @@ const DishesPage: React.FC = () => {
     const lowercasedFilter = searchText.toLowerCase();
     const filteredData = dishes.filter(dish => {
       return dish.name.toLowerCase().includes(lowercasedFilter) ||
-             dish.categories.some(({name}) => name.toLowerCase().includes(lowercasedFilter));
+        dish.categories.some(({name}) => name.toLowerCase().includes(lowercasedFilter));
     });
     setFilteredDishes(filteredData);
   }, [searchText, dishes]);
@@ -36,23 +45,15 @@ const DishesPage: React.FC = () => {
       setFilteredDishes(newMockDishes.filter(dish => { // Re-apply filter if searchText exists
         const lowercasedFilter = searchText.toLowerCase();
         return dish.name.toLowerCase().includes(lowercasedFilter) ||
-               dish.categories.some(({name}) => name.toLowerCase().includes(lowercasedFilter));
+          dish.categories.some(({name}) => name.toLowerCase().includes(lowercasedFilter));
       }));
       console.log('Async operation has ended');
       event.detail.complete();
     }, 2000);
   };
-
-  const handleDishCardClick = (dishId: string) => {
-    router.push(`/dish/${dishId}`); // Navigate to the dish detail page
-  };
-
   return (
     <IonPage>
       <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonTitle>Dishes</IonTitle>
-        </IonToolbar>
         <IonToolbar>
           <IonSearchbar
             value={searchText}
@@ -74,7 +75,7 @@ const DishesPage: React.FC = () => {
         <IonList className="dish-list">
           {filteredDishes.length > 0 ? (
             filteredDishes.map(dish => (
-              <DishCard key={dish.id} dish={dish} onClick={handleDishCardClick} /> // Pass the click handler
+              <DishCard key={dish.id} dish={dish}/> // Pass the click handler
             ))
           ) : (
             <div className="no-results">

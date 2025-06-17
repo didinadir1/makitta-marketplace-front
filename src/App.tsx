@@ -10,20 +10,15 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
-import {business, cart, chatbubble, fastFood, grid, person, receipt, restaurant} from 'ionicons/icons'; // Added restaurant mode icons
+import {business, cart, chatbubble, person, restaurant} from 'ionicons/icons'; // Added restaurant mode icons
 import DishesPage from './pages/DishesPage';
 import RestaurantPage from './pages/RestaurantPage';
-import MessagesPage from './pages/MessagesPage';
 import ProfilePage from './pages/ProfilePage';
 import DishDetailPage from './pages/DishDetailPage';
 import RestaurantDetailPage from './pages/RestaurantDetailPage';
 import CartPage from './pages/CartPage'; // Import the new CartPage
 import ProfileEditPage from './pages/ProfileEditPage'; // Import the new ProfileEditPage
 import {CartProvider} from './state/cartState'; // Import CartProvider
-import {AppModeProvider, useAppMode} from './state/appModeState'; // Import AppModeProvider
-import DashboardPage from './pages/DashboardPage';
-import MyStorePage from './pages/MyStorePage';
-import OrdersPage from './pages/OrdersPage';
 import {ProductContextProvider} from './state/productState'; // Import AppContextProvider
 import EntryPage from './pages/EntryPage'; // Import the new EntryPage
 import LoginPage from './pages/LoginPage'; // Import the new LoginPage
@@ -59,6 +54,7 @@ import './theme/variables.css';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {useEffect} from "react";
 import {SocialLogin} from "@capgo/capacitor-social-login";
+import MyAccountPage from "./pages/MyAccountPage";
 
 setupIonicReact();
 const queryClient = new QueryClient()
@@ -66,7 +62,6 @@ const queryClient = new QueryClient()
 
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
-  const {isRestaurantMode} = useAppMode();
   const location = useLocation(); // Get the current location
 
   useEffect(() => {
@@ -74,7 +69,7 @@ const TabsContainer: React.FC = () => {
       {
         google: {
           iOSClientId: "1079130558258-iqole135c63rblcsl6edp27509ei0hej.apps.googleusercontent.com",
-          webClientId:"1079130558258-q2liqaor41kmm36c73gvpp7jjmb98ddj.apps.googleusercontent.com"
+          webClientId: "1079130558258-q2liqaor41kmm36c73gvpp7jjmb98ddj.apps.googleusercontent.com"
         }
       }
     )
@@ -111,27 +106,15 @@ const TabsContainer: React.FC = () => {
           <CartPage/>
         </Route>
 
-        {/* Restaurant mode routes */}
-        {/* MyStorePage now handles its own nested routes */}
-        <Route path="/MyStore">
-          <MyStorePage/>
-        </Route>
-        <Route exact path="/dashboard">
-          <DashboardPage/>
-        </Route>
-        <Route exact path="/orders">
-          <OrdersPage/>
-        </Route>
-        <Route exact path="/messages">
-          <MessagesPage/>
-        </Route>
-
         {/* Common routes */}
         <Route exact path="/profile">
           <ProfilePage/>
         </Route>
         <Route exact path="/profile/edit">
           <ProfileEditPage/>
+        </Route>
+        <Route exact path="/profile/my-account">
+          <MyAccountPage/>
         </Route>
         {/* Dish and Restaurant Detail pages might be needed in both modes,
              or you might want separate detail pages for restaurant mode.
@@ -150,56 +133,29 @@ const TabsContainer: React.FC = () => {
 
       {/* Conditional Tab Bars */}
       {showTabBar && (
-        isRestaurantMode() ? (
-          // Restaurant mode tabs
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="dashboard" href="/dashboard">
-              <IonIcon aria-hidden="true" icon={grid}/> {/* Changed icon */}
-              <IonLabel>Dashboard</IonLabel>
-            </IonTabButton>
-            {/* MyStore tab now points to the base path */}
-            <IonTabButton tab="MyStore" href="/MyStore">
-              <IonIcon aria-hidden="true" icon={fastFood}/> {/* Changed icon */}
-              <IonLabel>My Store</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="orders" href="/orders">
-              <IonIcon aria-hidden="true" icon={receipt}/> {/* Changed icon */}
-              <IonLabel>Orders</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="messages" href="/messages">
-              <IonIcon aria-hidden="true" icon={chatbubble}/> {/* Changed icon */}
-              <IonLabel>Messages</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="profile" href="/profile">
-              <IonIcon aria-hidden="true" icon={person}/>
-              <IonLabel>Profile</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        ) : (
-          // Normal mode tabs
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="dishes" href="/dishes">
-              <IonIcon aria-hidden="true" icon={restaurant}/>
-              <IonLabel>Dishes</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="restaurants" href="/restaurants">
-              <IonIcon aria-hidden="true" icon={business}/>
-              <IonLabel>Restaurants</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="cart" href="/cart">
-              <IonIcon aria-hidden="true" icon={cart}/>
-              <IonLabel>Cart</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="messages" href="/messages">
-              <IonIcon aria-hidden="true" icon={chatbubble}/> {/* Changed icon */}
-              <IonLabel>Messages</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="profile" href="/profile">
-              <IonIcon aria-hidden="true" icon={person}/>
-              <IonLabel>Profile</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        )
+
+        <IonTabBar slot="bottom">
+          <IonTabButton tab="dishes" href="/dishes">
+            <IonIcon aria-hidden="true" icon={restaurant}/>
+            <IonLabel>Dishes</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="restaurants" href="/restaurants">
+            <IonIcon aria-hidden="true" icon={business}/>
+            <IonLabel>Restaurants</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="cart" href="/cart">
+            <IonIcon aria-hidden="true" icon={cart}/>
+            <IonLabel>Cart</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="messages" href="/messages">
+            <IonIcon aria-hidden="true" icon={chatbubble}/> {/* Changed icon */}
+            <IonLabel>Messages</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="profile" href="/profile">
+            <IonIcon aria-hidden="true" icon={person}/>
+            <IonLabel>Profile</IonLabel>
+          </IonTabButton>
+        </IonTabBar>
       )}
     </IonTabs>
   );
@@ -209,13 +165,11 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <QueryClientProvider client={queryClient}>
-        <AppModeProvider>
-          <CartProvider>
-            <ProductContextProvider> {/* Wrap with AppContextProvider */}
-              <TabsContainer/>
-            </ProductContextProvider>
-          </CartProvider>
-        </AppModeProvider>
+        <CartProvider>
+          <ProductContextProvider> {/* Wrap with AppContextProvider */}
+            <TabsContainer/>
+          </ProductContextProvider>
+        </CartProvider>
       </QueryClientProvider>
     </IonReactRouter>
   </IonApp>

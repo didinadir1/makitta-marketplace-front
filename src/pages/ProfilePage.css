@@ -1,18 +1,13 @@
 /* Styles for the Profile Page - Redesigned */
 
-ion-content {
-    --background: var(--ion-color-light);
-}
-
 /* Profile Header Area */
 .profile-header {
-    padding: 20px 16px; /* Increased padding */
-    background: var(--ion-color-primary); /* Use primary color for header background */
+    /* Increased padding */
+    padding: 80px 20px 30px;
+    background: var(--ion-color-secondary); /* Use primary color for header background */
     display: flex;
-    align-items: center;
-    height: 200px;
+    height: 180px;
     justify-content: space-between; /* Space out info and button */
-    color: var(--ion-color-primary-contrast); /* Text color for header */
 }
 
 .profile-info-container {
@@ -24,8 +19,8 @@ ion-content {
     width: 80px; /* Larger avatar */
     height: 80px;
     margin-right: 15px;
-    border: 3px solid var(--ion-color-light); /* Add a border around the avatar */
-    box-shadow: 0 2px 8px rgba(var(--ion-color-text-rgb), 0.2); /* Subtle shadow for depth */
+    border: 3px solid var(--ion-color-primary-contrast); /* Add a border around the avatar */
+    box-shadow: 0 2px 8px rgba(var(--ion-color-primary-contrast), 0.2); /* Subtle shadow for depth */
 }
 
 .profile-avatar img {
@@ -50,84 +45,7 @@ ion-content {
     color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
 }
 
-
 .edit-profile-button {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    --padding-top: 8px;
-    --padding-bottom: 8px;
-    --color: var(--ion-color-primary-contrast); /* White icon color */
-    --background: transparent; /* Transparent background */
+    color: var(--ion-color-primary-contrast);
 }
 
-.edit-profile-button ion-icon {
-    font-size: 1.5em; /* Larger icon */
-}
-
-/* Profile Sections Area */
-.profile-sections {
-    padding: 16px; /* Padding for the sections below the header */
-    margin-top: -20px; /* Optional: Overlap slightly with the header */
-    border-top-left-radius: 20px; /* Rounded top corners */
-    border-top-right-radius: 20px;
-    background: var(--ion-color-light); /* Ensure background is light */
-    position: relative;
-    z-index: 1;
-    height: 100%;
-    box-shadow: 0 -5px 10px rgba(var(--ion-color-text-rgb), 0.1); /* Subtle shadow */
-}
-
-/* Styles for the profile menu list */
-.profile-menu-list {
-    background: transparent;
-    margin-top: 0; /* Remove top margin */
-}
-
-.profile-menu-list ion-item {
-    --padding-start: 0; /* Remove default item padding */
-    --inner-padding-end: 0;
-    --inner-border-width: 0; /* Remove inner border */
-    margin-bottom: 0; /* Remove space between menu items */
-    border-radius: 0; /* Remove rounded corners */
-    box-shadow: none; /* Remove shadow */
-    --background: transparent; /* Ensure background is transparent */
-    padding: 15px 0; /* Increased vertical padding to make items larger */
-    --border-color: var(--ion-color-step-100, #e6e6e6); /* Explicitly set border color for consistency */
-}
-
-/* Removed custom bottom border */
-/* .profile-menu-list ion-item:not(:last-child) {
-  border-bottom: 1px solid var(--ion-color-step-100, #e6e6e6);
-} */
-
-
-.profile-menu-list ion-item ion-icon[slot="start"] {
-    margin-right: 15px; /* Increased space between icon and label */
-    font-size: 1.3em; /* Larger icons */
-}
-
-.profile-menu-list ion-item ion-icon[slot="end"] {
-    font-size: 1.1em; /* Size for chevron icon */
-}
-
-
-.profile-menu-list ion-item ion-label {
-    font-size: 1.1em; /* Slightly larger label font */
-    color: var(--ion-color-text);
-}
-
-/* Specific styling for the logout item */
-.profile-menu-list .logout-item {
-    --background: transparent; /* Ensure background is transparent */
-    margin-top: 20px; /* Add space above logout item */
-    padding-top: 20px; /* Add padding above logout label */
-}
-
-.profile-menu-list .logout-item ion-icon {
-    color: var(--ion-color-danger); /* Danger color for icon */
-}
-
-.profile-menu-list .logout-item ion-label {
-    color: var(--ion-color-danger); /* Danger color for label */
-    font-weight: bold;
-}

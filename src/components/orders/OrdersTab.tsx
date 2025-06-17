@@ -1,11 +1,11 @@
-import {IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, useIonAlert, useIonToast,} from '@ionic/react';
+import {IonList, useIonAlert, useIonToast,} from '@ionic/react';
 import React, {useState} from 'react'; // Import useState
-import OrderCard from '../components/orders/OrderCard'; // Import OrderCard
-import {mockOrders} from '../data/mockOrders'; // Import mock orders
-import {Order} from '../types/Order'; // Import Order types
-import './OrdersPage.css';
+import OrderCard from './OrderCard'; // Import OrderCard
+import {mockOrders} from '../../data/mockOrders'; // Import mock orders
+import {Order} from '../../types/Order'; // Import Order types
+import './OrdersTab.css';
 
-const OrdersPage: React.FC = () => {
+const OrdersTab: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
   const [presentToast] = useIonToast(); // Hook for presenting toasts
   const [orders, setOrders] = useState<Order[]>(mockOrders); // Use state for orders
@@ -123,33 +123,24 @@ const OrdersPage: React.FC = () => {
 
 
   return (
-    <IonPage>
-      <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonTitle>Orders</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <div className="orders-container">
-          {/* List of Order Cards */}
-          <IonList lines="none"> {/* Remove default list lines */}
-            {orders.map(order => (
-              <OrderCard
-                key={order.id}
-                order={order}
-                onAcceptOrder={handleAcceptOrder}
-                onCancelOrder={handleCancelOrder}
-                onStartPreparing={handleStartPreparing}
-                onSetReady={handleSetReady}
-                onSetInTransit={handleSetInTransit}
-                onSetCompleted={handleSetCompleted}
-              />
-            ))}
-          </IonList>
-        </div>
-      </IonContent>
-    </IonPage>
+    <div className="orders-container">
+      {/* List of Order Cards */}
+      <IonList lines="none"> {/* Remove default list lines */}
+        {orders.map(order => (
+          <OrderCard
+            key={order.id}
+            order={order}
+            onAcceptOrder={handleAcceptOrder}
+            onCancelOrder={handleCancelOrder}
+            onStartPreparing={handleStartPreparing}
+            onSetReady={handleSetReady}
+            onSetInTransit={handleSetInTransit}
+            onSetCompleted={handleSetCompleted}
+          />
+        ))}
+      </IonList>
+    </div>
   );
 };
 
-export default OrdersPage;
+export default OrdersTab;

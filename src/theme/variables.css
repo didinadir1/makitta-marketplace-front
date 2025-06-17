@@ -14,11 +14,11 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-primary-lighter: #3a9a6d;
 
     /** secondary - Spicy Orange (#FF6B35) **/
-    --ion-color-secondary: #FF6B35;
-    --ion-color-secondary-rgb: 255, 107, 53;
+    --ion-color-secondary: #C76E00;
+    --ion-color-secondary-rgb: 199, 110, 0;
     --ion-color-secondary-contrast: #000000;
     --ion-color-secondary-contrast-rgb: 0, 0, 0;
-    --ion-color-secondary-shade: #e05e2f;
+    --ion-color-secondary-shade: #FF6B35;
     --ion-color-secondary-tint: #ff7a49;
 
     /** tertiary - Golden Mustard (#FFD23F) **/
@@ -113,10 +113,10 @@ http://ionicframework.com/docs/theming/ */
         --ion-color-primary-shade: #176b53;
         --ion-color-primary-tint: #31876e;
 
-        --ion-color-secondary: #FF8C5A;
-        --ion-color-secondary-rgb: 255, 140, 90;
+        --ion-color-secondary: #C76E00;
+        --ion-color-secondary-rgb: 199, 110, 0;
         --ion-color-secondary-contrast: #000000;
-        --ion-color-secondary-shade: #e07b4f;
+        --ion-color-secondary-shade: #FF8C5A;
         --ion-color-secondary-tint: #ff986b;
 
         --ion-color-tertiary: #FFE082;
@@ -152,6 +152,7 @@ http://ionicframework.com/docs/theming/ */
 
 
         --ion-color-light: #2E2E2E;
+
 
         /* Dark theme step colors */
         --ion-color-step-50: #333333;

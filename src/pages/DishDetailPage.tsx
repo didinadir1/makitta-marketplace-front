@@ -139,7 +139,7 @@ const DishDetailPage: React.FC = () => {
 
           <div className="dish-detail-tags-section">
             {dish.categories.map(({name}, index) => (
-              <IonChip key={index} outline={true} color="primary">
+              <IonChip key={index} outline={true} color="secondary">
                 {name}
               </IonChip>
             ))}

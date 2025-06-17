@@ -12,10 +12,9 @@ import '@ionic/react/css/ionic-swiper.css';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
-  onClick: (restaurantId: string) => void;
 }
 
-const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) => {
+const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant}) => {
   const renderRatingStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -34,61 +33,59 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({restaurant, onClick}) =>
   };
 
   return (
-    <div onClick={() => onClick(restaurant.id)}> {/* Call onClick with restaurant ID */}
-      <IonCard className="restaurant-card">
-        {restaurant.imageUrls.length > 0 && (
-          <Swiper
-            modules={[Pagination]}
-            pagination={{clickable: true}}
-            initialSlide={0}
-            speed={400}
-            className="restaurant-slides"
-          >
-            {restaurant.imageUrls.map((url, index) => (
-              <SwiperSlide key={index}>
-                <IonImg src={url} alt={`${restaurant.name} image ${index + 1}`} className="restaurant-image"/>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+    <IonCard className="restaurant-card" routerLink={`/restaurant/${restaurant.id}`}>
+      {restaurant.imageUrls.length > 0 && (
+        <Swiper
+          modules={[Pagination]}
+          pagination={{clickable: true}}
+          initialSlide={0}
+          speed={400}
+          className="restaurant-slides"
+        >
+          {restaurant.imageUrls.map((url, index) => (
+            <SwiperSlide key={index}>
+              <IonImg src={url} alt={`${restaurant.name} image ${index + 1}`} className="restaurant-image"/>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
+
+      <IonCardContent className="restaurant-card-content"> {/* Content area below image */}
+        <div className="restaurant-header">
+          <IonCardTitle className="restaurant-name">{restaurant.name}</IonCardTitle>
+          <div className="restaurant-rating">
+            {renderRatingStars(restaurant.rating)}
+            <span className="rating-text">({restaurant.rating.toFixed(1)})</span>
+          </div>
+        </div>
+
+        <div className="restaurant-meta-info">
+          <div className="info-item">
+            <IonIcon icon={locationOutline} slot="start"/>
+            <span>{restaurant.distance}</span>
+          </div>
+          <div className={`info-item restaurant-status ${restaurant.status.toLowerCase()}`}>
+            <IonIcon icon={businessOutline} slot="start"/>
+            <span>{restaurant.status}</span>
+          </div>
+        </div>
+
+        <div className="restaurant-cuisine">
+          {restaurant.cuisine.map((tag, index) => (
+            <IonChip key={index} outline={true} color="secondary"> {/* Use secondary color for cuisine */}
+              {tag}
+            </IonChip>
+          ))}
+        </div>
+
+        {restaurant.description && (
+          <div className="restaurant-description">
+            <p>{restaurant.description}</p>
+          </div>
         )}
 
-        <IonCardContent className="restaurant-card-content"> {/* Content area below image */}
-          <div className="restaurant-header">
-            <IonCardTitle className="restaurant-name">{restaurant.name}</IonCardTitle>
-            <div className="restaurant-rating">
-              {renderRatingStars(restaurant.rating)}
-              <span className="rating-text">({restaurant.rating.toFixed(1)})</span>
-            </div>
-          </div>
-
-          <div className="restaurant-meta-info">
-            <div className="info-item">
-              <IonIcon icon={locationOutline} slot="start"/>
-              <span>{restaurant.distance}</span>
-            </div>
-            <div className={`info-item restaurant-status ${restaurant.status.toLowerCase()}`}>
-              <IonIcon icon={businessOutline} slot="start"/>
-              <span>{restaurant.status}</span>
-            </div>
-          </div>
-
-          <div className="restaurant-cuisine">
-            {restaurant.cuisine.map((tag, index) => (
-              <IonChip key={index} outline={true} color="secondary"> {/* Use secondary color for cuisine */}
-                {tag}
-              </IonChip>
-            ))}
-          </div>
-
-          {restaurant.description && (
-            <div className="restaurant-description">
-              <p>{restaurant.description}</p>
-            </div>
-          )}
-
-        </IonCardContent>
-      </IonCard>
-    </div>
+      </IonCardContent>
+    </IonCard>
   );
 };
 

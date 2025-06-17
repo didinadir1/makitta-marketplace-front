@@ -1,0 +1,62 @@
+.page-header {
+    background: var(--ion-color-secondary) !important;
+}
+
+.back-button {
+    color: var(--ion-text-color);
+}
+
+/* Styles for the profile menu list */
+.profile-menu-list {
+    background: transparent;
+    padding: 16px; /* Padding for the sections below the header */
+}
+
+.profile-menu-list ion-item {
+    --padding-start: 0; /* Remove default item padding */
+    --inner-padding-end: 0;
+    --inner-border-width: 0; /* Remove inner border */
+    margin-bottom: 0; /* Remove space between menu items */
+    border-radius: 0; /* Remove rounded corners */
+    box-shadow: none; /* Remove shadow */
+    --background: transparent; /* Ensure background is transparent */
+    padding: 15px 0; /* Increased vertical padding to make items larger */
+    --border-color: var(--ion-color-step-100, #e6e6e6); /* Explicitly set border color for consistency */
+}
+
+/* Removed custom bottom border */
+/* .profile-menu-list ion-item:not(:last-child) {
+  border-bottom: 1px solid var(--ion-color-step-100, #e6e6e6);
+} */
+
+
+.profile-menu-list ion-item ion-icon[slot="start"] {
+    margin-right: 15px; /* Increased space between icon and label */
+    font-size: 1.3em; /* Larger icons */
+}
+
+.profile-menu-list ion-item ion-icon[slot="end"] {
+    font-size: 1.1em; /* Size for chevron icon */
+}
+
+
+.profile-menu-list ion-item ion-label {
+    font-size: 1.1em; /* Slightly larger label font */
+    color: var(--ion-color-text);
+}
+
+/* Specific styling for the logout item */
+.profile-menu-list .logout-item {
+    --background: transparent; /* Ensure background is transparent */
+    margin-top: 20px; /* Add space above logout item */
+    padding-top: 20px; /* Add padding above logout label */
+}
+
+.profile-menu-list .logout-item ion-icon {
+    color: var(--ion-color-danger); /* Danger color for icon */
+}
+
+.profile-menu-list .logout-item ion-label {
+    color: var(--ion-color-danger); /* Danger color for label */
+    font-weight: bold;
+}

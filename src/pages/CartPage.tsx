@@ -15,7 +15,6 @@ import {
   IonTitle,
   IonToolbar,
   useIonAlert,
-  useIonRouter,
 } from '@ionic/react';
 import React from 'react';
 import {useCart} from '../state/cartState'; // Import the cart hook
@@ -24,16 +23,12 @@ import './CartPage.css';
 
 const CartPage: React.FC = () => {
   const {cartItems, total, addItem, removeItem, updateItemQuantity, clearCart} = useCart();
-  const router = useIonRouter(); // Get the router hook
   const [presentAlert] = useIonAlert(); // Use the useIonAlert hook
 
   // Placeholder for delivery cost - you would likely fetch this dynamically
   const deliveryCost = 5.00;
   const finalTotal = total + deliveryCost;
 
-  const handleItemClick = (dishId: string) => {
-    router.push(`/dish/${dishId}`); // Navigate to the dish detail page
-  };
 
   const handleUpdateQuantity = (dishId: string, currentQuantity: number, newQuantity: number) => {
     if (newQuantity <= 0 && currentQuantity === 1) {
@@ -85,7 +80,7 @@ const CartPage: React.FC = () => {
           <>
             <IonList lines="none" className="cart-items-list">
               {cartItems.map(item => (
-                <IonItem key={item.dish.id} onClick={() => handleItemClick(item.dish.id)} detail={false}
+                <IonItem key={item.dish.id} routerLink={`/dish/${item.dish.id}`} detail={false}
                          className="cart-item-container"> {/* Wrap in IonItem */}
                   <IonCard className="cart-item-card">
                     <IonCardContent className="cart-item-content">

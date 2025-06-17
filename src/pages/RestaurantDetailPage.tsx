@@ -9,10 +9,9 @@ import {
   IonImg,
   IonPage,
   IonTitle,
-  IonToolbar,
-  useIonRouter
+  IonToolbar
 } from '@ionic/react';
-import {useParams} from 'react-router'; // Import useIonRouter
+import {useParams} from 'react-router';
 import {mockRestaurants} from '../data/mockRestaurants';
 import {mockDishes} from '../data/mockDishes'; // Import mock dishes
 import {businessOutline, locationOutline, star, starHalf} from 'ionicons/icons';
@@ -30,7 +29,6 @@ interface RestaurantDetailParams {
 
 const RestaurantDetailPage: React.FC = () => {
   const {id} = useParams<RestaurantDetailParams>();
-  const router = useIonRouter(); // Get the router hook
   const restaurant = mockRestaurants.find(r => r.id === id);
 
   if (!restaurant) {
@@ -70,11 +68,6 @@ const RestaurantDetailPage: React.FC = () => {
     }
     return stars;
   };
-
-  const handleDishCardClick = (dishId: string) => {
-    router.push(`/dish/${dishId}`); // Navigate to the dish detail page
-  };
-
 
   return (
     <IonPage>
@@ -154,7 +147,7 @@ const RestaurantDetailPage: React.FC = () => {
 
                   {restaurantDishes.map(dish => (
                     <SwiperSlide key={dish.id} className="dish-swiper-slide"> {/* Style individual slides */}
-                      <DishCard dish={dish} onClick={handleDishCardClick} isCompact/> {/* Pass isCompact prop */}
+                      <DishCard dish={dish} isCompact/> {/* Pass isCompact prop */}
                     </SwiperSlide>
                   ))}
                 </Swiper>

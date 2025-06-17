@@ -1,9 +1,3 @@
-/* Styles for the Dashboard Page */
-
-ion-content {
-    --background: var(--ion-color-light);
-}
-
 .dashboard-container {
     padding: 16px;
 }

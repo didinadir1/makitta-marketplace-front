@@ -1,0 +1,42 @@
+ion-segment {
+    position: fixed;
+    z-index: 1;
+    --background: var(--ion-color-light);
+    /*border-top-left-radius: 20px; !* Rounded top corners *!*/
+    /*border-top-right-radius: 20px;*/
+    box-shadow: 0 1px rgba(var(--ion-color-text-rgb), 0.2); /* Subtle shadow */
+
+}
+
+.my-store-content {
+    padding-top: 70px; /* Adjust padding to account for the fixed segment */
+    border-top-left-radius: 20px; /* Rounded top corners */
+    border-top-right-radius: 20px;
+}
+
+/* Segment (Tab) Styling */
+
+ion-segment-button {
+    --background-checked: var(--ion-color-light);
+    --color-checked: var(--ion-color-primary-lighter);
+    --color: var(--ion-color-medium);
+    font-size: 14px;
+    text-transform: none;
+    min-height: 40px;
+    padding: 8px 0;
+}
+
+ion-segment-button ion-icon {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+/* Content Styling */
+ion-content {
+    --background: var(--ion-color-light, #f4f5f8); /* Use a light background for the page */
+}
+
+/* Make IonList background transparent */
+ion-list {
+    background: transparent !important;
+}

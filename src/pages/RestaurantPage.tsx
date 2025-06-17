@@ -1,15 +1,24 @@
-import { IonContent, IonHeader, IonPage, IonSearchbar, IonTitle, IonToolbar, IonList, IonRefresher, IonRefresherContent, RefresherEventDetail, useIonRouter } from '@ionic/react';
-import { chevronDownCircleOutline } from 'ionicons/icons';
-import React, { useState, useEffect } from 'react';
+import {
+  IonContent,
+  IonHeader,
+  IonList,
+  IonPage,
+  IonRefresher,
+  IonRefresherContent,
+  IonSearchbar,
+  IonToolbar,
+  RefresherEventDetail
+} from '@ionic/react';
+import {chevronDownCircleOutline} from 'ionicons/icons';
+import React, {useEffect, useState} from 'react';
 import RestaurantCard from '../components/RestaurantCard'; // Import the new RestaurantCard
-import { mockRestaurants, Restaurant } from '../data/mockRestaurants'; // Import mock restaurant data
+import {mockRestaurants, Restaurant} from '../data/mockRestaurants'; // Import mock restaurant data
 import './RestaurantPage.css'; // Import the new CSS file
 
 const RestaurantPage: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
-  const router = useIonRouter();
 
   useEffect(() => {
     // Simulate fetching data
@@ -21,7 +30,7 @@ const RestaurantPage: React.FC = () => {
     const lowercasedFilter = searchText.toLowerCase();
     const filteredData = restaurants.filter(restaurant => {
       return restaurant.name.toLowerCase().includes(lowercasedFilter) ||
-             restaurant.cuisine.some(tag => tag.toLowerCase().includes(lowercasedFilter)); // Filter by cuisine
+        restaurant.cuisine.some(tag => tag.toLowerCase().includes(lowercasedFilter)); // Filter by cuisine
     });
     setFilteredRestaurants(filteredData);
   }, [searchText, restaurants]);
@@ -35,23 +44,16 @@ const RestaurantPage: React.FC = () => {
       setFilteredRestaurants(newMockRestaurants.filter(restaurant => { // Re-apply filter if searchText exists
         const lowercasedFilter = searchText.toLowerCase();
         return restaurant.name.toLowerCase().includes(lowercasedFilter) ||
-               restaurant.cuisine.some(tag => tag.toLowerCase().includes(lowercasedFilter));
+          restaurant.cuisine.some(tag => tag.toLowerCase().includes(lowercasedFilter));
       }));
       console.log('Async operation has ended');
       event.detail.complete();
     }, 2000);
   };
 
-  const handleRestaurantCardClick = (restaurantId: string) => {
-    router.push(`/restaurant/${restaurantId}`); // Navigate to the restaurant detail page
-  };
-
   return (
     <IonPage>
       <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonTitle>Restaurants</IonTitle>
-        </IonToolbar>
         <IonToolbar>
           <IonSearchbar
             value={searchText}
@@ -73,7 +75,7 @@ const RestaurantPage: React.FC = () => {
         <IonList className="restaurant-list"> {/* Use a specific class name */}
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map(restaurant => (
-              <RestaurantCard key={restaurant.id} restaurant={restaurant} onClick={handleRestaurantCardClick} />
+              <RestaurantCard key={restaurant.id} restaurant={restaurant}/>
             ))
           ) : (
             <div className="no-results">

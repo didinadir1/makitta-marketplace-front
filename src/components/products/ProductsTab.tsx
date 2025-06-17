@@ -1,16 +1,12 @@
 import React, {useState} from 'react';
 import {IonFab, IonFabButton, IonIcon, useIonAlert, useIonToast,} from '@ionic/react'; // Import hooks for dialog/toast
 import {addOutline} from 'ionicons/icons';
-import ProductList from '../products/ProductList';
-import ProductFormModal from '../products/ProductFormModal';
-import './StoreTabs.css';
+import ProductList from './ProductList';
+import ProductFormModal from './ProductFormModal';
+import '../store/StoreTabs.css';
 import {Dish, mockDishes} from "../../data/mockDishes";
 
-interface ProductsTabProps {
-  onAddProductClick: () => void;
-}
-
-const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
+const ProductsTab: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
   const [presentToast] = useIonToast(); // Hook for presenting toasts
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,7 +91,7 @@ const ProductsTab: React.FC<ProductsTabProps> = ({onAddProductClick}) => {
       />
 
       {/* Floating Action Button for Add Product */}
-      <IonFab vertical="bottom" horizontal="end" slot="fixed">
+      <IonFab>
         <IonFabButton onClick={handleOpenModal}>
           <IonIcon icon={addOutline}></IonIcon>
         </IonFabButton>
