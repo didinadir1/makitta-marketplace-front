@@ -18,7 +18,7 @@ import {
 import {arrowBack} from 'ionicons/icons';
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import './SignupPage.css';
+import './StoreCreationPage.css';
 
 interface UserData {
   email: string;
@@ -91,16 +91,15 @@ const SignupPage: React.FC = () => {
               </IonButton>
             )}
           </IonButtons>
-          <IonTitle>Create Account</IonTitle>
+          <IonTitle>Create Store</IonTitle>
         </IonToolbar>
         <IonProgressBar value={currentStep / 2}/>
       </IonHeader>
       <IonContent>
         <div className="signup-content">
-
           <IonText className="step-header">
-            <h2>{currentStep === 1 ? "Personal Information" : "Store Information"}</h2>
-            <p>{currentStep === 1 ? "Create your restaurant manager account" : "Tell us about your restaurant"}</p>
+            <h2>{currentStep === 1 ? "Store Information" : "Social Media Links"}</h2>
+            <p>{currentStep === 1 ? "Tell us about your restaurant" : "Link your social media accounts"}</p>
           </IonText>
           <IonList className="signup-form">
             <IonItem lines="full">

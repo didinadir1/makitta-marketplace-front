@@ -4,13 +4,15 @@ import './ProfilePage.css';
 import {mockUser} from '../data/mockUser'; // Import mock user data
 import {chevronForwardOutline} from 'ionicons/icons';
 import MyStoreSection from "../components/store/MyStoreSection";
-import {useHistory} from "react-router-dom"; // Import necessary icons and chevronForwardOutline
+import {useHistory} from "react-router-dom";
+import {useUser} from "../lib/data"; // Import necessary icons and chevronForwardOutline
 
 const ProfilePage: React.FC = () => {
   const history = useHistory();
+  const {getUser} = useUser(); // Assuming mockUser has a getUser method to retrieve user data
+  const user = getUser.data;
 
-
-  const handleEditClick = () => {
+  const handleEditClick = async () => {
     history.push("/profile/my-account")
   };
 
@@ -27,7 +29,7 @@ const ProfilePage: React.FC = () => {
               <IonLabel className="profile-name">{mockUser.name}</IonLabel>
               {/* Add a subtitle or email here if available in mockUser */}
               {/*todo fetch store name*/}
-              <IonNote color="medium">les délices de titi</IonNote>
+              <IonNote color="medium">Manage my profile</IonNote>
             </div>
           </div>
           <IonButton fill="clear" className="edit-profile-button">
@@ -36,7 +38,16 @@ const ProfilePage: React.FC = () => {
         </div>
       </IonHeader>
       <IonContent>
-        <MyStoreSection/>
+        {user?.restaurant_id ? (<MyStoreSection/>) : (
+          <div className="create-store-container">
+            <IonLabel>
+              You haven't created a store yet.<br/> Click the button below to get started.
+            </IonLabel>
+            <IonButton routerLink="/profile/create-store">
+              Create my store
+            </IonButton>
+          </div>)}
+
       </IonContent>
     </IonPage>
   );

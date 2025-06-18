@@ -155,7 +155,6 @@ export const useAuth = () => {
         scopes: ['email', 'profile'],
       }
     }) as { result: GoogleLoginResponseOnline }
-    console.log("Google login result:", result);
     if (result.idToken) {
       const response: {
         token?: string;
@@ -243,14 +242,13 @@ export const createRestaurant = async (input: CreateRestaurantDTO) => {
 
 
 export const getRedirectPath = (actorType?: UserRole): string => {
-  switch (actorType) {
-    case "restaurant":
-      return "/dashboard"; // Example path for restaurant admin
-    case "driver":
-      return "/dashboard"; // Example path for driver
-    case "customer":
-      return "/dishes";
-    default:
-      return "/"; // Default path for customer
-  }
+  // switch (actorType) {
+  //   case "restaurant":
+  //     return "/dishes"; // Example path for restaurant admin
+  //   case "driver":
+  //     return "/dishes"; // Example path for driver
+  //   default:
+  //     return "/dishes"; // Default path for customer
+  // }
+  return "/dishes";
 };

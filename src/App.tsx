@@ -55,6 +55,7 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {useEffect} from "react";
 import {SocialLogin} from "@capgo/capacitor-social-login";
 import MyAccountPage from "./pages/MyAccountPage";
+import StoreCreationPage from "./pages/StoreCreationPage";
 
 setupIonicReact();
 const queryClient = new QueryClient()
@@ -115,6 +116,9 @@ const TabsContainer: React.FC = () => {
         </Route>
         <Route exact path="/profile/my-account">
           <MyAccountPage/>
+        </Route>
+        <Route exact path="/profile/create-store">
+          <StoreCreationPage/>
         </Route>
         {/* Dish and Restaurant Detail pages might be needed in both modes,
              or you might want separate detail pages for restaurant mode.

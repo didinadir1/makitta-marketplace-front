@@ -49,3 +49,28 @@
     color: var(--ion-color-primary-contrast);
 }
 
+.create-store-container {
+    position: relative;
+    top: 40%;
+    transform: translateY(-40%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.create-store-container ion-label {
+    font-size: 1.4em; /* Larger label text */
+    text-align: center;
+}
+
+.create-store-container ion-button {
+    --border-radius: 12px; /* Rounded corners */
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    max-width: 300px; /* Limit max width for larger screens */
+    font-size: 1.1em; /* Slightly larger text */
+    --padding-top: 16px; /* Increased padding for larger button */
+    --padding-bottom: 16px;
+}

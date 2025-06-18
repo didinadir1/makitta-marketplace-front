@@ -1,9 +1,6 @@
-import {CustomerDTO} from "@medusajs/types";
-
-
 export type UserRole = "customer" | "restaurant" | "driver"
 
-export type User = CustomerDTO | RestaurantAdminDTO | DriverDTO
+export type User = RestaurantAdminDTO | DriverDTO
 
 export interface RestaurantAdminDTO {
   id: string;
