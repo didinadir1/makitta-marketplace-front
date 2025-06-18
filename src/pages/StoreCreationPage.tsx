@@ -73,16 +73,16 @@ const StoreCreationPage: React.FC = () => {
   };
 
   // Function to handle the final submission (from Step 2)
-  const onSubmit: SubmitHandler<StoreCreationFormData> = async (data) => {
+  const onSubmit: SubmitHandler<StoreCreationFormData> = (data) => {
     console.log('Submitting:', data);
+    // TODO: Implement actual submission logic (API call, etc.)
 
-    // presentToast({
-    //   message: 'Store created successfully!',
-    //   duration: 2000,
-    //   color: 'success',
-    // });
-    // history.push('/login'); // Or navigate to the store dashboard
-    await handleNextStep()
+    presentToast({
+      message: 'Store created successfully!',
+      duration: 2000,
+      color: 'success',
+    });
+    history.push('/login'); // Or navigate to the store dashboard
   };
 
   // Helper to get error message for a field from react-hook-form errors
@@ -232,21 +232,21 @@ const StoreCreationPage: React.FC = () => {
             <h2>{currentStep === 1 ? "Store Information" : "Social Media Links"}</h2>
             <p>{currentStep === 1 ? "Tell us about your restaurant" : "Link your social media accounts (Optional)"}</p>
           </IonText>
+          {/* Wrap form content in <form> and use handleSubmit */}
           <form onSubmit={handleSubmit(onSubmit)}>
             {renderStepContent()}
 
-            {/* Use react-hook-form's handleSubmit for the final step */}
+            {/* Buttons to navigate steps or submit */}
             {currentStep < 2 ? (
-              <IonButton expand="block" onClick={handleNextStep}>
+              <IonButton expand="block" onClick={handleNextStep} type="button"> {/* Use type="button" to prevent form submission */}
                 Next
               </IonButton>
             ) : (
-              <IonButton expand="block" onClick={handleSubmit(onSubmit)}>
+              <IonButton expand="block" type="submit"> {/* Default type="submit" will trigger form onSubmit */}
                 Sign Up
               </IonButton>
             )}
           </form>
-
         </div>
       </IonContent>
     </IonPage>
