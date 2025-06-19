@@ -20,6 +20,6 @@ export const socialLinksSchema = z.object({
 export type SocialLinksFormData = z.infer<typeof socialLinksSchema>;
 
 // Combined schema for the entire form
-export const fullStoreCreationSchema = storeDetailsSchema.extend(socialLinksSchema);
+export const fullStoreCreationSchema = storeDetailsSchema.merge(socialLinksSchema);
 
 export type FullStoreCreationFormData = z.infer<typeof fullStoreCreationSchema>;

@@ -23,13 +23,10 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {
   FullStoreCreationFormData,
-  fullStoreCreationSchema,
-  StoreDetailsFormData
+  fullStoreCreationSchema, StoreDetailsFormData,
 } from '../validation/storeCreationValidation';
 import './StoreCreationPage.css';
 
-// Define the combined form data type
-type StoreCreationFormData = FullStoreCreationFormData;
 
 const StoreCreationPage: React.FC = () => {
   const history = useHistory();
@@ -41,8 +38,7 @@ const StoreCreationPage: React.FC = () => {
     handleSubmit,
     formState: {errors},
     trigger, // Use trigger for step-specific validation
-    getValues, // To get current form values
-  } = useForm<StoreCreationFormData>({
+  } = useForm<FullStoreCreationFormData>({
     resolver: zodResolver(fullStoreCreationSchema),
     defaultValues: {
       storeName: '',
@@ -52,7 +48,6 @@ const StoreCreationPage: React.FC = () => {
       facebook: '',
       snapchat: '',
     },
-    mode: 'onTouched', // Validate on blur
   });
 
   // Function to handle moving to the next step (Step 1 -> Step 2)
@@ -73,7 +68,7 @@ const StoreCreationPage: React.FC = () => {
   };
 
   // Function to handle the final submission (from Step 2)
-  const onSubmit: SubmitHandler<StoreCreationFormData> = (data) => {
+  const onSubmit: SubmitHandler<FullStoreCreationFormData> = (data) => {
     console.log('Submitting:', data);
     // TODO: Implement actual submission logic (API call, etc.)
 
@@ -85,21 +80,17 @@ const StoreCreationPage: React.FC = () => {
     history.push('/login'); // Or navigate to the store dashboard
   };
 
-  // Helper to get error message for a field from react-hook-form errors
-  const getErrorMessage = (fieldName: keyof StoreCreationFormData) => {
-    return errors[fieldName]?.message;
-  };
-
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return (
+          <form onSubmit={handleSubmit(handleNextStep)}>
           <IonList className="signup-form">
             <Controller
               name="storeName"
               control={control}
               render={({field}) => (
-                <IonItem lines="full" className={getErrorMessage('storeName') ? 'ion-invalid' : ''}>
+                <IonItem lines="full" >
                   <IonLabel position="stacked">Store Name</IonLabel>
                   <IonInput
                     type="text"
@@ -107,7 +98,7 @@ const StoreCreationPage: React.FC = () => {
                     placeholder="The Cozy Corner Cafe"
                     required
                   ></IonInput>
-                  <IonText color="danger" slot="error">{getErrorMessage('storeName')}</IonText>
+                  {errors.storeName && <IonText color="danger" slot="error">{errors.storeName.message}</IonText>}
                 </IonItem>
               )}
             />
@@ -116,7 +107,7 @@ const StoreCreationPage: React.FC = () => {
               name="address"
               control={control}
               render={({field}) => (
-                <IonItem lines="full" className={getErrorMessage('address') ? 'ion-invalid' : ''}>
+                <IonItem lines="full">
                   <IonLabel position="stacked">Address</IonLabel>
                   <IonInput
                     type="text"
@@ -124,7 +115,7 @@ const StoreCreationPage: React.FC = () => {
                     placeholder="123 Main St, Anytown"
                     required
                   ></IonInput>
-                  <IonText color="danger" slot="error">{getErrorMessage('address')}</IonText>
+                  {errors.address && <IonText color="danger" slot="error">{errors.address.message}</IonText>}
                 </IonItem>
               )}
             />
@@ -133,27 +124,33 @@ const StoreCreationPage: React.FC = () => {
               name="description"
               control={control}
               render={({field}) => (
-                <IonItem lines="full" className={getErrorMessage('description') ? 'ion-invalid' : ''}>
+                <IonItem lines="full">
                   <IonLabel position="stacked">Description</IonLabel>
                   <IonTextarea
                     {...field}
                     placeholder="Tell us about your store (cuisine, atmosphere, etc.)"
                     rows={4}
                   ></IonTextarea>
-                  <IonText color="danger" slot="error">{getErrorMessage('description')}</IonText>
+                  {errors.description && <IonText color="danger" slot="error">{errors.description.message}</IonText>}
                 </IonItem>
               )}
             />
           </IonList>
+        <IonButton expand="block" onClick={handleNextStep} type="submit"> {/* Use type="button" to prevent form submission */}
+          Next
+        </IonButton>
+          </form>
         );
       case 2:
         return (
+          <form onSubmit={handleSubmit(onSubmit)}>
+
           <IonList className="signup-form">
             <Controller
               name="instagram"
               control={control}
               render={({field}) => (
-                <IonItem lines="full" className={getErrorMessage('instagram') ? 'ion-invalid' : ''}>
+                <IonItem lines="full">
                   <IonIcon icon={logoInstagram} slot="start" color="medium"/>
                   <IonLabel position="stacked">Instagram Link (Optional)</IonLabel>
                   <IonInput
@@ -161,7 +158,7 @@ const StoreCreationPage: React.FC = () => {
                     {...field}
                     placeholder="https://instagram.com/yourstore"
                   ></IonInput>
-                  <IonText color="danger" slot="error">{getErrorMessage('instagram')}</IonText>
+                  {errors.instagram && <IonText color="danger" slot="error">{errors.instagram.message}</IonText>}
                 </IonItem>
               )}
             />
@@ -170,7 +167,7 @@ const StoreCreationPage: React.FC = () => {
               name="facebook"
               control={control}
               render={({field}) => (
-                <IonItem lines="full" className={getErrorMessage('facebook') ? 'ion-invalid' : ''}>
+                <IonItem lines="full">
                   <IonIcon icon={logoFacebook} slot="start" color="medium"/>
                   <IonLabel position="stacked">Facebook Link (Optional)</IonLabel>
                   <IonInput
@@ -178,7 +175,7 @@ const StoreCreationPage: React.FC = () => {
                     {...field}
                     placeholder="https://facebook.com/yourstore"
                   ></IonInput>
-                  <IonText color="danger" slot="error">{getErrorMessage('facebook')}</IonText>
+                  {errors.facebook && <IonText color="danger" slot="error">{errors.facebook.message}</IonText>}
                 </IonItem>
               )}
             />
@@ -187,7 +184,7 @@ const StoreCreationPage: React.FC = () => {
               name="snapchat"
               control={control}
               render={({field}) => (
-                <IonItem lines="full" className={getErrorMessage('snapchat') ? 'ion-invalid' : ''}>
+                <IonItem lines="full">
                   <IonIcon icon={logoSnapchat} slot="start" color="medium"/>
                   <IonLabel position="stacked">Snapchat Link (Optional)</IonLabel>
                   <IonInput
@@ -195,11 +192,15 @@ const StoreCreationPage: React.FC = () => {
                     {...field}
                     placeholder="https://snapchat.com/add/yourstore"
                   ></IonInput>
-                  <IonText color="danger" slot="error">{getErrorMessage('snapchat')}</IonText>
+                  {errors.snapchat && <IonText color="danger" slot="error">{errors.snapchat.message}</IonText>}
                 </IonItem>
               )}
             />
           </IonList>
+        <IonButton expand="block" type="submit"> {/* Default type="submit" will trigger form onSubmit */}
+          Sign Up
+        </IonButton>
+          </form>
         );
       default:
         return null;
@@ -212,7 +213,9 @@ const StoreCreationPage: React.FC = () => {
         <IonToolbar>
           <IonButtons slot="start">
             {currentStep > 1 ? ( // Show back button if not on the first step
-              <IonButton onClick={() => setCurrentStep(currentStep - 1)}>
+              <IonButton onClick={() => {
+                setCurrentStep(currentStep - 1)
+              }}>
                 <IonIcon icon={arrowBack}/>
               </IonButton>
             ) : ( // Show history back button on the first step
@@ -233,20 +236,7 @@ const StoreCreationPage: React.FC = () => {
             <p>{currentStep === 1 ? "Tell us about your restaurant" : "Link your social media accounts (Optional)"}</p>
           </IonText>
           {/* Wrap form content in <form> and use handleSubmit */}
-          <form onSubmit={handleSubmit(onSubmit)}>
             {renderStepContent()}
-
-            {/* Buttons to navigate steps or submit */}
-            {currentStep < 2 ? (
-              <IonButton expand="block" onClick={handleNextStep} type="button"> {/* Use type="button" to prevent form submission */}
-                Next
-              </IonButton>
-            ) : (
-              <IonButton expand="block" type="submit"> {/* Default type="submit" will trigger form onSubmit */}
-                Sign Up
-              </IonButton>
-            )}
-          </form>
         </div>
       </IonContent>
     </IonPage>
