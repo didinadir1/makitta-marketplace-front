@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 // Schema for the first step: Store Information
 export const storeDetailsSchema = z.object({
+  // todo change min
   storeName: z.string().min(1, 'Store name is required'),
   address: z.string().min(1, 'Address is required'),
   description: z.string().optional(), // Description is optional

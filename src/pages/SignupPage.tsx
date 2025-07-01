@@ -8,6 +8,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonLoading,
   IonPage,
   IonText,
   IonTitle,
@@ -19,24 +20,9 @@ import {useHistory} from 'react-router-dom';
 import './SignupPage.css';
 import {Controller, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
 import {useAuth} from "../lib/actions";
+import {PersonalInfoFormData, personalInfoSchema} from "../validation/signupValidation";
 
-// Define the Zod schema for personal information
-const personalInfoSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(10, "Phone number is required"), // Basic phone validation
-  first_name: z.string().min(1, "First name is required"),
-  last_name: z.string().min(1, "Last name is required"),
-  actor_type: z.enum(["restaurant", "driver", "customer"]),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
-  confirmedPassword: z.string().min(8, "Confirm password is required"),
-}).refine((data) => data.password === data.confirmedPassword, {
-  message: "Passwords don't match",
-  path: ["confirmedPassword"], // Set the error on the confirmedPassword field
-});
-
-type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 
 const SignupPage: React.FC = () => {
   const history = useHistory();
@@ -44,7 +30,7 @@ const SignupPage: React.FC = () => {
   const {
     control,
     handleSubmit,
-    formState: {errors},
+    formState: {errors, isValid, isSubmitting},
   } = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -185,7 +171,9 @@ const SignupPage: React.FC = () => {
             <IonButton expand="block" type="submit" className="action-button">
               Sign Up
               <IonIcon icon={arrowForward} slot="end"/>
+              {/*{true && <IonSpinner name="circular" slot={ "end"}></IonSpinner>}*/}
             </IonButton>
+            <IonLoading message="Loading..." isOpen={isValid && isSubmitting} spinner="circles"/>
           </form>
         </div>
       </IonContent>
