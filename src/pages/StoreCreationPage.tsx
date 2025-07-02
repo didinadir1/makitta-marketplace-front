@@ -25,7 +25,7 @@ import {
 } from '../validation/storeCreationValidation';
 import './StoreCreationPage.css';
 import StoreDetailsForm from '../components/store-creation/StoreDetailsForm'; // Import Step 1 component
-import SocialLinksForm from '../components/store-creation/SocialLinksForm'; // Import Step 2 component
+import SocialLinksForm from '../components/store-creation/SocialLinksForm';
 
 
 const StoreCreationPage: React.FC = () => {
@@ -43,7 +43,6 @@ const StoreCreationPage: React.FC = () => {
     handleSubmit,
     formState: {errors, isValid, isSubmitting},
     trigger, // Use trigger for step-specific validation
-    reset,
   } = useForm<FullStoreCreationFormData>({
     resolver: zodResolver(fullStoreCreationSchema),
     defaultValues: {
@@ -57,31 +56,22 @@ const StoreCreationPage: React.FC = () => {
   });
 
   const handlePrevStep = () => {
-    const stepTwoFields = Object.keys(socialLinksSchema.shape);
-
-    // Create reset object: { address: undefined, age: undefined }
-    const resetValues = stepTwoFields.reduce((acc, field) => {
-      acc[field] = undefined;
-      return acc;
-    }, {} as Record<string, undefined>);
-
-    reset(resetValues);
     setCurrentStep(currentStep - 1);
   }
   // Function to handle moving to the next step (Step 1 -> Step 2)
   const handleNextStep = async () => {
     // Trigger validation only for fields in step 1
-    // const isValidStep1 = await trigger();
-    // console.log(isValidStep1)
-    // if (isValidStep1) {
+    const isStepValid = await trigger(Object.keys(steps[currentStep-1].schema.shape) as (Array<keyof FullStoreCreationFormData>));
+    console.log(isStepValid)
+    if (isStepValid) {
       setCurrentStep(2);
-    // } else {
-    //   await presentToast({
-    //     message: 'Please fix the errors in the store information.',
-    //     duration: 2000,
-    //     color: 'danger',
-    //   });
-    // }
+    } else {
+      await presentToast({
+        message: 'Please fix the errors in the store information.',
+        duration: 2000,
+        color: 'danger',
+      });
+    }
   };
 
   // Function to handle the final submission (from Step 2)
@@ -131,8 +121,8 @@ const StoreCreationPage: React.FC = () => {
       <IonContent>
         <div className="signup-content">
           <IonText className="step-header">
-            <h2>{steps[currentStep-1].title}</h2>
-            <p>{steps[currentStep-1].subtitle}</p>
+            <h2>{steps[currentStep - 1].title}</h2>
+            <p>{steps[currentStep - 1].subtitle}</p>
           </IonText>
           {/* Wrap form content in <form> and use handleSubmit */}
           <form onSubmit={handleSubmit(onSubmit)}>
