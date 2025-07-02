@@ -1,20 +1,29 @@
 import React from 'react';
-import {IonItem, IonLabel, IonInput, IonTextarea, IonList, IonText, IonNote} from '@ionic/react';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { StoreDetailsFormData, FullStoreCreationFormData } from '../../validation/storeCreationValidation';
+import {IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea} from '@ionic/react';
+import {Control, Controller, FieldErrors} from 'react-hook-form';
+import {FullStoreCreationFormData} from '../../validation/storeCreationValidation';
+import ImageUploadField from "./ImageUploadField";
 
 interface StoreDetailsFormProps {
   control: Control<FullStoreCreationFormData>;
   errors: FieldErrors<FullStoreCreationFormData>;
+  defaultFile?: File
 }
 
-const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({ control, errors }) => {
+const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors,defaultFile}) => {
   return (
     <IonList className="signup-form">
+      <ImageUploadField
+        name="storeImage"
+        label="Store Logo/Image"
+        control={control}
+        errors={errors}
+        defaultFile={defaultFile}
+      />
       <Controller
         name="storeName"
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
           <IonItem lines="full"> {/* Add ion-invalid class */}
             <IonLabel position="stacked">Store Name</IonLabel>
             <IonInput
@@ -30,7 +39,7 @@ const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({ control, errors }) 
       <Controller
         name="address"
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
           <IonItem lines="full"> {/* Add ion-invalid class */}
             <IonLabel position="stacked">Address</IonLabel>
             <IonInput
@@ -46,13 +55,13 @@ const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({ control, errors }) 
       <Controller
         name="description"
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
           <IonItem lines="full"> {/* Add ion-invalid class */}
             <IonLabel position="stacked">Description</IonLabel>
             <IonTextarea
               {...field}
               placeholder="Tell us about your store (cuisine, atmosphere, etc.)"
-              rows={4}
+              rows={2}
             ></IonTextarea>
             {errors.description && <IonNote color="danger">{errors.description.message}</IonNote>}
           </IonItem>
