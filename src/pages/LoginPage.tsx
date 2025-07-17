@@ -17,18 +17,29 @@ import {
 } from '@ionic/react';
 import {logoGoogle} from 'ionicons/icons'; // Google icon
 import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {getRedirectPath, useAuth} from '../lib/actions/users'; // Import useAuth hook
 import './LoginPage.css';
-import {encode} from "base64-url";
+import {RouteComponentProps} from "react-router";
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps
+  extends RouteComponentProps<{
+    email?: string;
+  }> {
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({match}) => {
   const history = useHistory();
   const {login, loginWithGoogle} = useAuth(); // Use the useAuth hook
   const [present, dismiss] = useIonLoading();
   const [presentToast] = useIonToast();
+  const location = useLocation();
 
-  const [email, setEmail] = useState('');
+  // Parse query parameters manually
+  const queryParams = new URLSearchParams(location.search);
+
+  console.log('LoginPage match params:', match?.params);
+  const [email, setEmail] = useState(atob(queryParams.get("email") ?? ""));
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
@@ -37,13 +48,18 @@ const LoginPage: React.FC = () => {
       duration: 0,
     });
     try {
-      const response = await login({email, password});
+      const response = await login({
+        email,
+        password,
+        provider: queryParams.get("verify-google") ? 'google' : 'emailpass'
+      });
       await dismiss();
       // It also handles navigation based on actorType.
       if (response?.actorType) {
         history.push(getRedirectPath(response?.actorType));
       } else if (response?.verifyPassword) {
-        history.push(`verify-password?email=${encode(JSON.stringify(email))}`);
+        // todo manage this case when u implement sending verification email for account
+        history.push(`login?verify-password=${true}&email=${btoa(email)}`);
       }
     } catch (error: any) {
       await dismiss();
@@ -68,7 +84,8 @@ const LoginPage: React.FC = () => {
         if (actorType)
           history.push(getRedirectPath(response.actorType));
         else if (verifyPassword) {
-          history.push(`verify-password?email=${encode(JSON.stringify(profile?.email))}`);
+          setEmail(profile?.email ?? '');
+          history.push(`login?verify-google=${true}&email=${btoa(profile?.email ?? "")}`);
         }
       }
 

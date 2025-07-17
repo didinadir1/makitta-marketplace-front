@@ -4,7 +4,6 @@ import {CreateUserDTO, UserRole} from "../../types/user";
 import {FetchError} from "@medusajs/js-sdk";
 import {useCart} from "./carts";
 import {useHistory} from "react-router-dom";
-import {CreateRestaurantDTO} from "../../types/restaurant";
 import {getAuthHeaders, useSession} from "../data";
 import {GoogleLoginResponseOnline, SocialLogin} from "@capgo/capacitor-social-login";
 
@@ -217,29 +216,6 @@ export const createUser = async (input: CreateUserDTO) => {
     },
   });
 };
-
-// Function to create a restaurant (can be called from a mutation)
-export const createRestaurant = async (input: CreateRestaurantDTO) => {
-  const handle = input.name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/-$/, "")
-    .replace(/^-/, "");
-
-  const headers = await getAuthHeaders();
-  return await sdk.client.fetch("/store/restaurants", {
-    method: "POST",
-    body: JSON.stringify({
-      ...input,
-      handle,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-  });
-};
-
 
 export const getRedirectPath = (actorType?: UserRole): string => {
   // switch (actorType) {
