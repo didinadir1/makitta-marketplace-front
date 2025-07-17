@@ -5,7 +5,7 @@ import {Control, Controller, FieldErrors} from 'react-hook-form';
 import './ImageUploadField.css'; // We'll create this CSS file
 
 interface ImageUploadFieldProps {
-  control: Control<File>; // Use 'any' or a more specific type if you know the form data structure
+  control: Control<any>; // Use 'any' or a more specific type if you know the form data structure
   errors: FieldErrors<File>; // Use 'any' or a more specific type
   defaultFile?: File;
   name: string;
@@ -66,8 +66,8 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({control, errors, nam
               <IonIcon icon={addOutline} className="add-icon"/>
             )}
           </div>
-          {errors[name] &&
-              <IonNote color="danger" className="error-message">{errors[name]?.message as string}</IonNote>}
+          {errors.name &&
+              <IonNote color="danger" className="error-message">{errors.name?.message as string}</IonNote>}
         </div>
       )}
     />

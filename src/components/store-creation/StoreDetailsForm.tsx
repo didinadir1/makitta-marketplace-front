@@ -10,28 +10,28 @@ interface StoreDetailsFormProps {
   defaultFile?: File
 }
 
-const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors,defaultFile}) => {
+const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors, defaultFile}) => {
   return (
     <IonList className="signup-form">
       <ImageUploadField
-        name="storeImage"
+        name="image"
         label="Store Logo/Image"
         control={control}
         errors={errors}
         defaultFile={defaultFile}
       />
       <Controller
-        name="storeName"
+        name="name"
         control={control}
         render={({field}) => (
           <IonItem lines="full"> {/* Add ion-invalid class */}
-            <IonLabel position="stacked">Store Name</IonLabel>
+            <IonLabel position="stacked">Name</IonLabel>
             <IonInput
               type="text"
               {...field}
               placeholder="The Cozy Corner Cafe"
             ></IonInput>
-            {errors.storeName && <IonNote color="danger">{errors.storeName.message}</IonNote>}
+            {errors.name && <IonNote color="danger">{errors.name.message}</IonNote>}
           </IonItem>
         )}
       />

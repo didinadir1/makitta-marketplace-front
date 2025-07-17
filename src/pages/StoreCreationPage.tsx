@@ -25,11 +25,13 @@ import {
 } from '../validation/storeCreationValidation';
 import './StoreCreationPage.css';
 import StoreDetailsForm from '../components/store-creation/StoreDetailsForm'; // Import Step 1 component
-import SocialLinksForm from '../components/store-creation/SocialLinksForm'; // Import Step 2 component
+import SocialLinksForm from '../components/store-creation/SocialLinksForm';
+import {useRestaurantActions} from "../lib/actions"; // Import Step 2 component
 
 
 const StoreCreationPage: React.FC = () => {
   const history = useHistory();
+  const {createRestaurant} = useRestaurantActions()
   const [presentToast] = useIonToast();
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -43,27 +45,21 @@ const StoreCreationPage: React.FC = () => {
     handleSubmit,
     formState: {errors, isValid, isSubmitting},
     trigger, // Use trigger for step-specific validation
-    clearErrors, // Import clearErrors
     watch
   } = useForm<FullStoreCreationFormData>({
     resolver: zodResolver(fullStoreCreationSchema),
     defaultValues: {
-      storeName: '',
+      name: '',
       address: '',
       description: '',
       instagram: '',
       facebook: '',
       snapchat: '',
-      storeImage: undefined, // Initialize storeImage
+      image: undefined,
     },
   });
 
   const handlePrevStep = () => {
-    if (currentStep === 2) {
-      // Clear errors for social links fields when going back from step 2
-      const socialLinkFields: (keyof FullStoreCreationFormData)[] = ['instagram', 'facebook', 'snapchat', 'storeImage'];
-      clearErrors(socialLinkFields);
-    }
     setCurrentStep(currentStep - 1);
   }
 
@@ -91,33 +87,9 @@ const StoreCreationPage: React.FC = () => {
 
   // Function to handle the final submission (from Step 2)
   const onSubmit: SubmitHandler<FullStoreCreationFormData> = async (data) => {
-    console.log('Submitting:', data);
-
-    // // Example of how to handle the image file:
-    if (data.storeImage instanceof File) {
-      console.log('Store Image File:', data.storeImage);
-      // You would typically upload this file to a server
-      // For example, using FormData:
-      // const formData = new FormData();
-      // formData.append('storeImage', data.storeImage);
-      // formData.append('storeName', data.storeName);
-      // ... other fields
-      // await fetch('/api/upload', { method: 'POST', body: formData });
-    } else if (data.storeImage === null) {
-      console.log('No store image selected.');
-    }
-
-
-    // TODO: Implement actual submission logic (API call, etc.)
     const isValidStep = await validateStep();
-    console.log('isValidStep:', isValidStep);
     if (isValidStep) {
-      await presentToast({
-        message: 'Store created successfully!',
-        duration: 2000,
-        color: 'success',
-      });
-      history.push('/login'); // Or navigate to the store dashboard
+      createRestaurant(data)
     }
   };
 
@@ -125,7 +97,7 @@ const StoreCreationPage: React.FC = () => {
     switch (currentStep) {
       case 1:
         return <StoreDetailsForm control={control} errors={errors}
-                                 defaultFile={watch("storeImage")} // Pass existing image URL
+                                 defaultFile={watch("image")} // Pass existing image URL
         />;
       case 2:
         return <SocialLinksForm control={control} errors={errors}/>;

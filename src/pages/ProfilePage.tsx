@@ -5,12 +5,15 @@ import {mockUser} from '../data/mockUser'; // Import mock user data
 import {chevronForwardOutline} from 'ionicons/icons';
 import MyStoreSection from "../components/store/MyStoreSection";
 import {useHistory} from "react-router-dom";
-import {useUser} from "../lib/data"; // Import necessary icons and chevronForwardOutline
+import {useUser} from "../lib/data";
+import useRestaurant from "../lib/data/restaurants"; // Import necessary icons and chevronForwardOutline
 
 const ProfilePage: React.FC = () => {
   const history = useHistory();
-  const {getUser} = useUser(); // Assuming mockUser has a getUser method to retrieve user data
+  const {getUser} = useUser();
   const user = getUser.data;
+  const {getRestaurant} = useRestaurant(user?.restaurant_id || "");
+  const restaurant = getRestaurant.data;
 
   const handleEditClick = async () => {
     history.push("/profile/my-account")
@@ -23,7 +26,7 @@ const ProfilePage: React.FC = () => {
         <div className="profile-header" onClick={handleEditClick}> {/* Use a div for the header area */}
           <div className="profile-info-container"> {/* Container for avatar and name */}
             <IonAvatar className="profile-avatar">
-              <img src={mockUser.profilePictureUrl} alt="Profile"/>
+              <img src={restaurant?.image_url ?? "public/store-default-image.jpg"} alt="Profile"/>
             </IonAvatar>
             <div className="profile-name-container"> {/* Container for name and potential subtitle */}
               <IonLabel className="profile-name">{mockUser.name}</IonLabel>

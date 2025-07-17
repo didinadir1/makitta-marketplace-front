@@ -18,15 +18,13 @@ export interface RestaurantDTO {
 
 export interface CreateRestaurantDTO {
   name: string;
-  first_name: string;
-  last_name: string;
   handle?: string;
   address: string;
-  phone: string;
-  email: string;
   description?: string;
   image_url?: string;
-  is_open?: boolean;
+  instagram_url?: string;
+  facebook_url?: string;
+  snapchat_url?: string;
 }
 
 
