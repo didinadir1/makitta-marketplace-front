@@ -14,19 +14,29 @@ import {
 } from '@ionic/react'; // Added IonToggle
 import React from 'react';
 import './MyAccountPage.css';
-import {helpCircleOutline, informationCircleOutline, listOutline, logOutOutline, personOutline} from 'ionicons/icons'; // Import necessary icons and chevronForwardOutline
+import {
+  helpCircleOutline,
+  informationCircleOutline,
+  logOutOutline,
+  personOutline,
+  storefrontOutline
+} from 'ionicons/icons';
+import useRestaurant from "../lib/data/restaurants";
+import {useUser} from "../lib/data";
+import {useHistory} from "react-router-dom"; // Import necessary icons and chevronForwardOutline
 
 const MyAccountPage: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Use the useIonAlert hook
+  const history = useHistory();
+
+
+  const {data: user} = useUser();
+  const {data: restaurant} = useRestaurant(user?.restaurant_id || "");
+
 
   const handleAccountClick = () => {
     console.log('Navigate to Account Settings');
     // router.push('/profile/account'); // Example navigation
-  };
-
-  const handleOrdersClick = () => {
-    console.log('Navigate to Orders History');
-    // router.push('/profile/orders'); // Example navigation
   };
 
   const handleHelpClick = () => {
@@ -59,6 +69,9 @@ const MyAccountPage: React.FC = () => {
       ],
     });
   };
+  const handleEditStoreClick = async () => {
+    history.push("/profile/my-account/edit-store");
+  };
 
 
   return (
@@ -76,13 +89,12 @@ const MyAccountPage: React.FC = () => {
           <IonItem button onClick={handleAccountClick} detail={true}> {/* Use detail={true} for chevron */}
             <IonIcon icon={personOutline} slot="start" color="medium"/>
             <IonLabel>Account</IonLabel>
-            {/* Removed explicit chevron icon */}
           </IonItem>
-          <IonItem button onClick={handleOrdersClick} detail={true}> {/* Use detail={true} for chevron */}
-            <IonIcon icon={listOutline} slot="start" color="medium"/>
-            <IonLabel>Orders</IonLabel>
-            {/* Removed explicit chevron icon */}
-          </IonItem>
+          {restaurant?.id && (
+            <IonItem button onClick={handleEditStoreClick} detail={true}> {/* Use detail={true} for chevron */}
+              <IonIcon icon={storefrontOutline} slot="start" color="medium"/>
+              <IonLabel>My Store Settings</IonLabel>
+            </IonItem>)}
           <IonItem button onClick={handleHelpClick} detail={true}> {/* Use detail={true} for chevron */}
             <IonIcon icon={helpCircleOutline} slot="start" color="medium"/>
             <IonLabel>Help & Support</IonLabel>

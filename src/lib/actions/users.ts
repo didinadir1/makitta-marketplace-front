@@ -6,6 +6,7 @@ import {useCart} from "./carts";
 import {useHistory} from "react-router-dom";
 import {getAuthHeaders, useSession} from "../data";
 import {GoogleLoginResponseOnline, SocialLogin} from "@capgo/capacitor-social-login";
+import {useIonToast} from "@ionic/react";
 
 
 export interface SignupFormData {
@@ -29,6 +30,7 @@ export const useAuth = () => {
   const queryClient = useQueryClient();
   const history = useHistory(); // For client-side navigation
   const {transferCart} = useCart(); // Assuming transferCart is also a hook/mutation
+  const [presentToast] = useIonToast();
 
   const signup = async (data: SignupFormData) => {
     const {
@@ -74,12 +76,18 @@ export const useAuth = () => {
         fetchError.message !== "Identity with email already exists"
       ) {
         console.error(`An error occured while creating account: ${fetchError}`);
+        await presentToast({
+          message: 'Failed to sign up. Please try again.',
+          duration: 2000,
+          color: 'danger',
+        });
         throw new Error("An error occurred during signup.");
       }
 
       // Handle existing identity case - attempt to log in
+      // todo send verification email link in this case (email already exists)
       try {
-        const loginResponse = await sdk.auth.login("customer", "emailpass", {
+        const loginResponse = await sdk.auth.login(actor_type, "emailpass", {
           email,
           password,
         });
@@ -87,17 +95,24 @@ export const useAuth = () => {
           return
         }
         if (typeof loginResponse !== "string") {
+          await presentToast({
+            message: 'Failed to sign up. Please try again.',
+            duration: 2000,
+            color: 'danger',
+          });
           throw new Error(
             "Authentication requires more actions, which isn't supported by this flow."
           );
         }
-
         await createSession(loginResponse);
-        await transferCart(); // Transfer cart after successful login
-
-        return {success: true, actorType: "customer" as UserRole}; // Assume customer if logging into existing identity
+        // await transferCart(); // Transfer cart after successful login
       } catch (loginError) {
         console.error("Error logging in existing user:", loginError);
+        await presentToast({
+          message: 'Failed to sign up. Please try again.',
+          duration: 2000,
+          color: 'danger',
+        });
         throw new Error("An error occurred during login.");
       }
     }

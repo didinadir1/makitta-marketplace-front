@@ -20,7 +20,6 @@ const SocialLinksForm: React.FC<SocialLinksFormProps> = ({control, errors}) => {
             <IonIcon icon={logoInstagram} slot="start" color="medium"/>
             <IonLabel position="stacked">Instagram Link (Optional)</IonLabel>
             <IonInput
-              type="url"
               {...field}
               placeholder="https://instagram.com/yourstore"
             ></IonInput>
@@ -37,7 +36,6 @@ const SocialLinksForm: React.FC<SocialLinksFormProps> = ({control, errors}) => {
             <IonIcon icon={logoFacebook} slot="start" color="medium"/>
             <IonLabel position="stacked">Facebook Link (Optional)</IonLabel>
             <IonInput
-              type="url"
               {...field}
               placeholder="https://facebook.com/yourstore"
             ></IonInput>
@@ -54,7 +52,6 @@ const SocialLinksForm: React.FC<SocialLinksFormProps> = ({control, errors}) => {
             <IonIcon icon={logoSnapchat} slot="start" color="medium"/>
             <IonLabel position="stacked">Snapchat Link (Optional)</IonLabel>
             <IonInput
-              type="url"
               {...field}
               placeholder="https://snapchat.com/add/yourstore"
             ></IonInput>

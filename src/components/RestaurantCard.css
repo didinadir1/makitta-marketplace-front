@@ -125,8 +125,6 @@
 }
 
 .restaurant-cuisine ion-chip {
-    --background: var(--ion-color-secondary-tint);
-    --color: var(--ion-color-secondary-contrast);
     font-size: 0.85em;
     padding: 5px 10px;
     height: auto;

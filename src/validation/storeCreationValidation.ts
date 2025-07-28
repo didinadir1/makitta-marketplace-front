@@ -16,9 +16,26 @@ export type StoreDetailsFormData = z.infer<typeof storeDetailsSchema>;
 // Schema for the second step: Social Media Links
 // All social links are optional and should be valid URLs if provided
 export const socialLinksSchema = z.object({
-  instagram: z.string().url('Invalid Instagram URL').optional().or(z.literal('')),
-  facebook: z.string().url('Invalid Facebook URL').optional().or(z.literal('')),
-  snapchat: z.string().url('Invalid Snapchat URL').optional().or(z.literal('')),
+  instagram: z.string()
+    .refine(val => val === '' || /(https?:\/\/)?(www\.)?instagram\.com\/[a-zA-Z0-9_]+\/?/.test(val), {
+      message: 'Must be a valid Instagram URL'
+    })
+    .optional()
+    .or(z.literal('')),
+
+  facebook: z.string()
+    .refine(val => val === '' || /(https?:\/\/)?(www\.)?facebook\.com\/[a-zA-Z0-9.]+\/?/.test(val), {
+      message: 'Must be a valid Facebook URL'
+    })
+    .optional()
+    .or(z.literal('')),
+
+  snapchat: z.string()
+    .refine(val => val === '' || /(https?:\/\/)?(www\.)?snapchat\.com\/add\/[a-zA-Z0-9._-]+\/?/.test(val), {
+      message: 'Must be a valid Snapchat URL'
+    })
+    .optional()
+    .or(z.literal(''))
 });
 
 export type SocialLinksFormData = z.infer<typeof socialLinksSchema>;

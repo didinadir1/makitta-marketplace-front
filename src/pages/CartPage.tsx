@@ -10,7 +10,6 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonPage,
   IonText,
   IonTitle,
   IonToolbar,
@@ -57,7 +56,7 @@ const CartPage: React.FC = () => {
 
 
   return (
-    <IonPage>
+    <>
       <IonHeader translucent={true}>
         <IonToolbar>
           <IonTitle>Your Cart</IonTitle>
@@ -144,7 +143,7 @@ const CartPage: React.FC = () => {
           </>
         )}
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 

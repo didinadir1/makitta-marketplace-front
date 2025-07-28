@@ -2,7 +2,6 @@ import {
   IonContent,
   IonHeader,
   IonList,
-  IonPage,
   IonRefresher,
   IonRefresherContent,
   IonSearchbar,
@@ -52,7 +51,7 @@ const RestaurantPage: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <>
       <IonHeader translucent={true}>
         <IonToolbar>
           <IonSearchbar
@@ -84,7 +83,7 @@ const RestaurantPage: React.FC = () => {
           )}
         </IonList>
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 

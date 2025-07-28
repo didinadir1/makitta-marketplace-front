@@ -3,7 +3,7 @@ import {getAuthHeaders} from "./sessions";
 import {useQuery} from "@tanstack/react-query";
 import {RestaurantAdminDTO} from "../../types/user";
 
-async function retrieveUser() {
+export async function retrieveUser() {
   try {
     const {user} = await sdk.client.fetch<{
       user: RestaurantAdminDTO
@@ -21,12 +21,12 @@ async function retrieveUser() {
 }
 
 export function useUser() {
-  return {
-    getUser: useQuery<RestaurantAdminDTO | null>({
-      queryKey: ["user"],
-      queryFn: retrieveUser,
-      staleTime: 1000 * 60 * 15, // 15 minutes
-    })
-  }
+  console.log("useUser hook called");
+  return useQuery<RestaurantAdminDTO | null>({
+    queryKey: ["user"],
+    queryFn: retrieveUser,
+    staleTime: 1000 * 60 * 15, // 15 minutes
+    gcTime: 1000 * 60 * 60, // 1 hour
+  })
 }
 

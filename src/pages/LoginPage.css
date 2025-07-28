@@ -5,9 +5,9 @@
 }
 
 .login-container {
-    padding: 20px;
     max-width: 400px;
     margin: auto; /* Center the container */
+    padding: 100px 20px 20px;
 }
 
 .login-title {

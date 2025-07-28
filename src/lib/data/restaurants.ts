@@ -41,13 +41,13 @@ export async function retrieveRestaurantByHandle(
 }
 
 export default function useRestaurant(restaurantId: string) {
-  return {
-    getRestaurant: useQuery<RestaurantDTO | null>({
-      queryKey: ["restaurant", restaurantId],
-      queryFn: () => retrieveRestaurant(restaurantId),
-      staleTime: 1000 * 60 * 15, // 15 minutes
-      enabled: !!restaurantId, // Only run if restaurantId is provided
-    })
-  };
+  return useQuery<RestaurantDTO | null>({
+    queryKey: ["restaurant", restaurantId],
+    queryFn: () => retrieveRestaurant(restaurantId),
+    staleTime: 1000 * 60 * 15, // 15 minutes
+    gcTime: 1000 * 60 * 60, // 1 hour
+    enabled: !!restaurantId, // Only run if restaurantId is provided
+
+  })
 }
 

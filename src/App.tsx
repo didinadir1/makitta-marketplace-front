@@ -56,6 +56,8 @@ import {useEffect} from "react";
 import {SocialLogin} from "@capgo/capacitor-social-login";
 import MyAccountPage from "./pages/MyAccountPage";
 import StoreCreationPage from "./pages/StoreCreationPage";
+import {useUser} from "./lib/data";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
 setupIonicReact();
 const queryClient = new QueryClient()
@@ -64,6 +66,8 @@ const queryClient = new QueryClient()
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
   const location = useLocation(); // Get the current location
+  const {data: user} = useUser();
+
 
   useEffect(() => {
     SocialLogin.initialize(
@@ -78,57 +82,31 @@ const TabsContainer: React.FC = () => {
 
 
   // Determine if the tab bar should be visible
-  const showTabBar = location.pathname !== '/entry' && location.pathname !== '/login' && location.pathname !== '/signup';
+  const showTabBar = location.pathname !== '/entry' && location.pathname !== '/signup';
 
   return (
     <IonTabs>
       <IonRouterOutlet>
         {/* Entry point */}
-        <Route exact path="/entry">
-          <EntryPage/>
-        </Route>
+        <Route exact path="/entry" component={EntryPage}/>
         {/* Login page for restaurants */}
-        <Route exact path="/login">
-          <LoginPage/>
-        </Route>
+        <Route exact path="/login" component={LoginPage}/>
         {/* Signup page for restaurants */}
-        <Route exact path="/signup">
-          <SignupPage/>
-        </Route>
+        <Route exact path="/signup" component={SignupPage}/>
 
         {/* Normal mode routes */}
-        <Route exact path="/dishes">
-          <DishesPage/>
-        </Route>
-        <Route exact path="/restaurants">
-          <RestaurantPage/>
-        </Route>
-        <Route exact path="/cart">
-          <CartPage/>
-        </Route>
+        <Route exact path="/dishes" component={DishesPage}/>
+        <Route exact path="/restaurants" component={RestaurantPage}/>
+        <Route exact path="/cart" component={CartPage}/>
 
         {/* Common routes */}
-        <Route exact path="/profile">
-          <ProfilePage/>
-        </Route>
-        <Route exact path="/profile/edit">
-          <ProfileEditPage/>
-        </Route>
-        <Route exact path="/profile/my-account">
-          <MyAccountPage/>
-        </Route>
-        <Route exact path="/profile/create-store">
-          <StoreCreationPage/>
-        </Route>
-        {/* Dish and Restaurant Detail pages might be needed in both modes,
-             or you might want separate detail pages for restaurant mode.
-             Keeping them outside conditional rendering for now. */}
-        <Route exact path="/dish/:id">
-          <DishDetailPage/>
-        </Route>
-        <Route exact path="/restaurant/:id">
-          <RestaurantDetailPage/>
-        </Route>
+        <Route exact path="/profile" component={ProfilePage}/>
+        <Route exact path="/profile/edit" component={ProfileEditPage}/>
+        <Route exact path="/profile/my-account" component={MyAccountPage}/>
+        <Route exact path="/profile/create-store" component={StoreCreationPage}/>
+        <Route exact path="/profile/my-account/edit-store" component={StoreCreationPage}/>
+        <Route exact path="/dish/:id" component={DishDetailPage}/>
+        <Route exact path="/restaurant/:id" component={RestaurantDetailPage}/>
         {/* Default redirect to the entry page */}
         <Route exact path="/">
           <Redirect to="/entry"/>
@@ -155,7 +133,7 @@ const TabsContainer: React.FC = () => {
             <IonIcon aria-hidden="true" icon={chatbubble}/> {/* Changed icon */}
             <IonLabel>Messages</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="profile" href="/profile">
+          <IonTabButton tab="profile" href={`${user?.id ? '/profile' : '/login'}`}>
             <IonIcon aria-hidden="true" icon={person}/>
             <IonLabel>Profile</IonLabel>
           </IonTabButton>
@@ -167,15 +145,16 @@ const TabsContainer: React.FC = () => {
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <IonReactRouter>
         <CartProvider>
           <ProductContextProvider> {/* Wrap with AppContextProvider */}
             <TabsContainer/>
           </ProductContextProvider>
         </CartProvider>
-      </QueryClientProvider>
-    </IonReactRouter>
+        <ReactQueryDevtools initialIsOpen={false}/>
+      </IonReactRouter>
+    </QueryClientProvider>
   </IonApp>
 );
 

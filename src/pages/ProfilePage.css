@@ -30,6 +30,7 @@
 .profile-name-container {
     display: flex;
     flex-direction: column; /* Stack name and potential subtitle */
+    width: calc(100% - 90px); /* Adjust width to fit avatar and button */
 }
 
 .profile-name {
@@ -42,7 +43,7 @@
 /* Style for potential subtitle/email */
 .profile-name-container ion-note {
     font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+    color: rgba(var(--ion-color-secondary-contrast-rgb), 0.8); /* Slightly transparent white */
 }
 
 .edit-profile-button {

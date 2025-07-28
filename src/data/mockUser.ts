@@ -5,7 +5,7 @@ export interface User {
 }
 
 export const mockUser: User = {
-  name: 'John Doe',
+  name: 'Nadir DIB',
   profilePictureUrl: 'https://via.placeholder.com/150/007bff/ffffff?text=JD', // Placeholder image
   // Add other mock data
 };

@@ -2,7 +2,6 @@ import {
   IonContent,
   IonHeader,
   IonList,
-  IonPage,
   IonRefresher,
   IonRefresherContent,
   IonSearchbar,
@@ -52,7 +51,7 @@ const DishesPage: React.FC = () => {
     }, 2000);
   };
   return (
-    <IonPage>
+    <>
       <IonHeader translucent={true}>
         <IonToolbar>
           <IonSearchbar
@@ -84,7 +83,7 @@ const DishesPage: React.FC = () => {
           )}
         </IonList>
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 

@@ -10,6 +10,9 @@ export interface RestaurantDTO {
   phone: string;
   email: string;
   image_url?: string;
+  instagram_url?: string;
+  facebook_url?: string;
+  snapchat_url?: string;
   created_at: Date;
   updated_at: Date;
   products?: ProductDTO[];
@@ -28,7 +31,7 @@ export interface CreateRestaurantDTO {
 }
 
 
-export type UpdateRestaurantDTO = Partial<CreateRestaurantDTO>;
+export type UpdateRestaurantDTO = Partial<CreateRestaurantDTO> & { id: string };
 
 export interface RestaurantProductDTO {
   restaurant_id: string;

@@ -16,7 +16,6 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({control, errors, nam
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>();
 
-
   const readFile = (file: File) => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -39,7 +38,7 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({control, errors, nam
     if (defaultFile) {
       readFile(defaultFile)
     }
-  }, []);
+  }, [defaultFile]);
 
   const handleClick = () => {
     fileInputRef.current?.click();

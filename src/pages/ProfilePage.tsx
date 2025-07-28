@@ -1,7 +1,6 @@
-import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonLabel, IonNote, IonPage,} from '@ionic/react'; // Added IonToggle
+import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonLabel, IonNote,} from '@ionic/react'; // Added IonToggle
 import React from 'react';
 import './ProfilePage.css';
-import {mockUser} from '../data/mockUser'; // Import mock user data
 import {chevronForwardOutline} from 'ionicons/icons';
 import MyStoreSection from "../components/store/MyStoreSection";
 import {useHistory} from "react-router-dom";
@@ -10,10 +9,9 @@ import useRestaurant from "../lib/data/restaurants"; // Import necessary icons a
 
 const ProfilePage: React.FC = () => {
   const history = useHistory();
-  const {getUser} = useUser();
-  const user = getUser.data;
-  const {getRestaurant} = useRestaurant(user?.restaurant_id || "");
-  const restaurant = getRestaurant.data;
+  const {data: user} = useUser();
+  const {data: restaurant} = useRestaurant(user?.restaurant_id || "");
+
 
   const handleEditClick = async () => {
     history.push("/profile/my-account")
@@ -21,7 +19,7 @@ const ProfilePage: React.FC = () => {
 
 
   return (
-    <IonPage>
+    <>
       <IonHeader>
         <div className="profile-header" onClick={handleEditClick}> {/* Use a div for the header area */}
           <div className="profile-info-container"> {/* Container for avatar and name */}
@@ -29,10 +27,12 @@ const ProfilePage: React.FC = () => {
               <img src={restaurant?.image_url ?? "public/store-default-image.jpg"} alt="Profile"/>
             </IonAvatar>
             <div className="profile-name-container"> {/* Container for name and potential subtitle */}
-              <IonLabel className="profile-name">{mockUser.name}</IonLabel>
+              <IonLabel
+                className="profile-name">{restaurant?.name ?? user?.first_name + " " + user?.last_name}</IonLabel>
               {/* Add a subtitle or email here if available in mockUser */}
               {/*todo fetch store name*/}
-              <IonNote color="medium">Manage my profile</IonNote>
+              <IonNote
+                color="medium">{`${restaurant?.id ? user?.first_name + " " + user?.last_name : "Manage my profile"}`}</IonNote>
             </div>
           </div>
           <IonButton fill="clear" className="edit-profile-button">
@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
           </div>)}
 
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 

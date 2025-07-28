@@ -1,6 +1,6 @@
 import {sdk} from "../config";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {CreateRestaurantDTO, RestaurantDTO, RestaurantProductDTO} from "../../types/restaurant";
+import {CreateRestaurantDTO, RestaurantDTO, RestaurantProductDTO, UpdateRestaurantDTO} from "../../types/restaurant";
 import {getAuthHeaders} from "../data";
 import {useIonToast} from "@ionic/react";
 import {useHistory} from "react-router-dom";
@@ -30,7 +30,7 @@ export const useRestaurantActions = () => {
         }
       });
       const headers = await getAuthHeaders();
-      return await sdk.client.fetch<RestaurantDTO
+      return await sdk.client.fetch<{ restaurant: RestaurantDTO }
       >("/store/restaurants", {
         method: "POST",
         body: formData,
@@ -40,10 +40,10 @@ export const useRestaurantActions = () => {
         },
       });
     },
-    onSuccess: async (newRestaurant) => {
+    onSuccess: async ({restaurant}: { restaurant: RestaurantDTO }) => {
       // Invalidate or update relevant queries, e.g., restaurant list
       await queryClient.invalidateQueries({queryKey: ["restaurants"]});
-      queryClient.setQueryData(["restaurant", newRestaurant.id], newRestaurant);
+      queryClient.setQueryData(["restaurant", restaurant.id], restaurant);
       await presentToast({
         message: 'Store created successfully!',
         duration: 2000,
@@ -61,39 +61,51 @@ export const useRestaurantActions = () => {
     },
   })
 
-  const setRestaurantStatusMutation = useMutation({
-    mutationFn: async ({
-                         restaurantId,
-                         status,
-                       }: {
-      restaurantId: string;
-      status: boolean;
-    }) => {
+
+  const updateRestaurantMutation = useMutation({
+    mutationFn: async (restaurantData: UpdateRestaurantDTO) => {
+
+      const formData = new FormData();
+      // Append all fields from restaurantData to FormData
+      Object.entries(restaurantData).forEach(([key, value]) => {
+        if (value instanceof File) {
+          formData.append(key, value); // For file uploads
+        } else {
+          formData.append(key, String(value)); // For other fields
+        }
+      });
       const headers = await getAuthHeaders();
-      const {restaurant} = await sdk.client.fetch<{
-        restaurant: RestaurantDTO;
-      }>(`/restaurants/${restaurantId}/status`, {
+      return await sdk.client.fetch<{ restaurant: RestaurantDTO }
+      >(`/store/restaurants/${restaurantData.id}`, {
         method: "POST",
-        body: JSON.stringify({is_open: status}),
+        body: formData,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': null,
           ...headers,
         },
       });
-      return restaurant;
     },
-    onSuccess: async (updatedRestaurant) => {
-      // Invalidate or update relevant queries, e.g., restaurant details
+    onSuccess: async ({restaurant}: { restaurant: RestaurantDTO }) => {
+      // Invalidate or update relevant queries, e.g., restaurant list
+      console.log("sucessfully updated restaurant", restaurant);
       await queryClient.invalidateQueries({queryKey: ["restaurants"]});
-      queryClient.setQueryData(
-        ["restaurant", updatedRestaurant.id],
-        updatedRestaurant
-      );
+      queryClient.setQueryData(["restaurant", restaurant.id], restaurant);
+      await presentToast({
+        message: 'Store updated successfully!',
+        duration: 2000,
+        color: 'success',
+      });
+      history.push('/profile');
     },
-    onError: (error) => {
-      console.error("Error setting restaurant status:", error);
+    onError: async (error) => {
+      console.error("Error updating restaurant:", error);
+      await presentToast({
+        message: 'Failed to update store. Please try again.',
+        duration: 2000,
+        color: 'danger',
+      });
     },
-  });
+  })
 
   const createProductMutation = useMutation({
     mutationFn: async ({
@@ -159,8 +171,8 @@ export const useRestaurantActions = () => {
     },
   });
   return {
-    createRestaurant: createRestaurantMutation.mutate,
-    setRestaurantStatus: setRestaurantStatusMutation.mutate,
+    createRestaurant: createRestaurantMutation.mutateAsync,
+    updateRestaurant: updateRestaurantMutation.mutateAsync,
     createProduct: createProductMutation.mutate,
     deleteProduct: deleteProductMutation.mutate,
   };

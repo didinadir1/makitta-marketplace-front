@@ -16,8 +16,8 @@ http://ionicframework.com/docs/theming/ */
     /** secondary - Spicy Orange (#FF6B35) **/
     --ion-color-secondary: #C76E00;
     --ion-color-secondary-rgb: 199, 110, 0;
-    --ion-color-secondary-contrast: #000000;
-    --ion-color-secondary-contrast-rgb: 0, 0, 0;
+    --ion-color-secondary-contrast: #ffffff;
+    --ion-color-secondary-contrast-rgb: 255, 255, 255;
     --ion-color-secondary-shade: #FF6B35;
     --ion-color-secondary-tint: #ff7a49;
 
@@ -115,7 +115,8 @@ http://ionicframework.com/docs/theming/ */
 
         --ion-color-secondary: #C76E00;
         --ion-color-secondary-rgb: 199, 110, 0;
-        --ion-color-secondary-contrast: #000000;
+        --ion-color-secondary-contrast: #ffffff;
+        --ion-color-secondary-contrast-rgb: 255, 255, 255;
         --ion-color-secondary-shade: #FF8C5A;
         --ion-color-secondary-tint: #ff986b;
 

@@ -1,8 +1,6 @@
 import {
   IonButton,
-  IonButtons,
   IonContent,
-  IonHeader,
   IonIcon,
   IonInput,
   IonItem,
@@ -10,8 +8,6 @@ import {
   IonList,
   IonPage,
   IonText,
-  IonTitle,
-  IonToolbar,
   useIonLoading,
   useIonToast,
 } from '@ionic/react';
@@ -20,15 +16,9 @@ import React, {useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {getRedirectPath, useAuth} from '../lib/actions/users'; // Import useAuth hook
 import './LoginPage.css';
-import {RouteComponentProps} from "react-router";
 
-interface LoginPageProps
-  extends RouteComponentProps<{
-    email?: string;
-  }> {
-}
 
-const LoginPage: React.FC<LoginPageProps> = ({match}) => {
+const LoginPage: React.FC = () => {
   const history = useHistory();
   const {login, loginWithGoogle} = useAuth(); // Use the useAuth hook
   const [present, dismiss] = useIonLoading();
@@ -38,7 +28,6 @@ const LoginPage: React.FC<LoginPageProps> = ({match}) => {
   // Parse query parameters manually
   const queryParams = new URLSearchParams(location.search);
 
-  console.log('LoginPage match params:', match?.params);
   const [email, setEmail] = useState(atob(queryParams.get("email") ?? ""));
   const [password, setPassword] = useState('');
 
@@ -64,7 +53,7 @@ const LoginPage: React.FC<LoginPageProps> = ({match}) => {
     } catch (error: any) {
       await dismiss();
       console.error('Login failed:', error);
-      presentToast({
+      await presentToast({
         message: error.message || 'Login failed. Please try again.',
         duration: 3000,
         color: 'danger',
@@ -94,7 +83,7 @@ const LoginPage: React.FC<LoginPageProps> = ({match}) => {
     } catch (error: any) {
       await dismiss();
       console.error('Google login failed:', error);
-      presentToast({
+      await presentToast({
         message: error.message || 'Google login failed. Please try again.',
         duration: 3000,
         color: 'danger',
@@ -116,16 +105,6 @@ const LoginPage: React.FC<LoginPageProps> = ({match}) => {
 
   return (
     <IonPage>
-      <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton onClick={handleBackClick}>
-              <IonIcon icon="arrow-back"></IonIcon> {/* Back arrow icon */}
-            </IonButton>
-          </IonButtons>
-          <IonTitle>Restaurant Login</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen className="login-page-content">
         <div className="login-container">
           <IonText className="login-title">

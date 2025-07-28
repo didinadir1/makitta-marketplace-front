@@ -123,8 +123,6 @@
 }
 
 .restaurant-detail-cuisine-section ion-chip {
-    --background: var(--ion-color-secondary-tint);
-    --color: var(--ion-color-secondary-contrast);
     font-size: 0.9em;
     padding: 6px 12px;
     height: auto;
