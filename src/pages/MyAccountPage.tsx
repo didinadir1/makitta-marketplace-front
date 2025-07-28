@@ -23,11 +23,13 @@ import {
 } from 'ionicons/icons';
 import useRestaurant from "../lib/data/restaurants";
 import {useUser} from "../lib/data";
-import {useHistory} from "react-router-dom"; // Import necessary icons and chevronForwardOutline
+import {useHistory} from "react-router-dom";
+import {useAuth} from "../lib/actions"; // Import necessary icons and chevronForwardOutline
 
 const MyAccountPage: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Use the useIonAlert hook
   const history = useHistory();
+  const {logout} = useAuth()
 
 
   const {data: user} = useUser();
@@ -60,10 +62,8 @@ const MyAccountPage: React.FC = () => {
         },
         {
           text: 'Log Out',
-          handler: () => {
-            console.log('Logging out...');
-            // Implement actual logout logic here
-            // e.g., clear authentication tokens, redirect to login page
+          handler: async () => {
+            await logout()
           },
         },
       ],

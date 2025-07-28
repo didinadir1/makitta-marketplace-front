@@ -201,6 +201,7 @@ export const useAuth = () => {
   }
 
   const logout = async () => {
+    await sdk.auth.logout()
     await SocialLogin.logout({provider: "google"});
     await destroySession();
     // You might also want to clear the cart on logout depending on requirements
