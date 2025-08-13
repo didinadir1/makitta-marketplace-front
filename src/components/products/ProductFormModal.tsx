@@ -156,6 +156,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
               control={control}
               errors={errors}
               defaultFile={watch("images")?.[0]} // Use the first image as default
+              multiple
             />
             <div className="form-group">
               <Controller
