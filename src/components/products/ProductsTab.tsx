@@ -17,10 +17,6 @@ const ProductsTab: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setCurrentProduct(undefined);
-  };
 
   const handleEditProduct = (productId: string) => {
     console.log('Edit Product clicked for ID:', productId);
@@ -30,19 +26,6 @@ const ProductsTab: React.FC = () => {
       setCurrentProduct(productToEdit);
       setIsModalOpen(true);
     }
-  };
-
-  const handleSaveProduct = (product: Partial<Dish>) => {
-    console.log('Saving product:', product);
-    // Here you would update your state or call an API
-    // For now, just show a success toast
-    presentToast({
-      message: `Product ${currentProduct ? 'updated' : 'added'} successfully`,
-      duration: 1500,
-      position: 'bottom',
-      color: 'success',
-    });
-    setIsModalOpen(false);
   };
 
   const handleDeleteProduct = (productId: string) => {
@@ -100,8 +83,7 @@ const ProductsTab: React.FC = () => {
       {/* Product Form Modal */}
       <ProductFormModal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSave={handleSaveProduct}
+        setIsOpen={setIsModalOpen}
         product={currentProduct}
       />
     </div>

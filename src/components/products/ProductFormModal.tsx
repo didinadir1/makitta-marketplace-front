@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -13,7 +13,9 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonLoading,
   IonModal,
+  IonNote,
   IonSelect,
   IonSelectOption,
   IonTextarea,
@@ -25,112 +27,110 @@ import {addOutline, closeOutline, removeOutline} from 'ionicons/icons';
 import {mockCategories} from '../../data/mockCategories';
 import './ProductFormModal.css';
 import {Dish} from "../../data/mockDishes";
+import ImageUploadField from "../store-creation/ImageUploadField";
+import {Controller, SubmitHandler, useFieldArray, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {ProductCreationFormData, productCreationSchema} from "../../validation/productCreationValidation";
 
 interface ProductFormModalProps {
   isOpen: boolean;
-  onClose: () => void;
-  //todo fix this
-  onSave: (product: Partial<Dish>) => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   product?: Dish; // Optional product for editing
-}
-
-interface AddOn {
-  id: string;
-  name: string;
-  price: number;
 }
 
 const ProductFormModal: React.FC<ProductFormModalProps> = ({
                                                              isOpen,
-                                                             onClose,
-                                                             onSave,
+                                                             setIsOpen,
                                                              product,
                                                            }) => {
-  // Form state
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [categoryId, setCategoryId] = useState('');
-  const [addOns, setAddOns] = useState<AddOn[]>([]);
-  const [isAvailable, setIsAvailable] = useState(true);
 
-  // New add-on form state
-  const [newAddOnName, setNewAddOnName] = useState('');
-  const [newAddOnPrice, setNewAddOnPrice] = useState('');
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isSubmitting, isValid},
+    watch,
+    setValue,
+    reset
+  } = useForm<ProductCreationFormData>({
+    resolver: zodResolver(productCreationSchema),
+    defaultValues: {
+      name: '',
+      description: '',
+      categories: [],
+      isAvailable: true,
+      images: undefined,
+      addOns: undefined,
+      newAddOnName: '',
+      newAddOnPrice: '',
+    },
+  });
+
 
   // Initialize form with product data if editing
   useEffect(() => {
     if (product) {
-      setName(product.name);
-      setDescription(product.description || '');
-      // todo fix this
-      // setCategoryId(product.categoryId);
-      setIsAvailable(product.isAvailable);
-      // Initialize add-ons if they exist
-      if (product.addOns) {
-        setAddOns(product.addOns);
-      }
-    } else {
-      // Reset form for new product
-      resetForm();
+      reset({
+        name: product.name,
+        description: product.description || '',
+        categories: product.categories || [],
+        addOns: product.addOns || [],
+        isAvailable: product.isAvailable,
+        newAddOnName: '',
+        newAddOnPrice: '',
+      });
     }
-  }, [product, isOpen]);
 
-  const resetForm = () => {
-    setName('');
-    setDescription('');
-    setCategoryId('');
-    setAddOns([]);
-    setIsAvailable(true);
-    setNewAddOnName('');
-    setNewAddOnPrice('');
-  };
+    if (product?.imageUrls) {
+      const defaultImages: File[] = [];
+
+      product.imageUrls.forEach((imageUrl) => {
+
+        const url = new URL(imageUrl);
+        const fileName = url.pathname.replace(/^.*[\\/]/, "");
+
+        fetch(imageUrl)
+          .then(response => response.blob())
+          .then(blob => {
+            defaultImages.push(new File([blob], fileName, {type: blob.type}));
+          })
+          .catch(error => console.error('Error fetching image:', error));
+      })
+      setValue("images", defaultImages);
+    }
+  }, [product]);
+
+  const {fields: addOnFields, append: appendAddOn, remove: removeAddOn} = useFieldArray({
+    control,
+    name: 'addOns',
+  });
 
   const handleAddAddOn = () => {
-    if (newAddOnName.trim() && newAddOnPrice.trim()) {
+    const newAddOnName = watch('newAddOnName');
+    const newAddOnPrice = watch('newAddOnPrice');
+    if (newAddOnName?.trim() && newAddOnPrice?.trim()) {
       const price = parseFloat(newAddOnPrice);
       if (!isNaN(price) && price >= 0) {
-        const newAddOn: AddOn = {
-          id: Date.now().toString(), // Simple ID generation
+        const newAddOn = {
+          id: Date.now().toString(),
           name: newAddOnName.trim(),
           price: price,
         };
-        setAddOns([...addOns, newAddOn]);
-        setNewAddOnName('');
-        setNewAddOnPrice('');
+        appendAddOn(newAddOn);
+        setValue('newAddOnName', '');
+        setValue('newAddOnPrice', '');
       }
     }
   };
 
-  const handleRemoveAddOn = (id: string) => {
-    setAddOns(addOns.filter(addon => addon.id !== id));
-  };
-
-  const handleSave = () => {
-    // Validate form
-    if (!name.trim() || !categoryId) {
-      // Show validation error
-      return;
-    }
-
-    const updatedProduct: Partial<Dish> = {
-      id: product?.id || Date.now().toString(), // Use existing ID or generate new one
-      name: name.trim(),
-      description: description.trim(),
-      // todo fix this
-      categories: [],
-      basePrice: product?.basePrice || "0", // Maintain existing price or set default
-      imageUrls: product?.imageUrls || [], // Maintain existing images or set empty
-      isAvailable: isAvailable,
-      addOns: addOns,
-    };
-
-    onSave(updatedProduct);
-    resetForm();
+  const onSubmit: SubmitHandler<ProductCreationFormData> = (data) => {
+    console.log({data})
+    // reset();
   };
 
   const handleCancel = () => {
-    resetForm();
-    onClose();
+    reset();
+    setIsOpen(false)
   };
 
   return (
@@ -148,56 +148,87 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <IonList className="form-list">
-            {/* Name Field */}
+            <ImageUploadField
+              name="image"
+              label="Product images"
+              control={control}
+              errors={errors}
+              defaultFile={watch("images")?.[0]} // Use the first image as default
+            />
             <div className="form-group">
-              <IonLabel position="stacked" className="form-label">Name</IonLabel>
-              <IonItem lines="full" className="form-item">
-                <IonInput
-                  value={name}
-                  onIonChange={e => setName(e.detail.value!)}
-                  placeholder="Enter product name"
-                  required
-                  className="form-input"
-                />
-              </IonItem>
+              <Controller
+                name="name"
+                control={control}
+                render={({field}) => (
+                  <IonItem lines="full" className="form-item"> {/* Add ion-invalid class */}
+                    <IonLabel position="stacked" className="form-label">Name</IonLabel>
+                    <IonInput
+                      type="text"
+                      {...field}
+                      placeholder="Enter product name"
+                      className="form-input"
+                    ></IonInput>
+                    {errors.name && <IonNote color="danger">{errors.name.message}</IonNote>}
+                  </IonItem>
+                )}
+              />
             </div>
-
-            {/* Description Field */}
             <div className="form-group">
-              <IonLabel position="stacked" className="form-label">Description</IonLabel>
-              <IonItem lines="full" className="form-item">
-                <IonTextarea
-                  value={description}
-                  onIonChange={e => setDescription(e.detail.value!)}
-                  placeholder="Enter product description"
-                  rows={2}
-                  className="form-input"
-                />
-              </IonItem>
+              <Controller
+                name="description"
+                control={control}
+                render={({field}) => (
+                  <IonItem lines="full" className="form-item"> {/* Add ion-invalid class */}
+                    <IonLabel position="stacked" className="form-label">Description</IonLabel>
+                    <IonTextarea
+                      {...field}
+                      placeholder="Enter product description"
+                      rows={2}
+                      className="form-input"
+                    ></IonTextarea>
+                    {errors.description && <IonNote color="danger">{errors.description.message}</IonNote>}
+                  </IonItem>
+                )}
+              />
             </div>
-
-            {/* Category Field */}
             <div className="form-group">
-              <IonLabel position="stacked" className="form-label">Category</IonLabel>
-              <IonItem lines="full" className="form-item">
-                <IonSelect
-                  value={categoryId}
-                  onIonChange={e => setCategoryId(e.detail.value)}
-                  placeholder="Select a category"
-                  className="form-select"
-                  interface="action-sheet"
-                  interfaceOptions={{cssClass: "form-action-sheet"}}
-                  multiple
-                >
-                  {mockCategories.map(category => (
-                    <IonSelectOption key={category.id} value={category.id}>
-                      {category.name}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
+              <Controller
+                name="categories"
+                control={control}
+                render={({field}) => (
+                  <IonItem lines="full" className="form-item">
+                    <IonLabel position="stacked" className="form-label">Categories</IonLabel>
+                    <IonSelect
+                      {...field}
+                      value={field.value?.map((category) => category.id) || []}
+                      placeholder={
+                        field.value && field.value.length > 0
+                          ? field.value.map((category) => category.name).join(', ')
+                          : 'Select categories'
+                      }
+                      className="form-select"
+                      interface="action-sheet"
+                      interfaceOptions={{cssClass: "form-action-sheet"}}
+                      multiple
+                      onIonChange={(e) =>
+                        field.onChange(
+                          e.detail.value.map((id: string) =>
+                            mockCategories.find((category) => category.id === id)
+                          )
+                        )
+                      }
+                    >
+                      {mockCategories.map((category) => (
+                        <IonSelectOption key={category.id} value={category.id}>
+                          {category.name}
+                        </IonSelectOption>
+                      ))}
+                    </IonSelect>
+                  </IonItem>
+                )}
+              />
             </div>
 
             {/* Add-ons Section */}
@@ -205,13 +236,13 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
               <IonLabel position="stacked" className="form-label">Add-ons</IonLabel>
 
               <div className="add-ons-list">
-                {addOns.map(addon => (
-                  <IonChip key={addon.id} className="add-on-chip">
-                    <span className="add-on-name">{addon.name}</span>
-                    <span className="add-on-price">${addon.price.toFixed(2)}</span>
+                {addOnFields.map((field, index) => (
+                  <IonChip key={field.id} className="add-on-chip">
+                    <span className="add-on-name">{field.name}</span>
+                    <span className="add-on-price">${field.price.toFixed(2)}</span>
                     <IonIcon
                       icon={removeOutline}
-                      onClick={() => handleRemoveAddOn(addon.id)}
+                      onClick={() => removeAddOn(index)}
                       className="remove-add-on"
                     />
                   </IonChip>
@@ -220,33 +251,46 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
               <IonGrid className="add-on-form">
                 <IonCol size="5">
-                  <IonItem lines="full" className="form-item">
-                    <IonInput
-                      value={newAddOnName}
-                      onIonChange={e => setNewAddOnName(e.detail.value!)}
-                      placeholder="Name"
-                      className="form-input"
-                    />
-                  </IonItem>
+                  <Controller
+                    name="newAddOnName"
+                    control={control}
+                    render={({field}) => (
+                      <IonItem lines="full" className="form-item">
+                        <IonInput
+                          {...field}
+                          placeholder="Name"
+                          className="form-input"
+                          onIonInput={(e) => field.onChange(e.detail.value!)}
+                        />
+                      </IonItem>
+                    )}
+                  />
                 </IonCol>
                 <IonCol size="3">
-                  <IonItem lines="full" className="form-item">
-                    <IonInput
-                      value={newAddOnPrice}
-                      onIonChange={e => setNewAddOnPrice(e.detail.value!)}
-                      placeholder="Price"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      className="form-input"
-                    />
-                  </IonItem>
+                  <Controller
+                    name="newAddOnPrice"
+                    control={control}
+                    render={({field}) => (
+                      <IonItem lines="full" className="form-item">
+                        <IonInput
+                          {...field}
+                          placeholder="Price"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          className="form-input"
+                          onIonInput={(e) => field.onChange(e.detail.value!)}
+                        />
+                      </IonItem>
+                    )}
+                  />
                 </IonCol>
                 <IonCol size="2">
                   <IonButton
                     expand="block"
+                    type="button"
                     onClick={handleAddAddOn}
-                    disabled={!newAddOnName.trim() || !newAddOnPrice.trim()}
+                    disabled={!watch('newAddOnName')?.trim() || !watch('newAddOnPrice')?.trim()}
                     className="add-add-on-button"
                   >
                     <IonIcon icon={addOutline}/>
@@ -257,30 +301,38 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
             {/* Availability Toggle */}
             <div className="form-group">
-              <IonItem lines="full" className="availability-item">
-                <IonLabel>Available</IonLabel>
-                <IonToggle
-                  checked={isAvailable}
-                  onIonChange={e => setIsAvailable(e.detail.checked)}
-                  slot="end"
-                  className="availability-toggle"
-                />
-              </IonItem>
+              <Controller
+                name="isAvailable"
+                control={control}
+                render={({field}) => (
+                  <IonItem lines="full" className="availability-item">
+                    <IonLabel>Available</IonLabel>
+                    <IonToggle
+                      checked={field.value}
+                      onIonChange={(e) => field.onChange(e.detail.checked)}
+                      slot="end"
+                      className="availability-toggle"
+                    />
+                  </IonItem>
+                )}
+              />
             </div>
           </IonList>
         </form>
       </IonContent>
-
       <IonFooter>
-          <IonButton
-            expand="block"
-            onClick={handleSave}
-            disabled={!name.trim() || !categoryId}
-            className="save-button"
-          >
-            Save
-          </IonButton>
+        <IonButton
+          expand="block"
+          disabled={isSubmitting || !isValid}
+          className="save-button"
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+        >
+          Save
+        </IonButton>
+        <IonLoading message="Loading..." isOpen={isSubmitting} spinner="circles"/>
       </IonFooter>
+
     </IonModal>
   );
 };

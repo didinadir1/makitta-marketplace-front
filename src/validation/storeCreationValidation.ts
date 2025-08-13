@@ -3,8 +3,8 @@ import {z} from 'zod';
 // Schema for the first step: Store Information
 export const storeDetailsSchema = z.object({
   // todo change min
-  name: z.string().min(1, 'Name is required'),
-  address: z.string().min(1, 'Address is required'),
+  name: z.string().min(3, 'Name is required'),
+  address: z.string().min(5, 'Address is required'),
   description: z.string().optional(),
   // Add image field: it can be a File object or null/undefined
   // We'll validate its presence if needed in the main form submission
