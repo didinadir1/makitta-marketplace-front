@@ -1,26 +1,34 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {IonIcon, IonImg, IonLabel, IonNote} from '@ionic/react';
-import {addOutline, closeCircleOutline} from 'ionicons/icons'; // Import closeCircleOutline
+import {addOutline, closeCircleOutline} from 'ionicons/icons';
 import {Control, Controller, FieldErrors} from 'react-hook-form';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Pagination} from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
+
 import './ImageUploadField.css';
 
 interface ImageUploadFieldProps {
-  control: Control<any>; // Use 'any' or a more specific type if you know the form data structure
-  errors: FieldErrors<any>; // Use 'any' or a more specific type
-  defaultFile?: File | File[]; // Can be a single File or an array of Files
+  control: Control<any>;
+  errors: FieldErrors<any>;
+  defaultFile?: File | File[];
   name: string;
   label: string;
-  multiple?: boolean; // New prop to handle multiple files
+  multiple?: boolean;
 }
 
 const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
-                                                              control,
-                                                              errors,
-                                                              name,
-                                                              label,
-                                                              defaultFile,
-                                                              multiple = false,
-                                                            }) => {
+                                                             control,
+                                                             errors,
+                                                             name,
+                                                             label,
+                                                             defaultFile,
+                                                             multiple = false,
+                                                           }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
@@ -42,6 +50,7 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
     if (files && files.length > 0) {
       if (multiple) {
         const newFiles = Array.from(files);
+        // Get current files from react-hook-form state
         const currentFiles = (control._formValues[name] || []) as File[];
         const allFiles = [...currentFiles, ...newFiles];
         const urls = await Promise.all(allFiles.map(file => readFile(file)));
@@ -53,27 +62,25 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
         setPreviewUrls([url]);
         onChange(file);
       }
-    } else {
-      setPreviewUrls([]);
-      onChange(multiple ? [] : null);
+    }
+    // Clear the input value to allow selecting the same file again if needed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
   const handleRemoveImage = (indexToRemove: number, onChange: (value: File | File[] | null) => void) => {
-    const currentFiles = (control._formValues[name] || []) as File[];
-    const updatedFiles = currentFiles.filter((_, index) => index !== indexToRemove);
-
     if (multiple) {
+
+      const currentFiles = (control._formValues[name] || []) as File[];
+      const updatedFiles = currentFiles?.filter((_, index) => index !== indexToRemove);
       const updatedUrls = previewUrls.filter((_, index) => index !== indexToRemove);
       setPreviewUrls(updatedUrls);
       onChange(updatedFiles);
     } else {
+      console.log(previewUrls)
       setPreviewUrls([]);
       onChange(null);
-    }
-    // Clear the file input value to allow re-uploading the same file
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
     }
   };
 
@@ -101,7 +108,6 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
   const fieldError = errors[name];
   const errorMessage = fieldError?.message || (Array.isArray(fieldError) && fieldError.length > 0 ? fieldError[0]?.message : undefined);
 
-
   return (
     <Controller
       name={name}
@@ -109,34 +115,43 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
       render={({field: {onChange}}) => (
         <div className="image-upload-container">
           <IonLabel className="image-upload-label">{label}</IonLabel>
-          <div className={`image-upload-field-wrapper ${multiple ? 'multiple' : ''}`}>
-            {previewUrls.map((url, index) => (
-              <div key={index} className="image-preview-item">
-                <IonImg src={url} className="image-preview"/>
-                <IonIcon
-                  icon={closeCircleOutline}
-                  className="remove-image-icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveImage(index, onChange);
-                  }}
-                />
-              </div>
-            ))}
+          <div className="image-upload-slider-wrapper">
+            <Swiper
+              centerInsufficientSlides
+              slidesPerView={3}
+              modules={[Pagination]}
+              className="mySwiper"
+            >
+              {previewUrls.map((url, index) => (
+                <SwiperSlide key={index} className="image-preview-slide">
+                  <div className="image-preview-item">
+                    <IonImg src={url} className="image-preview"/>
+                    <IonIcon
+                      icon={closeCircleOutline}
+                      className="remove-image-icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveImage(index, onChange);
+                      }}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
 
-            {(multiple || previewUrls.length === 0) && ( // Show add button if multiple or no image selected for single
-              <div className="image-upload-field" onClick={handleClick}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  onChange={(e) => handleFileChange(e, onChange)}
-                  style={{display: 'none'}}
-                  multiple={multiple} // Apply multiple attribute
-                />
-                <IonIcon icon={addOutline} className="add-icon"/>
-              </div>
-            )}
+              {(multiple || previewUrls.length === 0) && (<SwiperSlide className="add-image-slide">
+                <div className="image-upload-field" onClick={handleClick}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={(e) => handleFileChange(e, onChange)}
+                    style={{display: 'none'}}
+                    multiple={multiple}
+                  />
+                  <IonIcon icon={addOutline} className="add-icon"/>
+                </div>
+              </SwiperSlide>)}
+            </Swiper>
           </div>
           {errorMessage &&
               <IonNote color="danger" className="error-message">{errorMessage as string}</IonNote>}
