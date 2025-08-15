@@ -1,8 +1,14 @@
 import {z} from 'zod';
+import {Size} from "../data/mockDishes";
 
 // Schema for the first step (Personal Information)
 export const productCreationSchema = z.object({
   name: z.string().min(3, 'Name is required'),
+  sizes: z.array(z.object({
+    id: z.string(),
+    name: z.nativeEnum(Size),
+    price: z.number().nonnegative('Price must be valid'),
+  })),
   description: z.string().optional(),
   categories: z.array(z.object({
     id: z.string(),

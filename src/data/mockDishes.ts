@@ -7,9 +7,20 @@ export interface Review {
   comment: string;
 }
 
+export enum Size {
+  SMALL = "Small",
+  MEDIUM = "Standard",
+  LARGE = "Large",
+}
+
 export interface Dish {
   id: string;
   name: string;
+  sizes: [{
+    id: string;
+    name: Size;
+    price: number;
+  }]
   basePrice: string;
   categories: Pick<Category, "id" | "name">[];
   rating: number; // e.g., 1-5

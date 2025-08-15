@@ -56,6 +56,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     resolver: zodResolver(productCreationSchema),
     defaultValues: {
       name: '',
+      sizes: undefined,
       description: '',
       categories: [],
       isAvailable: true,
@@ -72,6 +73,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     if (product) {
       reset({
         name: product.name,
+        sizes: product.sizes || [],
         description: product.description || '',
         categories: product.categories || [],
         addOns: product.addOns || [],
@@ -124,8 +126,9 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   };
 
   const onSubmit: SubmitHandler<ProductCreationFormData> = (data) => {
+
+    setIsOpen(false);
     console.log({data})
-    // reset();
   };
 
   const handleCancel = () => {
