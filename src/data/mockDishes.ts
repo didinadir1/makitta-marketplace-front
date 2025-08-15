@@ -9,18 +9,20 @@ export interface Review {
 
 export enum Size {
   SMALL = "Small",
-  MEDIUM = "Standard",
+  STANDARD = "Standard",
   LARGE = "Large",
+  EXTRA_SMALL = "Extra Small",
+  EXTRA_LARGE = "Extra Large",
 }
 
 export interface Dish {
   id: string;
   name: string;
-  sizes: [{
+  sizes: {
     id: string;
     name: Size;
     price: number;
-  }]
+  }[]; // Array of sizes with prices
   basePrice: string;
   categories: Pick<Category, "id" | "name">[];
   rating: number; // e.g., 1-5
@@ -41,6 +43,7 @@ export const mockDishes: Dish[] = [
   {
     id: '1',
     name: 'Spaghetti Carbonara',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$14.99',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
     rating: 4.5,
@@ -64,6 +67,7 @@ export const mockDishes: Dish[] = [
   {
     id: '2',
     name: 'Margherita Pizza',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$12.50',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -89,6 +93,7 @@ export const mockDishes: Dish[] = [
   {
     id: '3',
     name: 'Sushi Platter',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$22.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -112,6 +117,7 @@ export const mockDishes: Dish[] = [
   {
     id: '4',
     name: 'Chicken Burger',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$10.99',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -136,6 +142,7 @@ export const mockDishes: Dish[] = [
   {
     id: '5',
     name: 'Caesar Salad',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$9.75',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -160,6 +167,7 @@ export const mockDishes: Dish[] = [
   {
     id: '6',
     name: 'Lasagna Bolognese',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$16.50',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -178,6 +186,7 @@ export const mockDishes: Dish[] = [
   {
     id: '7',
     name: 'Pepperoni Pizza',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$13.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -196,6 +205,7 @@ export const mockDishes: Dish[] = [
   {
     id: '8',
     name: 'Garlic Bread',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$5.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -214,6 +224,7 @@ export const mockDishes: Dish[] = [
   {
     id: '9',
     name: 'California Roll',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$8.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -232,6 +243,7 @@ export const mockDishes: Dish[] = [
   {
     id: '10',
     name: 'Spicy Tuna Roll',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$9.50',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -250,6 +262,7 @@ export const mockDishes: Dish[] = [
   {
     id: '11',
     name: 'Edamame',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$4.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -268,6 +281,7 @@ export const mockDishes: Dish[] = [
   {
     id: '12',
     name: 'Beef Burger',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$11.50',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -286,6 +300,7 @@ export const mockDishes: Dish[] = [
   {
     id: '13',
     name: 'Cheese Burger',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$12.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -304,6 +319,7 @@ export const mockDishes: Dish[] = [
   {
     id: '14',
     name: 'Bacon Burger',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$13.50',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -322,6 +338,7 @@ export const mockDishes: Dish[] = [
   {
     id: '15',
     name: 'French Fries',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$4.50',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -340,6 +357,7 @@ export const mockDishes: Dish[] = [
   {
     id: '16',
     name: 'Onion Rings',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$5.50',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -358,6 +376,7 @@ export const mockDishes: Dish[] = [
   {
     id: '17',
     name: 'Greek Salad',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$10.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -376,6 +395,7 @@ export const mockDishes: Dish[] = [
   {
     id: '18',
     name: 'Quinoa Bowl',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$11.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -394,6 +414,7 @@ export const mockDishes: Dish[] = [
   {
     id: '19',
     name: 'Chicken Tacos',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$3.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -412,6 +433,7 @@ export const mockDishes: Dish[] = [
   {
     id: '20',
     name: 'Beef Burrito',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$9.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -430,6 +452,7 @@ export const mockDishes: Dish[] = [
   {
     id: '21',
     name: 'Cheese Quesadilla',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$7.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 
@@ -448,6 +471,7 @@ export const mockDishes: Dish[] = [
   {
     id: '22',
     name: 'Guacamole and Chips',
+    sizes: [{id: 'size1', name: Size.STANDARD, price: 14.99}, {id: 'size2', name: Size.LARGE, price: 19.99}],
     basePrice: '$6.00',
     categories: [{id: "cat1", name: 'Pasta'}, {id: "cat2", name: 'Italian'}],
 

@@ -26,7 +26,7 @@ import {
 import {addOutline, closeOutline, removeOutline} from 'ionicons/icons';
 import {mockCategories} from '../../data/mockCategories';
 import './ProductFormModal.css';
-import {Dish} from "../../data/mockDishes";
+import {Dish, Size} from "../../data/mockDishes";
 import ImageUploadField from "../store-creation/ImageUploadField";
 import {Controller, SubmitHandler, useFieldArray, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -47,8 +47,9 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
   const {
     control,
+    register,
     handleSubmit,
-    formState: {errors, isSubmitting, isValid},
+    formState: {errors, isSubmitting},
     watch,
     setValue,
     reset
@@ -56,7 +57,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     resolver: zodResolver(productCreationSchema),
     defaultValues: {
       name: '',
-      sizes: undefined,
+      sizes: [{id: 'standard', name: Size.STANDARD, price: 0}], // Default to Standard size
       description: '',
       categories: [],
       isAvailable: true,
@@ -73,7 +74,11 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     if (product) {
       reset({
         name: product.name,
-        sizes: product.sizes || [],
+        sizes: product.sizes && product.sizes.length > 0 ? product.sizes : [{
+          id: 'standard',
+          name: Size.STANDARD,
+          price: 0
+        }],
         description: product.description || '',
         categories: product.categories || [],
         addOns: product.addOns || [],
@@ -107,6 +112,11 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     name: 'addOns',
   });
 
+  const {fields: sizeFields, append: appendSize, remove: removeSize} = useFieldArray({
+    control,
+    name: 'sizes',
+  });
+
   const handleAddAddOn = () => {
     const newAddOnName = watch('newAddOnName');
     const newAddOnPrice = watch('newAddOnPrice');
@@ -125,8 +135,16 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
   };
 
-  const onSubmit: SubmitHandler<ProductCreationFormData> = (data) => {
+  const handleAddSize = () => {
+    appendSize({
+      id: Date.now().toString(),
+      name: allSizes.filter(size => !selectedSizeNames.includes(size))[0],
+      price: 0
+    });
+  };
 
+  const onSubmit: SubmitHandler<ProductCreationFormData> = (data) => {
+    console.log(errors)
     setIsOpen(false);
     console.log({data})
   };
@@ -135,6 +153,10 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     reset();
     setIsOpen(false)
   };
+
+  // Get available sizes for selection (excluding already selected ones)
+  const allSizes = Object.values(Size);
+  const selectedSizeNames = watch('sizes')?.map(s => s.name) || [];
 
   return (
     <IonModal isOpen={isOpen} onDidDismiss={handleCancel} className="product-form-modal" initialBreakpoint={1}
@@ -154,11 +176,11 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <IonList className="form-list">
             <ImageUploadField
-              name="image"
+              name="images"
               label="Product images"
               control={control}
               errors={errors}
-              defaultFile={watch("images")?.[0]} // Use the first image as default
+              defaultFile={watch("images")}
               multiple
             />
             <div className="form-group">
@@ -166,7 +188,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 name="name"
                 control={control}
                 render={({field}) => (
-                  <IonItem lines="full" className="form-item"> {/* Add ion-invalid class */}
+                  <IonItem lines="full" className="form-item">
                     <IonLabel position="stacked" className="form-label">Name</IonLabel>
                     <IonInput
                       type="text"
@@ -184,7 +206,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 name="description"
                 control={control}
                 render={({field}) => (
-                  <IonItem lines="full" className="form-item"> {/* Add ion-invalid class */}
+                  <IonItem lines="full" className="form-item">
                     <IonLabel position="stacked" className="form-label">Description</IonLabel>
                     <IonTextarea
                       {...field}
@@ -230,10 +252,73 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                         </IonSelectOption>
                       ))}
                     </IonSelect>
+                    {errors.categories && <IonNote color="danger">{errors.categories.message}</IonNote>}
                   </IonItem>
                 )}
               />
             </div>
+
+            {/* Sizes and Prices Section */}
+            <div className="form-group">
+              <IonLabel position="stacked" className="form-label">Size & Price</IonLabel>
+              {sizeFields.map((item, index) => (
+                <>
+                  <div key={item.id} className="size-item">
+                    <Controller
+                      name={`sizes.${index}.name`}
+                      control={control}
+                      render={({field}) => (
+                        <IonSelect
+                          {...field}
+                          placeholder="Select Size"
+                          className="form-select"
+                          onIonChange={(e) => field.onChange(e.detail.value)}
+                          disabled={index === 0 && product === undefined} // Disable size selection for the first (default) size if not editing
+                        >
+                          {allSizes.map((size) => (
+                            <IonSelectOption
+                              key={size}
+                              value={size}
+                              disabled={selectedSizeNames.includes(size) && size !== watch(`sizes.${index}.name`)}
+                            >
+                              {size}
+                            </IonSelectOption>
+                          ))}
+                        </IonSelect>
+                      )}
+                    />
+                    <Controller
+                      name={`sizes.${index}.price`}
+                      control={control}
+                      render={({field}) => (
+                        <IonInput
+                          {...field}
+                          type="number"
+                          placeholder="Price"
+                          className="form-input"
+                          {...register(`sizes.${index}.price`, {valueAsNumber: true})}
+                          onIonChange={(e) => field.onChange(e.detail.value)}
+                        />
+                      )}
+                    />
+                    {sizeFields.length > 1 && index !== 0 && ( // Allow removing if more than one size
+                      <IonButton fill="clear" onClick={() => removeSize(index)} className="remove-size-button">
+                        <IonIcon icon={removeOutline}/>
+                      </IonButton>
+                    )}
+                  </div>
+                  {errors.sizes?.[index]?.price?.message &&
+                      <IonNote color="danger">{errors.sizes?.[index]?.price?.message}</IonNote>}
+                </>
+              ))}
+              {selectedSizeNames.length < allSizes.length && ( // Only show if there are unselected sizes
+                <IonButton expand="block" fill="outline" onClick={handleAddSize} className="add-size-button">
+                  <IonIcon icon={addOutline} slot="start"/>
+                  Add a Size
+                </IonButton>
+              )}
+            </div>
+
 
             {/* Add-ons Section */}
             <div className="form-group add-ons-group">
@@ -243,7 +328,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 {addOnFields.map((field, index) => (
                   <IonChip key={field.id} className="add-on-chip">
                     <span className="add-on-name">{field.name}</span>
-                    <span className="add-on-price">${field.price.toFixed(2)}</span>
+                    <span className="add-on-price">{field.price.toFixed(2)}$</span>
                     <IonIcon
                       icon={removeOutline}
                       onClick={() => removeAddOn(index)}
@@ -327,10 +412,10 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       <IonFooter>
         <IonButton
           expand="block"
-          disabled={isSubmitting || !isValid}
+          disabled={isSubmitting}
           className="save-button"
           type="submit"
-          onClick={handleSubmit(onSubmit)}
+          onClick={(handleSubmit(onSubmit))}
         >
           Save
         </IonButton>

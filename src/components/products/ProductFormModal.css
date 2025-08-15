@@ -109,6 +109,42 @@ ion-toolbar {
     margin: 0;
 }
 
+/* Size and Price Section */
+.size-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.size-item ion-select,
+.size-item ion-input {
+    flex: 1;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    background: var(--ion-color-light);
+    border-radius: 8px;
+}
+
+.size-item .remove-size-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    height: auto;
+    width: auto;
+    font-size: 24px;
+    color: var(--ion-color-danger);
+}
+
+.add-size-button {
+    margin-top: 10px;
+    --border-radius: 8px;
+}
+
+
 /* Availability toggle */
 .availability-item {
     --inner-padding-end: 0;
@@ -134,5 +170,4 @@ ion-footer {
     --border-radius: 12px;
     margin: 20px 20px 35px;
 }
-
 

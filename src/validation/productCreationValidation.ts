@@ -1,28 +1,29 @@
 import {z} from 'zod';
-import {Size} from "../data/mockDishes";
+import {Size} from "../data/mockDishes"; // Assuming Size enum is exported from here
 
-// Schema for the first step (Personal Information)
 export const productCreationSchema = z.object({
-  name: z.string().min(3, 'Name is required'),
-  sizes: z.array(z.object({
-    id: z.string(),
-    name: z.nativeEnum(Size),
-    price: z.number().nonnegative('Price must be valid'),
-  })),
+  name: z.string().min(1, 'Product name is required'),
   description: z.string().optional(),
   categories: z.array(z.object({
     id: z.string(),
-    name: z.string().min(3, 'category name is required'),
-  })).nonempty(),
+    name: z.string()
+  })).min(1, 'At least one category is required'),
+  sizes: z.array(z.object({
+    id: z.string().optional(), // ID is optional for new sizes
+    name: z.nativeEnum(Size, {
+      errorMap: () => ({message: 'Invalid size selected'})
+    }),
+    price: z.number().min(1, 'enter a valid price'),
+  })).min(1, 'At least one size and price is required'),
   isAvailable: z.boolean(),
-  images: z.array(z.any().refine((file) => file instanceof File, 'Must be a valid file')).optional(),
+  images: z.union([z.array(z.instanceof(File)), z.instanceof(File)]).optional(),
   addOns: z.array(z.object({
-    id: z.string(),
-    name: z.string().min(3, 'Add-on name is required'),
-    price: z.number().nonnegative('Price must be valid'),
+    id: z.string().optional(),
+    name: z.string().min(1, 'Add-on name is required'),
+    price: z.number().min(0, 'Add-on price cannot be negative'),
   })).optional(),
   newAddOnName: z.string().optional(),
   newAddOnPrice: z.string().optional(),
-})
+});
 
 export type ProductCreationFormData = z.infer<typeof productCreationSchema>;
