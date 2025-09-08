@@ -170,4 +170,12 @@ ion-footer {
     --border-radius: 12px;
     margin: 20px 20px 35px;
 }
+.select-group-label-option {
+    .alert-checkbox-icon {
+        display: none;
+    }
 
+    .alert-checkbox-label {
+        padding-left: 10px;
+    }
+}

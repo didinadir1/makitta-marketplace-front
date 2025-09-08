@@ -1,12 +1,12 @@
-import { HttpTypes } from "@medusajs/types";
-import { sdk } from "../config";
+import {HttpTypes} from "@medusajs/types";
+import {sdk} from "../config";
 import {getAuthHeaders} from "./sessions";
 import {useQuery} from "@tanstack/react-query";
 
 async function listCategories(): Promise<
   HttpTypes.StoreProductCategory[]
 > {
-  const { product_categories } = await sdk.store.category.list(
+  const {product_categories} = await sdk.store.category.list(
     {},
     {
       ...await getAuthHeaders(),
@@ -17,12 +17,10 @@ async function listCategories(): Promise<
 }
 
 export function useCategories() {
-  return {
-    getCategories: useQuery(
-      {
-        queryKey: ["categories"],
-        queryFn: listCategories,
-      }
-    )
-  }
+  return useQuery(
+    {
+      queryKey: ["categories"],
+      queryFn: listCategories,
+    }
+  )
 }

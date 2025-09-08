@@ -24,13 +24,13 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import {addOutline, closeOutline, removeOutline} from 'ionicons/icons';
-import {mockCategories} from '../../data/mockCategories';
 import './ProductFormModal.css';
 import {Dish, Size} from "../../data/mockDishes";
 import ImageUploadField from "../store-creation/ImageUploadField";
 import {Controller, SubmitHandler, useFieldArray, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ProductCreationFormData, productCreationSchema} from "../../validation/productCreationValidation";
+import {useCategories} from "../../lib/data";
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -44,6 +44,9 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                                                              product,
                                                            }) => {
 
+  const {data: fetchedCategories} = useCategories()
+
+  console.log({fetchedCategories})
 
   const {
     control,
@@ -67,7 +70,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       newAddOnPrice: '',
     },
   });
-
 
   // Initialize form with product data if editing
   useEffect(() => {
@@ -241,16 +243,25 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                       onIonChange={(e) =>
                         field.onChange(
                           e.detail.value.map((id: string) =>
-                            mockCategories.find((category) => category.id === id)
+                            fetchedCategories?.find((category) => category.id === id)
                           )
                         )
                       }
                     >
-                      {mockCategories.map((category) => (
-                        <IonSelectOption key={category.id} value={category.id}>
-                          {category.name}
-                        </IonSelectOption>
-                      ))}
+                      {fetchedCategories
+                        ?.filter((category) => category.category_children && category.category_children.length > 0)
+                        .map((category) => (
+                          <React.Fragment key={category.id}>
+                            <IonSelectOption key={category.id} value={category.id} disabled className="select-group-label-option">
+                              {category.name}
+                            </IonSelectOption>
+                            {category.category_children.map((child) => (
+                              <IonSelectOption key={child.id} value={child.id}>
+                                {child.name}
+                              </IonSelectOption>
+                            ))}
+                          </React.Fragment>
+                        ))}
                     </IonSelect>
                     {errors.categories && <IonNote color="danger">{errors.categories.message}</IonNote>}
                   </IonItem>
