@@ -21,7 +21,6 @@ export async function retrieveUser() {
 }
 
 export function useUser() {
-  console.log("useUser hook called");
   return useQuery<RestaurantAdminDTO | null>({
     queryKey: ["user"],
     queryFn: retrieveUser,

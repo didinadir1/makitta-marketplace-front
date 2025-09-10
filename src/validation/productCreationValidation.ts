@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {Size} from "../data/mockDishes"; // Assuming Size enum is exported from here
 
 export const productCreationSchema = z.object({
-  name: z.string().min(1, 'Product name is required'),
+  title: z.string().min(1, 'Product title is required'),
   description: z.string().optional(),
   categories: z.array(z.object({
     id: z.string(),
@@ -10,7 +10,7 @@ export const productCreationSchema = z.object({
   })).min(1, 'At least one category is required'),
   sizes: z.array(z.object({
     id: z.string().optional(), // ID is optional for new sizes
-    name: z.nativeEnum(Size, {
+    title: z.nativeEnum(Size, {
       errorMap: () => ({message: 'Invalid size selected'})
     }),
     price: z.number().min(1, 'enter a valid price'),
@@ -19,7 +19,7 @@ export const productCreationSchema = z.object({
   images: z.union([z.array(z.instanceof(File)), z.instanceof(File)]).optional(),
   addOns: z.array(z.object({
     id: z.string().optional(),
-    name: z.string().min(1, 'Add-on name is required'),
+    title: z.string().min(1, 'Add-on title is required'),
     price: z.number().min(0, 'Add-on price cannot be negative'),
   })).optional(),
   newAddOnName: z.string().optional(),

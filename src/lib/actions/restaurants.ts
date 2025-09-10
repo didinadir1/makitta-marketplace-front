@@ -115,19 +115,32 @@ export const useRestaurantActions = () => {
       restaurantId: string;
       productData: Record<string, any>; // Adjust type based on actual product data structure
     }) => {
-      // Note: File upload needs to be handled separately before calling this mutation.
-      // The `productData` should include the image URL if applicable.
+      const formData = new FormData();
+
+      Object.entries(productData).forEach(([key, value]) => {
+        if (key === 'images' && Array.isArray(value)) {
+          // Handle multiple images
+          value.forEach((image) => {
+            if (image instanceof File) {
+              formData.append(`images`, image);
+            }
+          });
+        } else {
+          formData.append(key, JSON.stringify(value)); // For other fields
+        }
+      });
+
 
       const headers = await getAuthHeaders();
       const {restaurant_product} = await sdk.client.fetch<{
         restaurant_product: RestaurantProductDTO;
       }>(`/store/restaurants/${restaurantId}/products`, {
         method: "POST",
+        body: formData,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': null,
           ...headers,
         },
-        body: JSON.stringify({products: [productData]}),
       });
       return restaurant_product;
     },
@@ -135,9 +148,19 @@ export const useRestaurantActions = () => {
       // Invalidate product lists and potentially restaurant details
       await queryClient.invalidateQueries({queryKey: ["products"]});
       await queryClient.invalidateQueries({queryKey: ["restaurants"]}); // If restaurant data includes products
+      await presentToast({
+        message: 'Product saved successfully!',
+        duration: 2000,
+        color: 'success',
+      });
     },
-    onError: (error) => {
+    onError: async (error) => {
       console.error("Error creating product:", error);
+      await presentToast({
+        message: 'Failed to save the product. Please try again.',
+        duration: 2000,
+        color: 'danger',
+      });
     },
   });
 
@@ -173,8 +196,8 @@ export const useRestaurantActions = () => {
   return {
     createRestaurant: createRestaurantMutation.mutateAsync,
     updateRestaurant: updateRestaurantMutation.mutateAsync,
-    createProduct: createProductMutation.mutate,
-    deleteProduct: deleteProductMutation.mutate,
+    createProduct: createProductMutation.mutateAsync,
+    deleteProduct: deleteProductMutation.mutateAsync,
   };
 };
 
