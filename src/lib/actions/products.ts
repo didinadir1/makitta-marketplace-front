@@ -75,9 +75,9 @@ export const useProductActions = () => {
       restaurantId: string;
     }) => {
       const headers = await getAuthHeaders();
-      await sdk.client.fetch(`/restaurants/${restaurantId}/products`, {
+      await sdk.client.fetch(`store/restaurants/${restaurantId}/products`, {
         method: "DELETE",
-        body: JSON.stringify({product_ids: [productId]}),
+        body: {product_ids: [productId]},
         headers: {
           "Content-Type": "application/json",
           ...headers,
@@ -88,10 +88,21 @@ export const useProductActions = () => {
     onSuccess: async () => {
       // Invalidate product lists and potentially restaurant details
       await queryClient.invalidateQueries({queryKey: ["products"]});
-      await queryClient.invalidateQueries({queryKey: ["restaurants"]}); // If restaurant data includes products
+      await queryClient.invalidateQueries({queryKey: ["restaurant"]}); // If restaurant data includes products
+      await presentToast({
+        message: 'Product deleted successfully',
+        duration: 1500,
+        position: 'bottom',
+        color: 'success',
+      });
     },
-    onError: (error) => {
+    onError: async (error) => {
       console.error("Error deleting product:", error);
+      await presentToast({
+        message: 'Failed to delete the product. Please try again.',
+        duration: 2000,
+        color: 'danger',
+      })
       throw new Error("Error deleting product"); // Re-throw to allow component to handle
     },
   });
