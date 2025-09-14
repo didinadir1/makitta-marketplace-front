@@ -40,10 +40,10 @@ export async function retrieveRestaurantByHandle(
   return restaurants[0];
 }
 
-export default function useRestaurant(restaurantId: string) {
+export default function useRestaurant(restaurantId?: string) {
   return useQuery<RestaurantDTO | null>({
     queryKey: ["restaurant", restaurantId],
-    queryFn: () => retrieveRestaurant(restaurantId),
+    queryFn: () => retrieveRestaurant(restaurantId ?? ""),
     staleTime: 1000 * 60 * 15, // 15 minutes
     gcTime: 1000 * 60 * 60, // 1 hour
     enabled: !!restaurantId, // Only run if restaurantId is provided

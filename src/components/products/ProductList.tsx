@@ -1,7 +1,8 @@
-import {IonList} from '@ionic/react';
+import {IonCol, IonGrid, IonRow} from '@ionic/react';
 import React from 'react';
 import ProductCard from './ProductCard';
-import {Dish, mockDishes} from "../../data/mockDishes"; // Import the new ProductCard component
+import {useUser} from "../../lib/data";
+import useRestaurant from "../../lib/data/restaurants"; // Import the new ProductCard component
 
 interface ProductListProps {
   onEditProduct: (productId: string) => void;
@@ -10,19 +11,23 @@ interface ProductListProps {
 
 const ProductList: React.FC<ProductListProps> = ({onEditProduct, onDeleteProduct}) => {
   // Use mock data for now
-  const products: Dish[] = mockDishes;
+  const {data: user} = useUser();
+  const {data: restaurant} = useRestaurant(user?.restaurant_id);
 
   return (
-    <IonList lines="none"> {/* Remove default list lines */}
-      {products.map(product => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          onEditClick={onEditProduct}
-          onDeleteClick={onDeleteProduct} // Pass delete handler
-        />
-      ))}
-    </IonList>
+    <IonGrid>
+      <IonRow>
+        {restaurant?.products?.map(product => (
+          <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3" key={product.id}>
+            <ProductCard
+              product={product}
+              onEditClick={onEditProduct}
+              onDeleteClick={onDeleteProduct}
+            />
+          </IonCol>
+        ))}
+      </IonRow>
+    </IonGrid>
   );
 };
 

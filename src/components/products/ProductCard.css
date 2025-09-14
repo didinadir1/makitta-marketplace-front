@@ -3,7 +3,6 @@ ion-item-sliding {
     margin: 0 8px; /* Remove margin as IonItem will handle spacing */
     border-radius: 8px; /* Match card border radius */
     overflow: hidden; /* Ensure content stays within rounded corners */
-    box-shadow: 0 2px 4px rgba(var(--ion-color-text-rgb), 0.1); /* Match card shadow */
     width: 100%; /* Make sure sliding item takes full width */
 }
 
@@ -11,7 +10,6 @@ ion-item-sliding {
 .product-card {
     margin: 0 8px; /* Remove margin as IonItem will handle spacing */
     width: 100%; /* Make sure card takes full width */
-    box-shadow: 0 2px 4px rgba(var(--ion-color-text-rgb), 0.1); /* Subtle shadow */
     border-radius: 8px; /* Rounded corners */
     overflow: hidden; /* Ensure content stays within rounded corners */
     position: relative; /* Needed for absolute positioning of the oval */
@@ -31,10 +29,11 @@ ion-item-sliding {
     margin-right: 10px; /* Space between thumbnail and details */
 }
 
+
 .product-thumbnail ion-img {
     width: 100%;
     height: 100px; /* Fixed height for consistency */
-    object-fit: cover; /* Cover the area without distorting aspect ratio */
+    object-fit: contain; /* Cover the area without distorting aspect ratio */
     border-radius: 4px; /* Slightly rounded corners for the image */
 }
 
@@ -42,20 +41,18 @@ ion-item-sliding {
     flex-grow: 1; /* Details take up the remaining space */
 }
 
-.product-name {
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-bottom: 2px; /* Space below name */
-}
-
 .product-price {
     font-size: 1em;
-    margin-bottom: 2px; /* Space below price */
+    margin-bottom: 8px; /* Space below price */
 }
 
-.product-category {
-    font-size: 0.8em;
+.product-categories {
+    font-size: 0.9em;
     margin-top: 0; /* No top margin */
+    width: 28ch; /* Limit width to 30 characters */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow content */
+    text-overflow: ellipsis; /* Display ellipsis on overflow */
 }
 
 /* Product Actions (Removed - replaced by swipe options) */

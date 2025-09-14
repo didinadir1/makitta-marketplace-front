@@ -4,13 +4,18 @@ import {addOutline} from 'ionicons/icons';
 import ProductList from './ProductList';
 import ProductFormModal from './ProductFormModal';
 import '../store/StoreTabs.css';
-import {Dish, mockDishes} from "../../data/mockDishes";
+import {useUser} from "../../lib/data";
+import useRestaurant from "../../lib/data/restaurants";
+import {Product} from "../../types/product";
 
 const ProductsTab: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
   const [presentToast] = useIonToast(); // Hook for presenting toasts
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Dish | undefined>(undefined);
+  const [currentProduct, setCurrentProduct] = useState<Product | undefined>(undefined);
+
+  const {data: user} = useUser();
+  const {data: restaurant} = useRestaurant(user?.restaurant_id);
 
   const handleOpenModal = () => {
     setCurrentProduct(undefined); // Reset for new product
@@ -21,7 +26,7 @@ const ProductsTab: React.FC = () => {
   const handleEditProduct = (productId: string) => {
     console.log('Edit Product clicked for ID:', productId);
     // Find the product to edit
-    const productToEdit = mockDishes.find(p => p.id === productId);
+    const productToEdit = restaurant?.products?.find(p => p.id === productId);
     if (productToEdit) {
       setCurrentProduct(productToEdit);
       setIsModalOpen(true);

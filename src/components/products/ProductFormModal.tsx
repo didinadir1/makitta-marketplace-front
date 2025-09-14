@@ -29,10 +29,11 @@ import {Size} from "../../data/mockDishes";
 import ImageUploadField from "../store-creation/ImageUploadField";
 import {Controller, SubmitHandler, useFieldArray, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {ProductCreationFormData, productCreationSchema} from "../../validation/productCreationValidation";
+import {SaveProductFormData, saveProductSchema} from "../../validation/productCreationValidation";
 import {useCategories, useUser} from "../../lib/data";
-import {useRestaurantActions} from "../../lib/actions";
+import {useProductActions} from "../../lib/actions/products";
 import {Product} from "../../types/product";
+
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -47,7 +48,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                                                            }) => {
 
   const {data: fetchedCategories} = useCategories()
-  const {createProduct} = useRestaurantActions()
+  const {createProduct} = useProductActions()
   const {data: user} = useUser();
 
 
@@ -59,15 +60,16 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     watch,
     setValue,
     reset
-  } = useForm<ProductCreationFormData>({
-    resolver: zodResolver(productCreationSchema),
+  } = useForm<SaveProductFormData>({
+    resolver: zodResolver(saveProductSchema),
     defaultValues: {
+      id: product?.id,
       title: '',
       sizes: [{id: 'standard', title: Size.STANDARD, price: 0}], // Default to Standard size
       description: '',
       categories: [],
       isAvailable: true,
-      images: undefined,
+      images: [],
       addOns: [],
       newAddOnName: '',
       newAddOnPrice: '',
@@ -78,37 +80,41 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   useEffect(() => {
     if (product) {
       reset({
+        id: product.id,
         title: product.title,
-        sizes: product.sizes && product.sizes.length > 0 ? product.sizes : [{
+        sizes: Array.isArray(product.metadata?.sizes) && product.metadata.sizes.length > 0 ? product.metadata.sizes : [{
           id: 'standard',
           title: Size.STANDARD,
           price: 0
         }],
         description: product.description || '',
         categories: product.categories || [],
-        addOns: product.addOns || [],
-        isAvailable: product.isAvailable,
+        addOns: Array.isArray(product.metadata?.addOns) ? product.metadata.addOns : [],
+        isAvailable: product.status === 'published',
         newAddOnName: '',
         newAddOnPrice: '',
       });
     }
 
-    if (product?.imageUrls) {
-      const defaultImages: File[] = [];
-
-      product.imageUrls.forEach((imageUrl) => {
-
-        const url = new URL(imageUrl);
+    if (product?.images) {
+      const fetchImagePromises = product.images.map(async (image) => {
+        const url = new URL(image.url);
         const fileName = url.pathname.replace(/^.*[\\/]/, "");
 
-        fetch(imageUrl)
-          .then(response => response.blob())
-          .then(blob => {
-            defaultImages.push(new File([blob], fileName, {type: blob.type}));
-          })
-          .catch(error => console.error('Error fetching image:', error));
-      })
-      setValue("images", defaultImages);
+        try {
+          const response = await fetch(image.url);
+          const blob = await response.blob();
+          return new File([blob], fileName, {type: blob.type});
+        } catch (error) {
+          console.error('Error fetching image:', error);
+          return null;
+        }
+      });
+
+      Promise.all(fetchImagePromises).then((files) => {
+        const validFiles = files.filter((file) => file !== null) as File[];
+        setValue("images", validFiles);
+      });
     }
   }, [product]);
 
@@ -148,7 +154,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     });
   };
 
-  const onSubmit: SubmitHandler<ProductCreationFormData> = async (data) => {
+  const onSubmit: SubmitHandler<SaveProductFormData> = async (data) => {
     await createProduct({restaurantId: user!.restaurant_id, productData: data})
     setIsOpen(false);
   };
