@@ -17,6 +17,10 @@ ion-item-sliding {
     background: var(--ion-color-light); /* Explicit background */
 }
 
+ion-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
 .product-card-content {
     display: flex;
     align-items: center; /* Vertically align items */

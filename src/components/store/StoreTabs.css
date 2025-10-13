@@ -1,8 +1,8 @@
 /* Tab Content Styling */
 .tab-content {
-    padding: 16px 0;
-    height: 105%;
+    padding: 16px 0 200px 0; /* Add bottom padding to avoid FAB overlap */
     overflow-y: auto;
+    /* Add extra padding to ensure the last element is visible */
 }
 
 /* Add Button Container (Removed - replaced by FAB) */

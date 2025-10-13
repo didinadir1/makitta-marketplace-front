@@ -11,7 +11,6 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
-  IonItem,
   IonLabel,
   IonList,
   IonLoading,
@@ -195,13 +194,14 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
               defaultFile={watch("images")}
               multiple
             />
-            <div className="form-group">
+            <div className="form-item">
+
+              <IonLabel className="form-label">title</IonLabel>
               <Controller
                 name="title"
                 control={control}
                 render={({field}) => (
-                  <IonItem lines="full" className="form-item">
-                    <IonLabel position="stacked" className="form-label">title</IonLabel>
+                  <>
                     <IonInput
                       type="text"
                       {...field}
@@ -209,17 +209,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                       className="form-input"
                     ></IonInput>
                     {errors.title && <IonNote color="danger">{errors.title.message}</IonNote>}
-                  </IonItem>
+                  </>
                 )}
-              />
-            </div>
-            <div className="form-group">
+              /></div>
+            <div className="form-item">
+
+              <IonLabel className="form-label">Description</IonLabel>
               <Controller
                 name="description"
                 control={control}
                 render={({field}) => (
-                  <IonItem lines="full" className="form-item">
-                    <IonLabel position="stacked" className="form-label">Description</IonLabel>
+                  <>
                     <IonTextarea
                       {...field}
                       placeholder="Enter product description"
@@ -227,17 +227,18 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                       className="form-input"
                     ></IonTextarea>
                     {errors.description && <IonNote color="danger">{errors.description.message}</IonNote>}
-                  </IonItem>
+                  </>
                 )}
               />
             </div>
-            <div className="form-group">
+            <div className="form-item">
+
+              <IonLabel className="form-label">Categories</IonLabel>
               <Controller
                 name="categories"
                 control={control}
                 render={({field}) => (
-                  <IonItem lines="full" className="form-item">
-                    <IonLabel position="stacked" className="form-label">Categories</IonLabel>
+                  <>
                     <IonSelect
                       {...field}
                       value={field.value?.map((category) => category.id) || []}
@@ -275,14 +276,14 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                         ))}
                     </IonSelect>
                     {errors.categories && <IonNote color="danger">{errors.categories.message}</IonNote>}
-                  </IonItem>
+                  </>
                 )}
               />
             </div>
 
             {/* Sizes and Prices Section */}
-            <div className="form-group">
-              <IonLabel position="stacked" className="form-label">Size & Price</IonLabel>
+            <div className="form-item">
+              <IonLabel className="form-label">Size & Price</IonLabel>
               {sizeFields.map((item, index) => (
                 <>
                   <div key={item.id} className="size-item">
@@ -344,8 +345,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
 
             {/* Add-ons Section */}
-            <div className="form-group add-ons-group">
-              <IonLabel position="stacked" className="form-label">Add-ons</IonLabel>
+            <div className="form-item">
+              <IonLabel className="form-label">Add-ons</IonLabel>
 
               <div className="add-ons-list">
                 {addOnFields.map((field, index) => (
@@ -367,14 +368,12 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                     name="newAddOnName"
                     control={control}
                     render={({field}) => (
-                      <IonItem lines="full" className="form-item">
-                        <IonInput
-                          {...field}
-                          placeholder="Name"
-                          className="form-input"
-                          onIonInput={(e) => field.onChange(e.detail.value!)}
-                        />
-                      </IonItem>
+                      <IonInput
+                        {...field}
+                        placeholder="Name"
+                        className="form-input"
+                        onIonInput={(e) => field.onChange(e.detail.value!)}
+                      />
                     )}
                   />
                 </IonCol>
@@ -383,17 +382,15 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                     name="newAddOnPrice"
                     control={control}
                     render={({field}) => (
-                      <IonItem lines="full" className="form-item">
-                        <IonInput
-                          {...field}
-                          placeholder="Price"
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          className="form-input"
-                          onIonInput={(e) => field.onChange(e.detail.value!)}
-                        />
-                      </IonItem>
+                      <IonInput
+                        {...field}
+                        placeholder="Price"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        className="form-input"
+                        onIonInput={(e) => field.onChange(e.detail.value!)}
+                      />
                     )}
                   />
                 </IonCol>
@@ -412,38 +409,37 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
             </div>
 
             {/* Availability Toggle */}
-            <div className="form-group">
-              <IonLabel position="stacked" className="form-label">Always Available</IonLabel>
+            <div className="form-item">
+              <IonLabel className="form-label">Always Available</IonLabel>
               <Controller
                 name="isAlwaysAvailable"
                 control={control}
                 render={({field}) => (
-                  <IonItem lines="full" className="availability-item">
+                  <div className="availability-item">
                     <IonToggle
                       checked={field.value}
                       onIonChange={(e) => field.onChange(e.detail.checked)}
                       slot="end"
                       className="availability-toggle"
                     />
-                  </IonItem>
+                  </div>
                 )}
               />
             </div>
-            <div className="form-group">
-              <IonLabel position="stacked" className="form-label">Schedules</IonLabel>
+            <div className="form-item">
+
+              <IonLabel className="form-label">Schedules</IonLabel>
               <Controller name={"scheduledDates"} control={control} render={({field}) => (
-                <IonItem className="form-item">
-                  <IonDatetime
-                    disabled={watch("isAlwaysAvailable")}
-                    min={new Date().toISOString().split('T')[0]}
-                    max={new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]}
-                    presentation="date"
-                    multiple={true} // Allow multiple date selection
-                    value={field.value} // Bind selected dates
-                    onIonChange={(e) => field.onChange(e.detail.value)}
-                    className="schedule-calendar"
-                  />
-                </IonItem>
+                <IonDatetime
+                  disabled={watch("isAlwaysAvailable")}
+                  min={new Date().toISOString().split('T')[0]}
+                  max={new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]}
+                  presentation="date"
+                  multiple={true} // Allow multiple date selection
+                  value={field.value} // Bind selected dates
+                  onIonChange={(e) => field.onChange(e.detail.value)}
+                  className="schedule-calendar"
+                />
               )}
               />
             </div>
