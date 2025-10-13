@@ -16,7 +16,8 @@ export const saveProductSchema = z.object({
     }),
     price: z.number().min(1, 'enter a valid price'),
   })).min(1, 'At least one size and price is required'),
-  isAvailable: z.boolean(),
+  isAlwaysAvailable: z.boolean(),
+  scheduledDates: z.array(z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')).optional(),
   images: z.array(z.any().refine((file) => file instanceof File, 'Must be a valid file')).optional(),
   addOns: z.array(z.object({
     id: z.string().optional(),

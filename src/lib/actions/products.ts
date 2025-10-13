@@ -27,7 +27,7 @@ export const useProductActions = () => {
               formData.append(`images`, image);
             }
           });
-        } else {
+        } else if (value) {
           formData.append(key, JSON.stringify(value)); // For other fields
         }
       });

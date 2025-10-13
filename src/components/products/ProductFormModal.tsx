@@ -5,6 +5,7 @@ import {
   IonChip,
   IonCol,
   IonContent,
+  IonDatetime,
   IonFooter,
   IonGrid,
   IonHeader,
@@ -58,7 +59,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     handleSubmit,
     formState: {errors, isSubmitting},
     watch,
-    setValue,
+    setValue, getValues,
     reset
   } = useForm<SaveProductFormData>({
     resolver: zodResolver(saveProductSchema),
@@ -68,7 +69,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       sizes: [{id: 'standard', title: Size.STANDARD, price: 0}], // Default to Standard size
       description: '',
       categories: [],
-      isAvailable: true,
+      isAlwaysAvailable: true,
+      scheduledDates: [],
       images: [],
       addOns: [],
       newAddOnName: '',
@@ -79,21 +81,20 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   // Initialize form with product data if editing
   useEffect(() => {
     if (product) {
-      reset({
-        id: product.id,
-        title: product.title,
-        sizes: Array.isArray(product.metadata?.sizes) && product.metadata.sizes.length > 0 ? product.metadata.sizes : [{
-          id: 'standard',
-          title: Size.STANDARD,
-          price: 0
-        }],
-        description: product.description || '',
-        categories: product.categories || [],
-        addOns: Array.isArray(product.metadata?.addOns) ? product.metadata.addOns : [],
-        isAvailable: product.status === 'published',
-        newAddOnName: '',
-        newAddOnPrice: '',
-      });
+      setValue('id', product.id);
+      setValue('title', product.title);
+      setValue('sizes', Array.isArray(product.metadata?.sizes) && product.metadata.sizes.length > 0 ? product.metadata.sizes : [{
+        id: 'standard',
+        title: Size.STANDARD,
+        price: 0
+      }]);
+      setValue('description', product.description || '');
+      setValue('categories', product.categories || []);
+      setValue('addOns', Array.isArray(product.metadata?.addOns) ? product.metadata.addOns : []);
+      setValue('isAlwaysAvailable', !!product.metadata?.isAlwaysAvailable);
+      setValue('scheduledDates', Array.isArray(product.metadata?.scheduledDates) ? product.metadata.scheduledDates : []);
+      setValue('newAddOnName', '');
+      setValue('newAddOnPrice', '');
     }
 
     if (product?.images) {
@@ -161,6 +162,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
   const handleCancel = () => {
     reset();
+    console.log(getValues())
     setIsOpen(false)
   };
 
@@ -411,12 +413,12 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
             {/* Availability Toggle */}
             <div className="form-group">
+              <IonLabel position="stacked" className="form-label">Always Available</IonLabel>
               <Controller
-                name="isAvailable"
+                name="isAlwaysAvailable"
                 control={control}
                 render={({field}) => (
                   <IonItem lines="full" className="availability-item">
-                    <IonLabel>Available</IonLabel>
                     <IonToggle
                       checked={field.value}
                       onIonChange={(e) => field.onChange(e.detail.checked)}
@@ -425,6 +427,24 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                     />
                   </IonItem>
                 )}
+              />
+            </div>
+            <div className="form-group">
+              <IonLabel position="stacked" className="form-label">Schedules</IonLabel>
+              <Controller name={"scheduledDates"} control={control} render={({field}) => (
+                <IonItem className="form-item">
+                  <IonDatetime
+                    disabled={watch("isAlwaysAvailable")}
+                    min={new Date().toISOString().split('T')[0]}
+                    max={new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]}
+                    presentation="date"
+                    multiple={true} // Allow multiple date selection
+                    value={field.value} // Bind selected dates
+                    onIonChange={(e) => field.onChange(e.detail.value)}
+                    className="schedule-calendar"
+                  />
+                </IonItem>
+              )}
               />
             </div>
           </IonList>

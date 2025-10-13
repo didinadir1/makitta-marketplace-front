@@ -1,8 +1,7 @@
 import {IonIcon, IonLabel, IonSegment, IonSegmentButton,} from '@ionic/react';
-import {calendar, fastFood, grid, receipt} from 'ionicons/icons';
+import {fastFood, grid, receipt} from 'ionicons/icons';
 import React, {useState} from 'react';
 import ProductsTab from '../products/ProductsTab';
-import SchedulesTab from '../schedules/SchedulesTab';
 import './MyStoreSection.css';
 import DashboardTab from "../dashboard/DashboardTab";
 import OrdersTab from "../orders/OrdersTab";
@@ -21,10 +20,6 @@ const MyStoreSection: React.FC = () => {
         return <OrdersTab/>;
       case 'products':
         return <ProductsTab/>;
-      case 'schedules':
-        return (
-          <SchedulesTab/>
-        );
       default:
         return <ProductsTab/>;
     }
@@ -45,10 +40,6 @@ const MyStoreSection: React.FC = () => {
         <IonSegmentButton value="products">
           <IonIcon icon={fastFood}/>
           <IonLabel>Products</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton value="schedules">
-          <IonIcon icon={calendar}/>
-          <IonLabel>Schedules</IonLabel>
         </IonSegmentButton>
 
       </IonSegment>

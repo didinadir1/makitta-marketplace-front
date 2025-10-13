@@ -1,7 +1,5 @@
 import {mockCategories} from '../data/mockCategories';
-import {mockSchedules} from '../data/mockSchedules';
 import {Category} from "../types/Category";
-import {Schedule} from "../types/Schedule";
 import {Dish, mockDishes} from "../data/mockDishes";
 
 // Simulate an API call with a delay
@@ -19,10 +17,6 @@ export const fetchProducts = (): Promise<Dish[]> => {
 
 export const fetchCategories = (): Promise<Category[]> => {
   return simulateApiCall(mockCategories);
-};
-
-export const fetchSchedules = (): Promise<Schedule[]> => {
-  return simulateApiCall(mockSchedules);
 };
 
 // Add other fetch functions as needed, e.g.:
