@@ -2,7 +2,6 @@ import {
   IonBackButton,
   IonButtons,
   IonCardTitle,
-  IonChip,
   IonContent,
   IonHeader,
   IonIcon,
@@ -12,16 +11,15 @@ import {
   IonToolbar
 } from '@ionic/react';
 import {useParams} from 'react-router';
-import {mockRestaurants} from '../data/mockRestaurants';
-import {mockDishes} from '../data/mockDishes'; // Import mock dishes
 import {businessOutline, locationOutline, star, starHalf} from 'ionicons/icons';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {EffectCards, Pagination} from 'swiper/modules';
+import {EffectCards} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import '@ionic/react/css/ionic-swiper.css';
 import './RestaurantDetailPage.css'; // Create a new CSS file for this page
-import DishCard from '../components/DishCard'; // Import DishCard
+import DishCard from '../components/DishCard';
+import useRestaurant from "../lib/data/restaurants"; // Import DishCard
 
 interface RestaurantDetailParams {
   id: string;
@@ -29,7 +27,7 @@ interface RestaurantDetailParams {
 
 const RestaurantDetailPage: React.FC = () => {
   const {id} = useParams<RestaurantDetailParams>();
-  const restaurant = mockRestaurants.find(r => r.id === id);
+  const {data: restaurant} = useRestaurant(id);
 
   if (!restaurant) {
     return (
@@ -49,9 +47,6 @@ const RestaurantDetailPage: React.FC = () => {
     );
   }
 
-  // Filter dishes belonging to this restaurant
-  const restaurantDishes = mockDishes.filter(dish => restaurant.dishIds.includes(dish.id));
-
   const renderRatingStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -69,6 +64,9 @@ const RestaurantDetailPage: React.FC = () => {
     return stars;
   };
 
+  const status = restaurant.has_available_products ? "Open" : "Closed";
+
+
   return (
     <IonPage>
       <IonHeader translucent={true}>
@@ -80,62 +78,46 @@ const RestaurantDetailPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {restaurant.imageUrls.length > 0 && (
-          <div className="restaurant-detail-image-slider-container"> {/* Container for slider */}
-            <Swiper
-              modules={[Pagination]}
-              pagination={{clickable: true}}
-              initialSlide={0}
-              speed={400}
-              className="restaurant-detail-slides"
-            >
-              {restaurant.imageUrls.map((url, index) => (
-                <SwiperSlide key={index}>
-                  <IonImg src={url} alt={`${restaurant.name} image ${index + 1}`} className="restaurant-detail-image"/>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        )}
+        <div className="restaurant-detail-image-container"> {/* Container for slider */}
+          <IonImg src={restaurant.image_url} alt={`${restaurant.name} image`} className="restaurant-detail-image"/>
+        </div>
 
         <div className="restaurant-detail-content"> {/* Main content container */}
           <div className="restaurant-detail-header-section">
             <IonCardTitle className="restaurant-detail-name">{restaurant.name}</IonCardTitle>
             <div className="restaurant-detail-rating">
-              {renderRatingStars(restaurant.rating)}
-              <span className="rating-text">({restaurant.rating.toFixed(1)})</span>
+              {/*todo implement ratings*/}
+              {/*{renderRatingStars(restaurant.rating)}*/}
+              {/*<span className="rating-text">({restaurant.rating.toFixed(1)})</span>*/}
+              {renderRatingStars(4.5)}
+              <span className="rating-text">4.5</span>
             </div>
           </div>
 
           <div className="restaurant-detail-meta-section">
             <div className="info-item">
+              {/*todo implement distance calculation*/}
+              {/*<IonIcon icon={locationOutline} slot="start" color="medium"/>*/}
+              {/*<span>{restaurant.distance}</span>*/}
               <IonIcon icon={locationOutline} slot="start" color="medium"/>
-              <span>{restaurant.distance}</span>
+              <span>1.2 km</span>
             </div>
-            <div className={`info-item restaurant-detail-status ${restaurant.status.toLowerCase()}`}>
+            <div className={`info-item restaurant-detail-status ${status.toLowerCase()}`}>
               <IonIcon icon={businessOutline} slot="start" color="medium"/>
-              <span>{restaurant.status}</span>
+              <span>{status}</span>
             </div>
-          </div>
-
-          <div className="restaurant-detail-cuisine-section">
-            {restaurant.cuisine.map((tag, index) => (
-              <IonChip key={index} outline={true} color="secondary">
-                {tag}
-              </IonChip>
-            ))}
           </div>
 
           {restaurant.description && (
             <div className="restaurant-detail-description-section">
-              <h3>About {restaurant.name}</h3>
+              <h3>About</h3>
               <p>{restaurant.description}</p>
             </div>
           )}
 
           <div className="restaurant-dishes-section">
-            <h3>Dishes from {restaurant.name}</h3>
-            {restaurantDishes.length > 0 ? (
+            <h3>Proposed Dishes</h3>
+            {restaurant.products && restaurant.products.length > 0 ? (
               <div className="dishes-swiper-container"> {/* Container for horizontal dish list */}
                 <Swiper
                   slidesPerView={'auto'} // Show as many as fit
@@ -143,9 +125,9 @@ const RestaurantDetailPage: React.FC = () => {
                   effect={'cards'}
                   modules={[EffectCards]}
                   grabCursor
-                  className="mySwiper">
+                >
 
-                  {restaurantDishes.map(dish => (
+                  {restaurant.products.map(dish => (
                     <SwiperSlide key={dish.id} className="dish-swiper-slide"> {/* Style individual slides */}
                       <DishCard dish={dish} isCompact/> {/* Pass isCompact prop */}
                     </SwiperSlide>
@@ -157,7 +139,7 @@ const RestaurantDetailPage: React.FC = () => {
             )}
           </div>
 
-          {/* Add a section for reviews if needed later */}
+          {/* todo Add a section for reviews if needed later */}
           {/* <div className="restaurant-detail-reviews-section">
             <h3>Reviews</h3>
             </div> */}

@@ -129,7 +129,6 @@ const StoreCreationPage: React.FC = () => {
         if (haveImageChanged) {
           updatedValues = {...updatedValues, image: watch("image")!}
         }
-        console.log({updatedValues})
         await updateRestaurant({id: restaurant!.id, ...updatedValues})
       } else await createRestaurant(data)
     }

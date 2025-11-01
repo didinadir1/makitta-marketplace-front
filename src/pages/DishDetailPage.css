@@ -116,6 +116,7 @@ ion-content {
     align-items: center;
     font-size: 1em; /* Larger info text */
     color: var(--ion-color-text-tint);
+    flex-wrap: wrap;
 }
 
 .dish-detail-info-items .info-item ion-icon {

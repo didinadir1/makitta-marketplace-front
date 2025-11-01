@@ -71,7 +71,6 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
 
   const handleRemoveImage = (indexToRemove: number, onChange: (value: File | File[] | null) => void) => {
     if (multiple) {
-
       const currentFiles = (control._formValues[name] || []) as File[];
       const updatedFiles = currentFiles?.filter((_, index) => index !== indexToRemove);
       const updatedUrls = previewUrls.filter((_, index) => index !== indexToRemove);

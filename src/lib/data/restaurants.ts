@@ -13,7 +13,7 @@ export async function retrieveRestaurant(
     }
   );
 
-  return restaurant;
+  return new RestaurantDTO(restaurant)
 }
 
 export async function listRestaurants(
@@ -26,7 +26,8 @@ export async function listRestaurants(
       method: "GET",
     });
 
-  return restaurants;
+
+  return restaurants.map((restaurantData) => new RestaurantDTO(restaurantData));
 }
 
 export async function retrieveRestaurantByHandle(
@@ -37,7 +38,7 @@ export async function retrieveRestaurantByHandle(
       method: "GET",
     });
 
-  return restaurants[0];
+  return new RestaurantDTO(restaurants[0]);
 }
 
 export default function useRestaurant(restaurantId?: string) {
@@ -49,5 +50,14 @@ export default function useRestaurant(restaurantId?: string) {
     enabled: !!restaurantId, // Only run if restaurantId is provided
 
   })
+}
+
+export function useRestaurants(filter?: Record<string, string>) {
+  return useQuery<RestaurantDTO[]>({
+    queryKey: ["restaurants", filter],
+    queryFn: () => listRestaurants(filter),
+    staleTime: 1000 * 60 * 15, // 15 minutes
+    gcTime: 1000 * 60 * 60, // 1 hour
+  });
 }
 

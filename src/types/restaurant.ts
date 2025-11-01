@@ -1,6 +1,8 @@
-import {ProductDTO} from "@medusajs/types";
+import {Product} from "./product";
+import {DeliveryDTO} from "./delivery";
 
-export interface RestaurantDTO {
+
+export class RestaurantDTO {
   id: string;
   handle: string;
   is_open: boolean;
@@ -13,10 +15,23 @@ export interface RestaurantDTO {
   instagram_url?: string;
   facebook_url?: string;
   snapchat_url?: string;
-  created_at: Date;
-  updated_at: Date;
-  products?: ProductDTO[];
-  deliveries: DeliveryDTO[];
+  created_at?: Date;
+  updated_at?: Date;
+  products?: Product[];
+  deliveries?: DeliveryDTO[];
+
+  constructor(public dto: RestaurantDTO) {
+    Object.assign(this, dto);
+    this.products = dto.products?.map(p => new Product(p)) ?? []
+  }
+
+
+  get has_available_products(): boolean {
+    if (!this.products || this.products.length === 0) return false;
+
+    return this.products.some(product => product.is_currently_available);
+  }
+
 }
 
 export interface CreateRestaurantDTO {

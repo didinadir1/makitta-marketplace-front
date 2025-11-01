@@ -1,4 +1,4 @@
-import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonLabel, IonNote,} from '@ionic/react'; // Added IonToggle
+import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonLabel, IonNote, IonPage,} from '@ionic/react'; // Added IonToggle
 import React from 'react';
 import './ProfilePage.css';
 import {chevronForwardOutline} from 'ionicons/icons';
@@ -19,12 +19,12 @@ const ProfilePage: React.FC = () => {
 
 
   return (
-    <>
+    <IonPage>
       <IonHeader>
         <div className="profile-header" onClick={handleEditClick}> {/* Use a div for the header area */}
           <div className="profile-info-container"> {/* Container for avatar and name */}
             <IonAvatar className="profile-avatar">
-              <img src={restaurant?.image_url ?? "public/store-default-image.jpg"} alt="Profile"/>
+              <img src={restaurant?.image_url ?? "public/store-default-image.png"} alt="Profile"/>
             </IonAvatar>
             <div className="profile-name-container"> {/* Container for name and potential subtitle */}
               <IonLabel
@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
           </div>)}
 
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 

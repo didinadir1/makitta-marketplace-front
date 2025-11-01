@@ -13,7 +13,7 @@ ion-toolbar {
 }
 
 /* Form styling */
-.form-list {
+.form-fields {
     background: transparent;
     padding: 0;
     display: flex;

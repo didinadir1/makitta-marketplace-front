@@ -1,6 +1,7 @@
 import {
   createAnimation,
   IonCard,
+  IonChip,
   IonIcon,
   IonImg,
   IonItem,
@@ -13,10 +14,10 @@ import {
 import {createOutline, trashOutline} from 'ionicons/icons';
 import React, {useRef} from 'react';
 import './ProductCard.css';
-import {ProductDTO} from "@medusajs/types"; // Import the CSS for styling
+import {Product} from "../../types/product"; // Import the CSS for styling
 
 interface ProductCardProps {
-  product: ProductDTO;
+  product: Product;
   onEditClick: (productId: string) => void;
   onDeleteClick?: (productId: string) => void; // Optional delete handler
 }
@@ -28,8 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                                                  }) => {
   const handleEditClick = () => {
     onEditClick(product.id);
-    // Close the sliding item after action (optional, but good UX)
-    // You might need a ref to the IonItemSliding for this
+    itemRef.current?.close()
   };
 
   const handleDeleteClick = () => {
@@ -98,28 +98,33 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div className="product-card-content">
             <div className="product-thumbnail">
               {/* Use the first image URL from the array */}
-              <IonImg src={product.thumbnail ?? "public/food-default-image.jpg"} alt={product.title}/>
+              <IonImg src={product.thumbnail ?? "public/food-default-image.png"} alt={product.title}/>
             </div>
             <div className="product-details">
               <IonLabel>
                 <IonText color="dark">
-                  <h3 className="product-name">{product.title}</h3>
+                  <h3>{product.title}</h3>
                 </IonText>
               </IonLabel>
-              <IonText color="secondary">
-                <p className="product-price">
-                  ${parseFloat((product.metadata?.basePrice ?? 0) as string).toFixed(2)}
-                </p>
-              </IonText>
+              <div className="product-info">
+                <IonText color="secondary">
+                  <p className="product-price">
+                    ${(product.metadata?.basePrice ?? 0).toFixed(2)}
+                  </p>
+                </IonText>
+                <IonChip
+                  disabled
+                  color={product.is_currently_available ? "success" : "tertiary"}>
+                  {product.is_currently_available
+                    ? "scheduled"
+                    : "not scheduled"}
+                </IonChip>
+              </div>
               <IonText color="medium">
                 {/* You might want to map category ID to a name here */}
                 <p className="product-categories">{product?.categories?.map(category => category.name).join(', ')}</p>
               </IonText>
             </div>
-            {/* Removed the old actions icon */}
-            {/* <div className="product-actions" onClick={handleActionsClick}>
-              <IonIcon icon={ellipsisVertical} size="large"></IonIcon>
-            </div> */}
           </div>
         </IonCard>
       </IonItem>

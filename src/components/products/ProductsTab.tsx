@@ -3,7 +3,7 @@ import {IonFab, IonFabButton, IonIcon, IonLoading, useIonAlert, useIonToast,} fr
 import {addOutline} from 'ionicons/icons';
 import ProductList from './ProductList';
 import ProductFormModal from './ProductFormModal';
-import '../store/StoreTabs.css';
+import './ProductsTab.css';
 import {useUser} from "../../lib/data";
 import useRestaurant from "../../lib/data/restaurants";
 import {Product} from "../../types/product";
@@ -27,8 +27,6 @@ const ProductsTab: React.FC = () => {
 
 
   const handleEditProduct = (productId: string) => {
-    console.log('Edit Product clicked for ID:', productId);
-    // Find the product to edit
     const productToEdit = restaurant?.products?.find(p => p.id === productId);
     if (productToEdit) {
       setCurrentProduct(productToEdit);

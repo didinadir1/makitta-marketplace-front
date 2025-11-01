@@ -12,7 +12,6 @@ import {
   IonIcon,
   IonInput,
   IonLabel,
-  IonList,
   IonLoading,
   IonModal,
   IonNote,
@@ -58,7 +57,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     handleSubmit,
     formState: {errors, isSubmitting},
     watch,
-    setValue, getValues,
+    setValue,
     reset
   } = useForm<SaveProductFormData>({
     resolver: zodResolver(saveProductSchema),
@@ -78,7 +77,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   });
 
   // Initialize form with product data if editing
-  useEffect(() => {
+  const initializeWithProduct = () => {
     if (product) {
       setValue('id', product.id);
       setValue('title', product.title);
@@ -94,29 +93,30 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       setValue('scheduledDates', Array.isArray(product.metadata?.scheduledDates) ? product.metadata.scheduledDates : []);
       setValue('newAddOnName', '');
       setValue('newAddOnPrice', '');
-    }
+      if (product?.images) {
+        const fetchImagePromises = product.images.map(async (image) => {
+          const url = new URL(image.url);
+          const fileName = url.pathname.replace(/^.*[\\/]/, "");
 
-    if (product?.images) {
-      const fetchImagePromises = product.images.map(async (image) => {
-        const url = new URL(image.url);
-        const fileName = url.pathname.replace(/^.*[\\/]/, "");
+          try {
+            const response = await fetch(image.url);
+            const blob = await response.blob();
+            return new File([blob], fileName, {type: blob.type});
+          } catch (error) {
+            console.error('Error fetching image:', error);
+            return null;
+          }
+        });
 
-        try {
-          const response = await fetch(image.url);
-          const blob = await response.blob();
-          return new File([blob], fileName, {type: blob.type});
-        } catch (error) {
-          console.error('Error fetching image:', error);
-          return null;
-        }
-      });
+        Promise.all(fetchImagePromises).then((files) => {
+          const validFiles = files.filter((file) => file !== null) as File[];
+          setValue("images", validFiles);
+        });
+      }
+    } else reset()
+  };
 
-      Promise.all(fetchImagePromises).then((files) => {
-        const validFiles = files.filter((file) => file !== null) as File[];
-        setValue("images", validFiles);
-      });
-    }
-  }, [product]);
+  useEffect(initializeWithProduct, [product]);
 
   const {fields: addOnFields, append: appendAddOn, remove: removeAddOn} = useFieldArray({
     control,
@@ -160,8 +160,9 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   };
 
   const handleCancel = () => {
-    reset();
-    console.log(getValues())
+    if (product) {
+      initializeWithProduct()
+    } else reset();
     setIsOpen(false)
   };
 
@@ -185,7 +186,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
       <IonContent className="ion-padding">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <IonList className="form-list">
+          <div className="form-fields">
             <ImageUploadField
               name="images"
               label="Product images"
@@ -285,8 +286,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
             <div className="form-item">
               <IonLabel className="form-label">Size & Price</IonLabel>
               {sizeFields.map((item, index) => (
-                <>
-                  <div key={item.id} className="size-item">
+                <div key={item.id}>
+                  <div className="size-item">
                     <Controller
                       name={`sizes.${index}.title`}
                       control={control}
@@ -333,7 +334,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   </div>
                   {errors.sizes?.[index]?.price?.message &&
                       <IonNote color="danger">{errors.sizes?.[index]?.price?.message}</IonNote>}
-                </>
+                </div>
               ))}
               {selectedSizeNames.length < allSizes.length && ( // Only show if there are unselected sizes
                 <IonButton expand="block" fill="outline" onClick={handleAddSize} className="add-size-button">
@@ -443,7 +444,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
               )}
               />
             </div>
-          </IonList>
+          </div>
         </form>
       </IonContent>
       <IonFooter>

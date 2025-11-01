@@ -4,7 +4,6 @@ import {
   IonButton,
   IonCard,
   IonCardContent,
-  IonCardHeader,
   IonCardTitle,
   IonChip,
   IonIcon,
@@ -14,16 +13,17 @@ import {
 import {cartOutline, locationOutline, star, starHalf, timeOutline} from 'ionicons/icons'; // Import cartOutline icon
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from "swiper/modules"; // Import Pagination module
-import {Dish} from '../data/mockDishes'; // Assuming mockDishes.ts is in src/data
 import './DishCard.css';
 import 'swiper/css'; // Import Swiper core styles
 import 'swiper/css/pagination'; // Import Swiper pagination styles
 import '@ionic/react/css/ionic-swiper.css';
-import {useCart} from '../state/cartState'; // Import the useCart hook
+import {useCart} from '../state/cartState';
+import {Size} from "../data/mockDishes";
+import {Product} from "../types/product"; // Import the useCart hook
 
 
 interface DishCardProps {
-  dish: Dish;
+  dish: Product;
   isCompact?: boolean;
 }
 
@@ -53,7 +53,7 @@ const DishCard: React.FC<DishCardProps> = ({dish, isCompact = false}) => { // De
     e.preventDefault();
     addItem(dish); // Add the current dish to the cart
     presentToast({ // Present the toast
-      message: `${dish.name} added to cart!`,
+      message: `${dish.title} added to cart!`,
       duration: 1500,
       position: 'bottom',
       color: 'success',
@@ -63,62 +63,87 @@ const DishCard: React.FC<DishCardProps> = ({dish, isCompact = false}) => { // De
 
   return (
     <IonCard className={`dish-card`} routerLink={`/dish/${dish.id}`}> {/* Apply compact class */}
-      {dish.imageUrls.length > 0 && (
+      {
         isCompact ? (
           <div className="dish-image-container"> {/* Use a simple container for compact mode image */}
-            <IonImg src={dish.imageUrls[0]} alt={`${dish.name} image`}
+            <IonImg src={dish.thumbnail ?? "public/food-default-image.png"} alt={`${dish.title} image`}
                     className="dish-image"/> {/* Display first image */}
           </div>
         ) : (
           <Swiper
             modules={[Pagination]}
-            pagination={!isCompact} // Only show pagination in non-compact mode
+            pagination={true} // Only show pagination in non-compact mode
             initialSlide={0}
             speed={400}
             className="dish-slides">
-            {dish.imageUrls.map((url, index) => (
-              <SwiperSlide key={index}>
-                <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-image"/>
-              </SwiperSlide>
-            ))}
+            {dish.images && dish.images.length > 0 ? (dish.images.map((image, index) => (
+                <SwiperSlide key={index}>
+                  <IonImg src={image.url} alt={`${dish.title} image ${index + 1}`} className="dish-image"/>
+                </SwiperSlide>
+              ))) :
+              (
+                <SwiperSlide>
+                  <IonImg src={dish.thumbnail ?? "public/food-default-image.png"} alt={`${dish.title} image`}
+                          className="dish-image"/>
+                </SwiperSlide>
+
+              )}
           </Swiper>
-        ))}
-      <IonCardHeader>
+        )}
+      <div className="dish-card-header">
         <div className="dish-title-price">
-          <IonCardTitle>{dish.name}</IonCardTitle>
-          <IonBadge color="success" className="dish-price">{dish.basePrice}</IonBadge>
+          <IonCardTitle className="dish-name">{dish.title}</IonCardTitle>
+          {/*todo handle price currency*/}
+          <IonBadge color="success" className="dish-price">
+            {`${dish.metadata?.sizes?.find((size) => size.title === Size.STANDARD)?.price} $`}
+          </IonBadge>
         </div>
-        <div className="dish-rating"> {/* Keep this structure for styling */}
-          {renderRatingStars(dish.rating)}
-          <span className="rating-text">({dish.rating.toFixed(1)})</span>
+        <div className="dish-rating">
+          {/*todo implement ratings*/}
+          {/*{renderRatingStars(dish.rating)}*/}
+          {/*<span className="rating-text">({dish.rating.toFixed(1)})</span>*/}
+          {renderRatingStars(4.5)}
+          <span className="rating-text">4.5</span>
         </div>
-      </IonCardHeader>
+      </div>
       <IonCardContent>
         <div className="dish-tags">
-          {dish.categories.map(({name}, index) => (
+          {dish.categories?.slice(0, 2).map(({name}, index) => (
             <IonChip key={index} outline={true} color="secondary">
               {name}
             </IonChip>
           ))}
+          {dish.categories && dish.categories.length > 2 && (
+            <IonChip outline={true} color="secondary">
+              ...+{dish.categories.length - 2}
+            </IonChip>
+          )}
         </div>
         <div className="dish-info">
           <div className="info-item">
             <IonIcon icon={locationOutline} slot="start"/>
-            <span>{dish.distance}</span>
+            {/*todo implement distance*/}
+            <span>1.2 km</span>
           </div>
           <div className="info-item">
             <IonIcon icon={timeOutline} slot="start"/>
-            <span>{dish.timeToReady}</span>
+            <IonChip
+              color={dish.is_currently_available ? "success" : "tertiary"}>
+              {dish.is_currently_available
+                ? "Available"
+                : "Unavailable"}
+            </IonChip>
           </div>
+          <IonButton
+            disabled={!dish.is_currently_available}
+            shape="round"
+            size={isCompact ? "small" : "default"}
+            className="add-to-cart-button-card"
+            onClick={handleAddToCart} // Add click handler
+          >
+            <IonIcon icon={cartOutline} slot="icon-only"/>
+          </IonButton>
         </div>
-        {isCompact || (<IonButton
-          shape="round"
-          size="default"
-          className="add-to-cart-button-card"
-          onClick={handleAddToCart} // Add click handler
-        >
-          <IonIcon icon={cartOutline} slot="icon-only"/>
-        </IonButton>)}
       </IonCardContent>
     </IonCard>
   );

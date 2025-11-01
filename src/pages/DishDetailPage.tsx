@@ -3,23 +3,18 @@ import {
   IonBadge,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
   IonCardTitle,
   IonChip,
   IonContent,
   IonHeader,
   IonIcon,
   IonImg,
-  IonList,
   IonPage,
-  IonText,
   IonTitle,
   IonToolbar,
   useIonToast,
 } from '@ionic/react';
 import {useParams} from 'react-router';
-import {mockDishes} from '../data/mockDishes';
 import {cartOutline, locationOutline, star, starHalf, timeOutline} from 'ionicons/icons'; // Changed icon to cartOutline
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
@@ -27,7 +22,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import '@ionic/react/css/ionic-swiper.css';
 import './DishDetailPage.css';
-import {useCart} from '../state/cartState'; // Import the useCart hook
+import useProducts from "../lib/data/products";
+import {Size} from "../data/mockDishes";
 
 interface DishDetailParams {
   id: string;
@@ -35,8 +31,9 @@ interface DishDetailParams {
 
 const DishDetailPage: React.FC = () => {
   const {id} = useParams<DishDetailParams>();
-  const dish = mockDishes.find(d => d.id === id);
-  const {addItem} = useCart(); // Use the addItem function from the cart state
+  const {data: dish} = useProducts(id, {fields: "+metadata,+categories.*"}).getProduct;
+
+  // const {addItem} = useCart(); // Use the addItem function from the cart state
   const [presentToast] = useIonToast(); // Use the useIonToast hook
 
   if (!dish) {
@@ -75,9 +72,9 @@ const DishDetailPage: React.FC = () => {
   };
 
   const handleAddToCart = () => {
-    addItem(dish); // Add the current dish to the cart
+    // addItem(dish); // Add the current dish to the cart
     presentToast({ // Present the toast
-      message: `${dish.name} added to cart!`,
+      message: `${dish.title} added to cart!`,
       duration: 1500,
       position: 'bottom',
       color: 'success',
@@ -91,11 +88,11 @@ const DishDetailPage: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/dishes"/>
           </IonButtons>
-          <IonTitle>{dish.name}</IonTitle>
+          <IonTitle>{dish.title}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {dish.imageUrls.length > 0 && (
+        {dish.images.length > 0 && (
           <div className="image-slider-container">
             <Swiper
               modules={[Pagination]}
@@ -104,9 +101,9 @@ const DishDetailPage: React.FC = () => {
               speed={400}
               className="dish-detail-slides"
             >
-              {dish.imageUrls.map((url, index) => (
+              {dish.images.map((image, index) => (
                 <SwiperSlide key={index}>
-                  <IonImg src={url} alt={`${dish.name} image ${index + 1}`} className="dish-detail-image"/>
+                  <IonImg src={image.url} alt={`${dish.title} image ${index + 1}`} className="dish-detail-image"/>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -115,30 +112,46 @@ const DishDetailPage: React.FC = () => {
 
         <div className="dish-detail-content">
           <div className="dish-detail-header-section">
-            <IonCardTitle className="dish-detail-name">{dish.name}</IonCardTitle>
-            <IonBadge color="success"
-                      className="dish-detail-price">{dish.basePrice}</IonBadge> {/* Price remains here */}
+            <IonCardTitle className="dish-detail-name">{dish.title}</IonCardTitle>
+            {/*todo handle price currency*/}
+            <IonBadge color="success" className="dish-detail-price">
+              {`${dish.metadata?.sizes?.find((size) => size.title === Size.STANDARD)?.price} $`}
+            </IonBadge> {/* Price remains here */}
           </div>
 
           <div className="dish-detail-meta-section">
             <div className="dish-detail-rating">
-              {renderRatingStars(dish.rating)}
-              <span className="rating-text">({dish.rating.toFixed(1)})</span>
+              {/*//todo implement ratings*/}
+              {/*{renderRatingStars(dish.rating)}*/}
+              {/*<span className="rating-text">({dish.rating.toFixed(1)})</span>*/}
+              {renderRatingStars(4.5)}
+              <span className="rating-text">(4.5)</span>
             </div>
             <div className="dish-detail-info-items">
               <div className="info-item">
                 <IonIcon icon={locationOutline} slot="start" color="medium"/>
-                <span>{dish.distance}</span>
+                {/*//todo implement distance calculation*/}
+                {/*<span>{dish.distance}</span>*/}
+                <span>1.2 km</span>
               </div>
               <div className="info-item">
                 <IonIcon icon={timeOutline} slot="start" color="medium"/>
-                <span>{dish.timeToReady}</span>
+                {dish.metadata?.isAlwaysAvailable ? (
+                  <IonChip color="success">Always Available</IonChip>) : (
+                  dish.metadata?.scheduledDates && dish.metadata?.scheduledDates.length > 0 ? (
+                      dish.metadata?.scheduledDates.filter((date) => new Date(date) >= new Date()).map((date) => (
+                        <IonChip key={date} color="success">
+                          {new Date(date).toLocaleDateString()}
+                        </IonChip>
+                      )))
+                    : (
+                      <IonChip color="tertiary">Unavailable</IonChip>))}
               </div>
             </div>
           </div>
 
           <div className="dish-detail-tags-section">
-            {dish.categories.map(({name}, index) => (
+            {dish && dish.categories?.map(({name}, index) => (
               <IonChip key={index} outline={true} color="secondary">
                 {name}
               </IonChip>
@@ -161,24 +174,26 @@ const DishDetailPage: React.FC = () => {
           </div>
 
           <div className="dish-detail-reviews-section">
-            <h3>Reviews ({dish.reviews.length})</h3>
-            {dish.reviews.length > 0 ? (
-              <IonList lines="none">
-                {dish.reviews.map(review => (
-                  <IonCard key={review.id} className="review-card">
-                    <IonCardContent>
-                      <div className="review-header">
-                        <h4>{review.author}</h4>
-                        <div className="review-rating">{renderRatingStars(review.rating)}</div>
-                      </div>
-                      <IonText>{review.comment}</IonText>
-                    </IonCardContent>
-                  </IonCard>
-                ))}
-              </IonList>
-            ) : (
-              <p>No reviews yet.</p>
-            )}
+            {/*//todo implement reviews fetching*/}
+            <h3>Reviews 5</h3>
+            {/*<h3>Reviews ({dish.reviews.length})</h3>*/}
+            {/*{dish.reviews.length > 0 ? (*/}
+            {/*  <IonList lines="none">*/}
+            {/*    {dish.reviews.map(review => (*/}
+            {/*      <IonCard key={review.id} className="review-card">*/}
+            {/*        <IonCardContent>*/}
+            {/*          <div className="review-header">*/}
+            {/*            <h4>{review.author}</h4>*/}
+            {/*            <div className="review-rating">{renderRatingStars(review.rating)}</div>*/}
+            {/*          </div>*/}
+            {/*          <IonText>{review.comment}</IonText>*/}
+            {/*        </IonCardContent>*/}
+            {/*      </IonCard>*/}
+            {/*    ))}*/}
+            {/*  </IonList>*/}
+            {/*) : (*/}
+            {/*  <p>No reviews yet.</p>*/}
+            {/*)}*/}
           </div>
         </div>
       </IonContent>

@@ -1,6 +1,7 @@
 /* Orders Container */
 .orders-container {
     padding: 15px;
+    overflow-y: auto;
 }
 
 .orders-container h2 {

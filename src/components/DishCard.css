@@ -15,9 +15,9 @@
 }
 
 .dish-image {
-    width: 100%;
-    height: 100%;
+    height: 300px;
     object-fit: cover; /* Cover the area without distortion */
+    box-shadow: 0 2px 16px rgba(var(--ion-color-text-rgb), 0.1);
 }
 
 /* Swiper pagination styling for DishCard */
@@ -49,8 +49,7 @@
     height: 10px;
 }
 
-
-.dish-card ion-card-header {
+.dish-card-header {
     padding: 12px 16px 8px 16px; /* Adjust padding */
     gap: 5px;
 }
@@ -59,14 +58,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 5%;
     margin-bottom: 5px;
 }
 
 .dish-title-price ion-card-title {
+    text-align: start;
     font-size: 1.2em;
     font-weight: bold;
     color: var(--ion-color-text);
-    margin: 0;
+    /* Limit to one line and add ellipsis */
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Limit to 1 line */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dish-price {
@@ -107,9 +113,11 @@
 
 .dish-tags {
     display: flex;
-    flex-wrap: wrap;
-    gap: 5px; /* Space between chips */
-    margin-bottom: 10px;
+    flex-wrap: nowrap;
+    height: 50px;
+    gap: 12px; /* Space between chips */
+    margin-bottom: 20px;
+    overflow-x: auto; /* Allow horizontal scrolling if content overflows */
 }
 
 .dish-tags ion-chip {
@@ -119,6 +127,8 @@
     padding: 4px 8px;
     height: auto;
     border-radius: 12px;
+    margin: 4px 0;
+    --text-align: center;
 }
 
 .dish-info {
@@ -135,8 +145,8 @@
 }
 
 .dish-info .info-item ion-icon {
-    margin-right: 4px;
-    font-size: 1em;
+    margin-right: 2px;
+    font-size: 1.1em;
     color: var(--ion-color-text-tint);
 }
 
@@ -150,8 +160,8 @@
     --padding-top: 8px;
     --padding-bottom: 8px;
     --border-radius: 50%; /* Make it round */
-    height: 50px; /* Fixed height for round button */
-    width: 50px; /* Fixed width for round button */
+    height: 40px; /* Fixed height for round button */
+    width: 40px; /* Fixed width for round button */
     --background: var(--ion-color-primary);
     --color: var(--ion-color-primary-contrast);
     z-index: 5; /* Ensure it's above other content */
@@ -161,78 +171,3 @@
     font-size: 1.3em; /* Icon size */
 }
 
-
-/* --- Compact Styling for Restaurant Detail Page --- */
-.dish-card.compact {
-    margin: 0; /* Remove margin when in compact mode */
-    border-radius: 8px; /* Slightly less rounded */
-    box-shadow: 0 1px 4px rgba(var(--ion-color-text-rgb), 0.08); /* Lighter shadow */
-    width: 100%; /* Ensure card takes full width of its slide */
-    display: flex; /* Use flexbox for internal layout */
-    flex-direction: column; /* Stack content vertically */
-    background: var(--ion-color-step-50, #f2f2f2); /* Add a subtle background */
-}
-
-.dish-card.compact .dish-image-container { /* Use the new container */
-    width: 100%;
-    /* Use padding-top trick for square aspect ratio */
-    padding-top: 100%; /* Makes the height equal to the width */
-    height: 0; /* Reset height */
-    position: relative; /* Needed for absolute positioning of image */
-    overflow: hidden; /* Hide overflow */
-    border-top-left-radius: 8px; /* Match card border radius */
-    border-top-right-radius: 8px;
-}
-
-.dish-card.compact .dish-image {
-    position: absolute; /* Position image absolutely within the padded container */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-
-.dish-card.compact ion-card-header {
-    padding: 8px 10px 4px 10px; /* Reduced padding */
-    flex-shrink: 0; /* Prevent header from shrinking */
-}
-
-.dish-card.compact .dish-title-price {
-    margin-bottom: 0; /* Remove bottom margin */
-    flex-direction: column; /* Stack title and price vertically */
-    align-items: flex-start; /* Align items to the start */
-}
-
-.dish-card.compact .dish-title-price ion-card-title {
-    font-size: 1em; /* Smaller title */
-    white-space: nowrap; /* Prevent wrapping */
-    overflow: hidden; /* Hide overflow */
-    text-overflow: ellipsis; /* Add ellipsis */
-    width: 100%; /* Ensure it takes full width */
-    font-weight: normal; /* Less bold title */
-    color: var(--ion-color-text);
-}
-
-.dish-card.compact .dish-price {
-    font-size: 0.8em; /* Smaller price */
-    padding: 2px 5px; /* Reduced padding */
-    min-width: auto; /* Allow width to be determined by content */
-    align-self: flex-end; /* Align price to the end */
-    margin-top: 4px; /* Space between title and price */
-    --background: var(--ion-color-success-tint); /* Lighter success color */
-    --color: var(--ion-color-success-contrast);
-}
-
-.dish-card.compact .dish-rating,
-.dish-card.compact ion-card-content {
-    display: none; /* Hide rating and content in compact mode */
-}
-
-
-/* Swiper pagination styling for compact DishCard */
-/* Hide pagination in compact mode */
-.dish-card.compact .swiper-pagination {
-    display: none;
-}
