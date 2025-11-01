@@ -1,16 +1,41 @@
 import React from 'react';
-import {IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea} from '@ionic/react';
-import {Control, Controller, FieldErrors} from 'react-hook-form';
+import {IonIcon, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea, useIonToast} from '@ionic/react';
+import {Control, Controller, FieldErrors, UseFormSetValue} from 'react-hook-form';
 import {FullStoreCreationFormData} from '../../validation/storeCreationValidation';
 import ImageUploadField from "./ImageUploadField";
+import {locationOutline} from "ionicons/icons";
+import getCurrentLocation from "../../lib/utils/geolocation";
+import {useQueryClient} from "@tanstack/react-query";
 
 interface StoreDetailsFormProps {
   control: Control<FullStoreCreationFormData>;
   errors: FieldErrors<FullStoreCreationFormData>;
-  defaultFile?: File
+  defaultFile?: File;
+  setValue: UseFormSetValue<FullStoreCreationFormData>; // Add setValue to props
 }
 
-const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors, defaultFile}) => {
+const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors, defaultFile, setValue}) => {
+
+  const [presentToast] = useIonToast();
+
+
+  const handleLocationClick = async () => {
+    try {
+      const address = await getCurrentLocation();
+      if (address) {
+        console.log(address)
+        setValue('address', address, {shouldValidate: true});
+      }
+    } catch (error) {
+      console.error("Error getting current location:", error);
+      await presentToast({
+        message: 'Failed to get current location. Please retry.',
+        duration: 2000,
+        color: 'danger',
+      });
+    }
+  };
+
   return (
     <IonList className="signup-form">
       <ImageUploadField
@@ -42,11 +67,22 @@ const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors, def
         render={({field}) => (
           <IonItem lines="full"> {/* Add ion-invalid class */}
             <IonLabel position="stacked">Address</IonLabel>
-            <IonInput
-              type="text"
-              {...field}
-              placeholder="123 Main St, Anytown"
-            ></IonInput>
+            <div style={{display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between"}}>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="123 Main St, Anytown"
+              >
+              </IonInput>
+              <IonIcon
+                icon={locationOutline}
+                slot="end"
+                className="location-icon"
+                onClick={handleLocationClick}
+                color="primary"
+                size="large"
+              />
+            </div>
             {errors.address && <IonNote color="danger">{errors.address.message}</IonNote>}
           </IonItem>
         )}
@@ -57,7 +93,7 @@ const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors, def
         control={control}
         render={({field}) => (
           <IonItem lines="full"> {/* Add ion-invalid class */}
-            <IonLabel position="stacked">Description</IonLabel>
+            <IonLabel position="stacked" style={{marginBottom: "5px"}}>Description</IonLabel>
             <IonTextarea
               {...field}
               placeholder="Tell us about your store (cuisine, atmosphere, etc.)"

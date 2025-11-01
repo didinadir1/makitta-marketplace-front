@@ -137,7 +137,7 @@ const StoreCreationPage: React.FC = () => {
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <StoreDetailsForm control={control} errors={errors}
+        return <StoreDetailsForm control={control} errors={errors} setValue={setValue}
                                  defaultFile={watch("image")} // Pass existing image URL
         />;
       case 2:
