@@ -77,7 +77,6 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
       setPreviewUrls(updatedUrls);
       onChange(updatedFiles);
     } else {
-      console.log(previewUrls)
       setPreviewUrls([]);
       onChange(null);
     }

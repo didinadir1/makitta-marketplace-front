@@ -83,7 +83,7 @@ export const useRestaurantActions = () => {
       // Invalidate or update relevant queries, e.g., restaurant list
       console.log("sucessfully updated restaurant", restaurant);
       await queryClient.invalidateQueries({queryKey: ["restaurants"]});
-      queryClient.setQueryData(["restaurant", restaurant.id], restaurant);
+      await queryClient.invalidateQueries({queryKey: ["restaurant", restaurant.id]});
       await presentToast({
         message: 'Store updated successfully!',
         duration: 2000,

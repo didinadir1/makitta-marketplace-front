@@ -28,4 +28,4 @@ export const saveProductSchema = z.object({
   newAddOnPrice: z.string().optional(),
 });
 
-export type SaveProductFormData = z.infer<typeof saveProductSchema>;
+export type SaveProductFormData = z.infer<typeof saveProductSchema> & { keptImagesUrls?: { url: string }[] };

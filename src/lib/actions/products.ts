@@ -9,7 +9,7 @@ export const useProductActions = () => {
   const queryClient = useQueryClient();
   const [presentToast] = useIonToast();
 
-  const createProductMutation = useMutation({
+  const saveProductMutation = useMutation({
     mutationFn: async ({
                          restaurantId,
                          productData,
@@ -34,8 +34,10 @@ export const useProductActions = () => {
 
 
       const headers = await getAuthHeaders();
-      const {restaurant_product} = await sdk.client.fetch<{
-        restaurant_product: RestaurantProductDTO;
+      // we save one product at a time
+      await sdk.client.fetch<{
+        createdProducts: RestaurantProductDTO[];
+        updatedProducts: RestaurantProductDTO[];
       }>(`/store/restaurants/${restaurantId}/products`, {
         method: "POST",
         body: formData,
@@ -44,12 +46,16 @@ export const useProductActions = () => {
           ...headers,
         },
       });
-      return restaurant_product;
+
+      return {product_id: productData?.id, restaurant_id: restaurantId}
+
     },
-    onSuccess: async () => {
+    onSuccess: async (restaurantProduct: RestaurantProductDTO) => {
+      console.log("Product saved successfully:", restaurantProduct);
       // Invalidate product lists and potentially restaurant details
       await queryClient.invalidateQueries({queryKey: ["products"]});
-      await queryClient.invalidateQueries({queryKey: ["restaurant"]}); // If restaurant data includes products
+      await queryClient.invalidateQueries({queryKey: ["product", restaurantProduct.product_id]});
+      await queryClient.invalidateQueries({queryKey: ["restaurant", restaurantProduct.restaurant_id]}); // If restaurant data includes products
       await presentToast({
         message: 'Product saved successfully!',
         duration: 2000,
@@ -57,7 +63,7 @@ export const useProductActions = () => {
       });
     },
     onError: async (error) => {
-      console.error("Error creating product:", error);
+      console.error("Error saving product:", error);
       await presentToast({
         message: 'Failed to save the product. Please try again.',
         duration: 2000,
@@ -107,7 +113,7 @@ export const useProductActions = () => {
     },
   });
   return {
-    createProduct: createProductMutation.mutateAsync,
+    saveProduct: saveProductMutation.mutateAsync,
     deleteProduct: deleteProductMutation.mutateAsync,
   };
 };

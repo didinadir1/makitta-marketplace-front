@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -32,6 +32,7 @@ import {SaveProductFormData, saveProductSchema} from "../../validation/productCr
 import {useCategories, useUser} from "../../lib/data";
 import {useProductActions} from "../../lib/actions/products";
 import {Product} from "../../types/product";
+import {compareImageArrays} from "../../lib/util/files";
 
 
 interface ProductFormModalProps {
@@ -47,8 +48,10 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                                                            }) => {
 
   const {data: fetchedCategories} = useCategories()
-  const {createProduct} = useProductActions()
+  const {saveProduct} = useProductActions()
   const {data: user} = useUser();
+
+  const [defaultImages, setDefaultImages] = useState<{ url: string; file: File }[]>([]);
 
 
   const {
@@ -101,15 +104,18 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           try {
             const response = await fetch(image.url);
             const blob = await response.blob();
-            return new File([blob], fileName, {type: blob.type});
+            const file = new File([blob], fileName, {type: blob.type});
+            return {file, url: image.url}; // Include the URL with the file
           } catch (error) {
             console.error('Error fetching image:', error);
             return null;
           }
         });
 
-        Promise.all(fetchImagePromises).then((files) => {
-          const validFiles = files.filter((file) => file !== null) as File[];
+        Promise.all(fetchImagePromises).then((images) => {
+          const validImages = images.filter((img): img is { file: File, url: string } => img !== null);
+          const validFiles = validImages.map(img => img.file);
+          setDefaultImages(validImages);
           setValue("images", validFiles);
         });
       }
@@ -155,7 +161,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   };
 
   const onSubmit: SubmitHandler<SaveProductFormData> = async (data) => {
-    await createProduct({restaurantId: user!.restaurant_id, productData: data})
+    let dataToSave: Partial<SaveProductFormData> = data
+    if (product) {
+      dataToSave = Object.fromEntries(
+        Object.entries(data).filter(([key, value]) => key !== "images" && value !== product[key as keyof typeof product])
+      )
+      const {keptImagesUrls, newFiles} = await compareImageArrays(defaultImages, watch("images"))
+
+      dataToSave = {...dataToSave, id: product.id, keptImagesUrls, images: newFiles}
+
+    }
+    await saveProduct({restaurantId: user!.restaurant_id, productData: dataToSave})
     setIsOpen(false);
   };
 

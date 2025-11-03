@@ -28,7 +28,8 @@ import StoreDetailsForm from '../components/store-creation/StoreDetailsForm'; //
 import SocialLinksForm from '../components/store-creation/SocialLinksForm';
 import {useRestaurantActions} from "../lib/actions";
 import {useUser} from "../lib/data";
-import useRestaurant from "../lib/data/restaurants"; // Import Step 2 component
+import useRestaurant from "../lib/data/restaurants";
+import areFilesIdentical from "../lib/util/files"; // Import Step 2 component
 
 
 const StoreCreationPage: React.FC = () => {
@@ -46,7 +47,8 @@ const StoreCreationPage: React.FC = () => {
   ];
   const isEditPage = history.location.pathname.includes("edit-store")
 
-  let defaultImage: File;
+  const [defaultImage, setDefaultImage] = useState<File>();
+
   const {
     control,
     handleSubmit,
@@ -84,7 +86,7 @@ const StoreCreationPage: React.FC = () => {
       fetch(restaurant.image_url)
         .then(response => response.blob())
         .then(blob => {
-          defaultImage = new File([blob], fileName, {type: blob.type});
+          setDefaultImage(new File([blob], fileName, {type: blob.type}));
           setValue("image", defaultImage); // Set the file in form state
         })
         .catch(error => console.error('Error fetching image:', error));
@@ -131,6 +133,7 @@ const StoreCreationPage: React.FC = () => {
         }
         await updateRestaurant({id: restaurant!.id, ...updatedValues})
       } else await createRestaurant(data)
+      setCurrentStep(1)
     }
   };
 
@@ -199,23 +202,3 @@ const StoreCreationPage: React.FC = () => {
 };
 
 export default StoreCreationPage;
-
-async function areFilesIdentical(file1?: File, file2?: File) {
-  // Convert files to ArrayBuffers
-  const buffer1 = await file1?.arrayBuffer();
-  const buffer2 = await file2?.arrayBuffer();
-
-  if (!buffer1 || !buffer2) return false;
-
-  // Compare byte-by-byte
-  if (buffer1.byteLength !== buffer2.byteLength) return false;
-
-  const view1 = new Uint8Array(buffer1);
-  const view2 = new Uint8Array(buffer2);
-
-  for (let i = 0; i < view1.length; i++) {
-    if (view1[i] !== view2[i]) return false;
-  }
-
-  return true;
-}

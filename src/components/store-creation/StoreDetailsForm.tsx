@@ -5,7 +5,6 @@ import {FullStoreCreationFormData} from '../../validation/storeCreationValidatio
 import ImageUploadField from "./ImageUploadField";
 import {locationOutline} from "ionicons/icons";
 import getCurrentLocation from "../../lib/utils/geolocation";
-import {useQueryClient} from "@tanstack/react-query";
 
 interface StoreDetailsFormProps {
   control: Control<FullStoreCreationFormData>;
@@ -23,7 +22,6 @@ const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors, def
     try {
       const address = await getCurrentLocation();
       if (address) {
-        console.log(address)
         setValue('address', address, {shouldValidate: true});
       }
     } catch (error) {
