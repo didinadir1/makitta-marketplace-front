@@ -2,12 +2,13 @@ import {IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSearchbar, I
 import React, {useState} from 'react';
 import RestaurantCard from '../components/RestaurantCard'; // Import the new RestaurantCard
 import './RestaurantPage.css';
-import {useRestaurants} from "../lib/data";
+import {useRestaurants, useUser} from "../lib/data";
 
 const RestaurantPage: React.FC = () => {
   const [searchText, setSearchText] = useState('');
 
-  const {data: restaurants} = useRestaurants();
+  const {data: user} = useUser();
+  const {data: restaurants} = useRestaurants({id: {$ne: user?.restaurant_id}});
 
 
   return (

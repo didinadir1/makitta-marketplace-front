@@ -19,7 +19,7 @@ export async function retrieveRestaurant(
 export async function listRestaurants(
   filter?: Record<string, string>
 ): Promise<RestaurantDTO[]> {
-  const query = new URLSearchParams(filter).toString();
+  const query = new URLSearchParams(JSON.stringify(filter)).toString();
 
   const {restaurants}: { restaurants: RestaurantDTO[] } =
     await sdk.client.fetch(`/store/restaurants?${query}`, {
@@ -52,7 +52,7 @@ export default function useRestaurant(restaurantId?: string) {
   })
 }
 
-export function useRestaurants(filter?: Record<string, string>) {
+export function useRestaurants(filter?: Record<string, any>) {
   return useQuery<RestaurantDTO[]>({
     queryKey: ["restaurants", filter],
     queryFn: () => listRestaurants(filter),

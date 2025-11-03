@@ -106,8 +106,18 @@ const TabsContainer: React.FC = () => {
         <Route exact path="/profile/create-store" component={StoreCreationPage}/>
         <Route exact path="/profile/my-account/edit-store" component={StoreCreationPage}/>
         <Route exact path="/dish/:id" component={DishDetailPage}/>
-        <Route exact path="/restaurant/:id" component={RestaurantDetailPage}/>
-        {/* Default redirect to the entry page */}
+        <Route
+          exact
+          path="/restaurant/:id"
+          render={({match}) =>
+            match.params.id !== user?.restaurant_id ? (
+              <RestaurantDetailPage/>
+            ) : (
+              // todo maybe redirect to fallback page
+              <Redirect to="/restaurants"/>
+            )
+          }
+        />
         <Route exact path="/">
           <Redirect to="/entry"/>
         </Route>
