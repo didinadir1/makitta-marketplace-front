@@ -51,16 +51,16 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {QueryClientProvider} from "@tanstack/react-query";
 import {useEffect} from "react";
 import {SocialLogin} from "@capgo/capacitor-social-login";
 import MyAccountPage from "./pages/MyAccountPage";
 import StoreCreationPage from "./pages/StoreCreationPage";
 import {useUser} from "./lib/data";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
+import {queryClient} from "./vendor/utils/query-client";
 
 setupIonicReact();
-const queryClient = new QueryClient()
 
 
 // Create a TabsContainer component to use the mode context

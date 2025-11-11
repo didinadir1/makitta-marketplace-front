@@ -10,7 +10,7 @@ import {
 } from '@ionic/react';
 import {archiveOutline, checkmarkCircleOutline, closeCircleOutline, playCircleOutline} from 'ionicons/icons'; // Icons for actions
 import React from 'react';
-import {Order, OrderStatus} from '../../types/Order';
+import {Order, OrderStatus} from '../../vendor/types/order';
 import './OrderCard.css';
 import {mockDishes} from "../../data/mockDishes";
 

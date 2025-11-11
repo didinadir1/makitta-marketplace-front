@@ -2,7 +2,7 @@ import {IonList, useIonAlert, useIonToast,} from '@ionic/react';
 import React, {useState} from 'react'; // Import useState
 import OrderCard from './OrderCard'; // Import OrderCard
 import {mockOrders} from '../../data/mockOrders'; // Import mock orders
-import {Order} from '../../types/Order'; // Import Order types
+import {Order} from '../../vendor/types/order'; // Import Order types
 import './OrdersTab.css';
 
 const OrdersTab: React.FC = () => {
