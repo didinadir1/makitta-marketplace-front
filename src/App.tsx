@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
-import {business, cart, chatbubble, person, restaurant} from 'ionicons/icons'; // Added restaurant mode icons
+import {business, cart, chatbubble, person, restaurant, store} from 'ionicons/icons'; // Added store icon for the new store tab
 import DishesPage from './pages/DishesPage';
 import RestaurantPage from './pages/RestaurantPage';
 import ProfilePage from './pages/ProfilePage';
@@ -23,6 +23,7 @@ import {ProductContextProvider} from './state/productState'; // Import AppContex
 import EntryPage from './pages/EntryPage'; // Import the new EntryPage
 import LoginPage from './pages/LoginPage'; // Import the new LoginPage
 import SignupPage from './pages/SignupPage'; // Import the new SignupPage
+import StorePage from './pages/StorePage'; // Import the new StorePage for seller store management
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -97,6 +98,7 @@ const TabsContainer: React.FC = () => {
         <Route exact path="/dishes" component={DishesPage}/>
         <Route exact path="/restaurants" component={RestaurantPage}/>
         <Route exact path="/cart" component={CartPage}/>
+        <Route exact path="/store" component={StorePage}/> {/* New route for store management page */}
 
         {/* Common routes */}
         <Route exact path="/profile" component={ProfilePage}/>
@@ -146,6 +148,13 @@ const TabsContainer: React.FC = () => {
             <IonIcon aria-hidden="true" icon={person}/>
             <IonLabel>Profile</IonLabel>
           </IonTabButton>
+          {/* New store tab, only visible if user is a seller (has restaurant_id) */}
+          {user?.restaurant_id && (
+            <IonTabButton tab="store" href="/store">
+              <IonIcon aria-hidden="true" icon={store}/>
+              <IonLabel>Store</IonLabel>
+            </IonTabButton>
+          )}
         </IonTabBar>
       )}
     </IonTabs>
