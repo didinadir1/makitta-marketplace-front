@@ -1,15 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query"
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import {fetchQuery, sdk} from "../../lib/config";
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {fetchQuery, sellerSdk} from "../../lib/config";
 import {inventoryItemsQueryKeys} from "./inventory";
 import {ProductAttributesResponse} from "../types/products";
 import productsImagesFormatter from "../utils/products-images-formatter";
@@ -121,9 +115,9 @@ export const useProductVariant = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: async () => {
-      const { product } = await fetchQuery(`/vendor/products/${productId}`, {
+      const {product} = await fetchQuery(`/vendor/products/${productId}`, {
         method: "GET",
         query: {
           fields:
@@ -132,16 +126,16 @@ export const useProductVariant = (
       })
 
       const variant = product.variants.find(
-        ({ id }: { id: string }) => id === variantId
+        ({id}: { id: string }) => id === variantId
       )
 
-      return { variant }
+      return {variant}
     },
     queryKey: variantsQueryKeys.detail(variantId, query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useProductVariants = (
@@ -157,8 +151,8 @@ export const useProductVariants = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.product.listVariants(productId, query),
+  const {data, ...rest} = useQuery({
+    queryFn: () => sellerSdk.admin.product.listVariants(productId, query),
     queryKey: variantsQueryKeys.list({
       productId,
       ...query,
@@ -166,7 +160,7 @@ export const useProductVariants = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateProductVariant = (
@@ -228,7 +222,7 @@ export const useUpdateProductVariantsBatch = (
   return useMutation({
     mutationFn: async (variants: Array<{ id: string; [key: string]: any }>) => {
       const promises = variants.map((variant) => {
-        const { id, ...updateData } = variant
+        const {id, ...updateData} = variant
         return fetchQuery(`/vendor/products/${productId}/variants/${id}`, {
           method: "POST",
           body: updateData,
@@ -254,7 +248,7 @@ export const useProductVariantsInventoryItemsBatch = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.admin.product.batchVariantInventoryItems(productId, payload),
+      sellerSdk.admin.product.batchVariantInventoryItems(productId, payload),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: variantsQueryKeys.lists(),
@@ -308,7 +302,7 @@ export const useDeleteVariantLazy = (
   >
 ) => {
   return useMutation({
-    mutationFn: ({ variantId }) =>
+    mutationFn: ({variantId}) =>
       fetchQuery(`/vendor/products/${productId}/variants/${variantId}`, {
         method: "DELETE",
       }),
@@ -330,7 +324,7 @@ export const useDeleteVariantLazy = (
 }
 
 export const useProductAttributes = (id: string) => {
-  const { data, ...rest } = useQuery<ProductAttributesResponse>({
+  const {data, ...rest} = useQuery<ProductAttributesResponse>({
     queryFn: () =>
       fetchQuery(`/vendor/products/${id}/applicable-attributes`, {
         method: "GET",
@@ -338,7 +332,7 @@ export const useProductAttributes = (id: string) => {
     queryKey: productAttributesQueryKey(id),
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useProduct = (
@@ -354,7 +348,7 @@ export const useProduct = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/products/${id}`, {
         method: "GET",
@@ -383,7 +377,7 @@ export const useProducts = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/products", {
         method: "GET",
@@ -393,7 +387,7 @@ export const useProducts = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateProduct = (

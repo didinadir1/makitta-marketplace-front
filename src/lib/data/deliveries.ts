@@ -1,4 +1,4 @@
-import { sdk } from "../config";
+import {sellerSdk} from "../config";
 import {DeliveryDTO} from "../../types/delivery";
 import {getAuthHeaders} from "./sessions";
 import {useQuery} from "@tanstack/react-query";
@@ -7,7 +7,7 @@ import {useQuery} from "@tanstack/react-query";
 async function listDeliveries(
   filter?: Record<string, string>
 ): Promise<DeliveryDTO[]> {
-  const { deliveries }: { deliveries: DeliveryDTO[] } = await sdk.client.fetch(
+  const {deliveries}: { deliveries: DeliveryDTO[] } = await sellerSdk.client.fetch(
     "/store/deliveries",
     {
       method: "GET",
@@ -24,7 +24,7 @@ async function listDeliveries(
 async function retrieveDelivery(
   deliveryId: string
 ): Promise<DeliveryDTO> {
-  const { delivery }: { delivery: DeliveryDTO } = await sdk.client.fetch(
+  const {delivery}: { delivery: DeliveryDTO } = await sellerSdk.client.fetch(
     `/store/deliveries/${deliveryId}`,
     {
       method: "GET",

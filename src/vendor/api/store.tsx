@@ -1,17 +1,11 @@
-import {
-  MutationOptions,
-  QueryKey,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
+import {MutationOptions, QueryKey, useMutation, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { pricePreferencesQueryKeys } from "./price-preferences"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {pricePreferencesQueryKeys} from "./price-preferences"
 
 const STORE_QUERY_KEY = "store" as const
 export const storeQueryKeys = queryKeysFactory(STORE_QUERY_KEY)
@@ -33,7 +27,7 @@ export async function retrieveActiveStore(
     throw new FetchError("No active store found", "Not Found", 404)
   }
 
-  return { store: activeStore }
+  return {store: activeStore}
 }
 
 export const useStore = (
@@ -48,7 +42,7 @@ export const useStore = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () => retrieveActiveStore(query),
     queryKey: storeQueryKeys.details(),
     ...options,
@@ -69,7 +63,7 @@ export const useUpdateStore = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.store.update(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.store.update(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: pricePreferencesQueryKeys.list(),
@@ -88,7 +82,7 @@ export const useUpdateStore = (
 }
 
 export const useConfiguration = () => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: async () =>
       await fetchQuery("/vendor/configuration", {
         method: "GET",
@@ -96,5 +90,5 @@ export const useConfiguration = () => {
     queryKey: ["configuration"],
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }

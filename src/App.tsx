@@ -62,7 +62,6 @@ import {queryClient} from "./vendor/utils/query-client";
 
 setupIonicReact();
 
-
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
   const location = useLocation(); // Get the current location
@@ -73,8 +72,8 @@ const TabsContainer: React.FC = () => {
     SocialLogin.initialize(
       {
         google: {
-          iOSClientId: "1079130558258-iqole135c63rblcsl6edp27509ei0hej.apps.googleusercontent.com",
-          webClientId: "1079130558258-q2liqaor41kmm36c73gvpp7jjmb98ddj.apps.googleusercontent.com"
+          iOSClientId: __GOOGLE_IOS_CLIENT_ID__,
+          webClientId: __GOOGLE_WEB_CLIENT_ID__
         }
       }
     )

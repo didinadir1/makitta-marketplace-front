@@ -1,4 +1,4 @@
-import {sdk} from "../config";
+import {sellerSdk} from "../config";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {CreateRestaurantDTO, RestaurantDTO, UpdateRestaurantDTO} from "../../types/restaurant";
 import {getAuthHeaders} from "../data";
@@ -24,7 +24,7 @@ export const useRestaurantActions = () => {
         }
       });
       const headers = await getAuthHeaders();
-      return await sdk.client.fetch<{ restaurant: RestaurantDTO }
+      return await sellerSdk.client.fetch<{ restaurant: RestaurantDTO }
       >("/store/restaurants", {
         method: "POST",
         body: formData,
@@ -69,7 +69,7 @@ export const useRestaurantActions = () => {
         }
       });
       const headers = await getAuthHeaders();
-      return await sdk.client.fetch<{ restaurant: RestaurantDTO }
+      return await sellerSdk.client.fetch<{ restaurant: RestaurantDTO }
       >(`/store/restaurants/${restaurantData.id}`, {
         method: "POST",
         body: formData,

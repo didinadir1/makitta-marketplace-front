@@ -1,16 +1,10 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { FindParams, HttpTypes, PaginatedResponse } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { productsQueryKeys } from "./products"
+import {FetchError} from "@medusajs/js-sdk"
+import {FindParams, HttpTypes, PaginatedResponse} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {productsQueryKeys} from "./products"
 
 const COLLECTION_QUERY_KEY = "collections" as const
 export const collectionsQueryKeys = queryKeysFactory(COLLECTION_QUERY_KEY)
@@ -27,17 +21,17 @@ export const useCollection = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: collectionsQueryKeys.detail(id),
     queryFn: async () =>
       await fetchQuery(`/vendor/product-collections/${id}`, {
         method: "GET",
-        query: { fields: "*products" },
+        query: {fields: "*products"},
       }),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCollections = (
@@ -57,7 +51,7 @@ export const useCollections = (
   >,
   id?: string
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: collectionsQueryKeys.list(query),
     queryFn: async () =>
       fetchQuery("/vendor/product-collections", {
@@ -76,7 +70,7 @@ export const useCollections = (
       ),
     }
   }
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useUpdateCollection = (
@@ -88,7 +82,7 @@ export const useUpdateCollection = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.productCollection.update(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.productCollection.update(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: collectionsQueryKeys.lists(),
@@ -113,7 +107,7 @@ export const useUpdateCollectionProducts = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.admin.productCollection.updateProducts(id, payload),
+      sellerSdk.admin.productCollection.updateProducts(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: collectionsQueryKeys.lists(),
@@ -175,7 +169,7 @@ export const useDeleteCollection = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.productCollection.delete(id),
+    mutationFn: () => sellerSdk.admin.productCollection.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: collectionsQueryKeys.lists(),

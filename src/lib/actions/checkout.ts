@@ -1,7 +1,7 @@
-import { HttpTypes, UpsertAddressDTO } from "@medusajs/types";
-import { sdk } from "../config";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCart } from "./carts";
+import {UpsertAddressDTO} from "@medusajs/types";
+import {sellerSdk} from "../config";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useCart} from "./carts";
 import {DeliveryDTO} from "../../types/delivery";
 
 // This file is primarily for checkout actions that might involve server-side steps
@@ -18,7 +18,7 @@ import {DeliveryDTO} from "../../types/delivery";
 
 export const useUpdateCart = () => {
   const queryClient = useQueryClient();
-  const { cartId } = useCart();
+  const {cartId} = useCart();
 
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
@@ -26,12 +26,12 @@ export const useUpdateCart = () => {
         throw new Error("No cart found");
       }
 
-      const { cart } = await sdk.store.cart.update(cartId, data);
+      const {cart} = await sellerSdk.store.cart.update(cartId, data);
       return cart;
     },
     onSuccess: (updatedCart) => {
       queryClient.setQueryData(["cart", updatedCart.id], updatedCart);
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({queryKey: ["cart"]});
     },
     onError: (error) => {
       console.error("Error updating cart:", error);
@@ -41,7 +41,7 @@ export const useUpdateCart = () => {
 
 export const useCompleteCart = () => {
   const queryClient = useQueryClient();
-  const { cartId, clearCart } = useCart();
+  const {cartId, clearCart} = useCart();
 
   return useMutation({
     mutationFn: async () => {
@@ -49,13 +49,13 @@ export const useCompleteCart = () => {
         throw new Error("No cart found");
       }
 
-      const response = await sdk.store.cart.complete(cartId);
+      const response = await sellerSdk.store.cart.complete(cartId);
       return response;
     },
     onSuccess: async (response) => {
       // Assuming successful completion means the cart is no longer needed
       await clearCart();
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({queryKey: ["cart"]});
       // Handle post-completion logic, e.g., navigate to order confirmation
     },
     onError: (error) => {
@@ -66,7 +66,7 @@ export const useCompleteCart = () => {
 
 export const useAddPaymentSession = () => {
   const queryClient = useQueryClient();
-  const { cart } = useCart();
+  const {cart} = useCart();
 
   return useMutation({
     mutationFn: async () => {
@@ -74,12 +74,12 @@ export const useAddPaymentSession = () => {
         throw new Error("No cart found");
       }
 
-      const res = await sdk.store.payment.initiatePaymentSession(cart);
+      const res = await sellerSdk.store.payment.initiatePaymentSession(cart);
       return res;
     },
     onSuccess: (res) => {
       // Update cart data in cache if necessary
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({queryKey: ["cart"]});
     },
     onError: (error) => {
       console.error("Error adding payment session:", error);
@@ -92,17 +92,17 @@ export const useCreateDelivery = () => {
 
   return useMutation({
     mutationFn: async ({
-      cartId,
-      restaurantId,
-    }: {
+                         cartId,
+                         restaurantId,
+                       }: {
       cartId: string;
       restaurantId: string;
     }) => {
-      const { delivery } = await sdk.client.fetch<{
+      const {delivery} = await sellerSdk.client.fetch<{
         delivery: DeliveryDTO;
       }>("/store/deliveries", {
         method: "POST",
-        body: JSON.stringify({ cart_id: cartId, restaurant_id: restaurantId }),
+        body: JSON.stringify({cart_id: cartId, restaurant_id: restaurantId}),
         headers: {
           "Content-Type": "application/json",
         },
@@ -110,7 +110,7 @@ export const useCreateDelivery = () => {
       return delivery;
     },
     onSuccess: (delivery) => {
-      queryClient.invalidateQueries({ queryKey: ["deliveries"] });
+      queryClient.invalidateQueries({queryKey: ["deliveries"]});
       // Store delivery ID client-side if needed for subsequent actions
       // medusaStorage.set("_delivery_id", delivery.id);
     },
@@ -123,7 +123,7 @@ export const useCreateDelivery = () => {
 // Refactored placeOrder for client-side usage
 export const usePlaceOrder = () => {
   const queryClient = useQueryClient();
-  const { cartId, clearCart } = useCart();
+  const {cartId, clearCart} = useCart();
   const updateCartMutation = useUpdateCart();
   const createDeliveryMutation = useCreateDelivery();
   const completeCartMutation = useCompleteCart();

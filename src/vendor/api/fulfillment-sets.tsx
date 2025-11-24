@@ -1,17 +1,11 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { shippingOptionsQueryKeys } from "./shipping-options"
-import { stockLocationsQueryKeys } from "./stock-locations"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {shippingOptionsQueryKeys} from "./shipping-options"
+import {stockLocationsQueryKeys} from "./stock-locations"
 
 const FULFILLMENT_SETS_QUERY_KEY = "fulfillment_sets" as const
 export const fulfillmentSetsQueryKeys = queryKeysFactory(
@@ -70,9 +64,9 @@ export const useFulfillmentSetServiceZone = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
-      sdk.admin.fulfillmentSet.retrieveServiceZone(
+      sellerSdk.admin.fulfillmentSet.retrieveServiceZone(
         fulfillmentSetId,
         serviceZoneId,
         query
@@ -81,7 +75,7 @@ export const useFulfillmentSetServiceZone = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateFulfillmentSetServiceZone = (
@@ -133,7 +127,7 @@ export const useUpdateFulfillmentSetServiceZone = (
     mutationFn: (payload) =>
       fetchQuery(
         `/vendor/fulfillment-sets/${fulfillmentSetId}/service-zones/${serviceZoneId}`,
-        { method: "POST", body: payload }
+        {method: "POST", body: payload}
       ),
     onSuccess: async (data, variables, context) => {
       await queryClient.invalidateQueries({
@@ -165,7 +159,7 @@ export const useDeleteFulfillmentServiceZone = (
     mutationFn: () =>
       fetchQuery(
         `/vendor/fulfillment-sets/${fulfillmentSetId}/service-zones/${serviceZoneId}`,
-        { method: "DELETE" }
+        {method: "DELETE"}
       ),
     onSuccess: async (data, variables, context) => {
       await queryClient.invalidateQueries({

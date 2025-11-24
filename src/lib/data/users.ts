@@ -1,11 +1,11 @@
-import {sdk} from "../config";
+import {sellerSdk} from "../config";
 import {getAuthHeaders} from "./sessions";
 import {useQuery} from "@tanstack/react-query";
 import {RestaurantAdminDTO} from "../../types/user";
 
 export async function retrieveUser() {
   try {
-    const {user} = await sdk.client.fetch<{
+    const {user} = await sellerSdk.client.fetch<{
       user: RestaurantAdminDTO
     }>("/store/users/me", {
       headers: {

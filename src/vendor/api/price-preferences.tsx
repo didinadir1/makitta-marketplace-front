@@ -1,15 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
 
 const PRICE_PREFERENCES_QUERY_KEY = "price-preferences" as const
 export const pricePreferencesQueryKeys = queryKeysFactory(
@@ -29,14 +23,14 @@ export const usePricePreference = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     // queryFn: () => fetchQuery(`/admin/price-preferences/${id}`, { query }),
-    queryFn: () => sdk.admin.pricePreference.retrieve(id, query),
+    queryFn: () => sellerSdk.admin.pricePreference.retrieve(id, query),
     queryKey: pricePreferencesQueryKeys.detail(id),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const usePricePreferences = (
@@ -51,7 +45,7 @@ export const usePricePreferences = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/price-preferences`, {
         method: "GET",
@@ -61,7 +55,7 @@ export const usePricePreferences = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useUpsertPricePreference = (
@@ -76,9 +70,9 @@ export const useUpsertPricePreference = (
   return useMutation({
     mutationFn: (payload) => {
       if (id) {
-        return sdk.admin.pricePreference.update(id, payload, query)
+        return sellerSdk.admin.pricePreference.update(id, payload, query)
       }
-      return sdk.admin.pricePreference.create(payload, query)
+      return sellerSdk.admin.pricePreference.create(payload, query)
     },
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
@@ -105,7 +99,7 @@ export const useDeletePricePreference = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.pricePreference.delete(id),
+    mutationFn: () => sellerSdk.admin.pricePreference.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: pricePreferencesQueryKeys.list(),

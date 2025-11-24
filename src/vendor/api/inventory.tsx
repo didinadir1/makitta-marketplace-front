@@ -2,7 +2,7 @@ import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useMutation, UseMutationOptions, useQueries, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 
-import {fetchQuery, sdk} from "../../lib/config";
+import {fetchQuery, sellerSdk} from "../../lib/config";
 import {queryClient} from "../utils/query-client"
 import {queryKeysFactory} from "../utils/query-key-factory"
 import {variantsQueryKeys} from "./products"
@@ -93,7 +93,7 @@ export const useCreateInventoryItem = (
 ) => {
   return useMutation({
     mutationFn: (payload: HttpTypes.AdminCreateInventoryItem) =>
-      sdk.admin.inventoryItem.create(payload),
+      sellerSdk.admin.inventoryItem.create(payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: inventoryItemsQueryKeys.lists(),
@@ -140,7 +140,7 @@ export const useDeleteInventoryItem = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.inventoryItem.delete(id),
+    mutationFn: () => sellerSdk.admin.inventoryItem.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: inventoryItemsQueryKeys.lists(),

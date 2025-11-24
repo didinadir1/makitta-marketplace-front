@@ -1,17 +1,11 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { customerGroupsQueryKeys } from "./customer-groups"
-import { productsQueryKeys } from "./products"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {customerGroupsQueryKeys} from "./customer-groups"
+import {productsQueryKeys} from "./products"
 
 const PRICE_LISTS_QUERY_KEY = "price-lists" as const
 export const priceListsQueryKeys = queryKeysFactory(PRICE_LISTS_QUERY_KEY)
@@ -29,7 +23,7 @@ export const usePriceList = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/price-lists/${id}`, {
         method: "GET",
@@ -39,7 +33,7 @@ export const usePriceList = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const usePriceListProducts = (
@@ -55,7 +49,7 @@ export const usePriceListProducts = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/price-lists/${id}/products`, {
         method: "GET",
@@ -65,7 +59,7 @@ export const usePriceListProducts = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const usePriceLists = (
@@ -80,7 +74,7 @@ export const usePriceLists = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/price-lists", {
         method: "GET",
@@ -92,7 +86,7 @@ export const usePriceLists = (
 
   const price_lists = data?.price_lists?.filter((item: any) => item.price_list)
   const count = price_lists?.length || 0
-  return { ...data, price_lists, count, ...rest }
+  return {...data, price_lists, count, ...rest}
 }
 
 export const useCreatePriceList = (
@@ -190,7 +184,7 @@ export const useBatchPriceListPrices = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.admin.priceList.batchPrices(id, payload, query),
+      sellerSdk.admin.priceList.batchPrices(id, payload, query),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: priceListsQueryKeys.detail(id),

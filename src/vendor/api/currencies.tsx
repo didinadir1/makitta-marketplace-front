@@ -1,9 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import { QueryKey, UseQueryOptions, useQuery } from "@tanstack/react-query"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useQuery, UseQueryOptions} from "@tanstack/react-query"
 
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryKeysFactory} from "../utils/query-key-factory"
 
 const CURRENCIES_QUERY_KEY = "currencies" as const
 const currenciesQueryKeys = queryKeysFactory(CURRENCIES_QUERY_KEY)
@@ -20,13 +20,13 @@ export const useCurrencies = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
-    queryFn: () => fetchQuery("/store/currencies", { method: "GET" }),
+  const {data, ...rest} = useQuery({
+    queryFn: () => fetchQuery("/store/currencies", {method: "GET"}),
     queryKey: currenciesQueryKeys.list(query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCurrency = (
@@ -42,11 +42,11 @@ export const useCurrency = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: currenciesQueryKeys.detail(id),
-    queryFn: async () => sdk.admin.currency.retrieve(id, query),
+    queryFn: async () => sellerSdk.admin.currency.retrieve(id, query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }

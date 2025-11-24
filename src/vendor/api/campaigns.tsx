@@ -1,16 +1,10 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { AdminPromotion, HttpTypes, LinkMethodRequest } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { promotionsQueryKeys } from "./promotions"
-import {fetchQuery, sdk} from "../../lib/config";
+import {FetchError} from "@medusajs/js-sdk"
+import {AdminPromotion, HttpTypes, LinkMethodRequest} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {promotionsQueryKeys} from "./promotions"
+import {fetchQuery, sellerSdk} from "../../lib/config";
 
 const REGIONS_QUERY_KEY = "campaigns" as const
 export const campaignsQueryKeys = queryKeysFactory(REGIONS_QUERY_KEY)
@@ -28,7 +22,7 @@ export const useCampaign = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: campaignsQueryKeys.detail(id),
     queryFn: async () =>
       fetchQuery(`/vendor/campaigns/${id}`, {
@@ -38,7 +32,7 @@ export const useCampaign = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCampaigns = (
@@ -53,7 +47,7 @@ export const useCampaigns = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/campaigns", {
         method: "GET",
@@ -63,7 +57,7 @@ export const useCampaigns = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateCampaign = (
@@ -159,7 +153,7 @@ export const useAddOrRemoveCampaignPromotions = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.campaign.batchPromotions(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.campaign.batchPromotions(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: campaignsQueryKeys.details(),

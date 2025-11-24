@@ -1,16 +1,10 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { productsQueryKeys } from "./products"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {productsQueryKeys} from "./products"
 
 const CATEGORIES_QUERY_KEY = "categories" as const
 export const categoriesQueryKeys = queryKeysFactory(CATEGORIES_QUERY_KEY)
@@ -28,7 +22,7 @@ export const useProductCategory = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: categoriesQueryKeys.detail(id, query),
     queryFn: () =>
       fetchQuery(`/vendor/product-categories/${id}`, {
@@ -37,7 +31,7 @@ export const useProductCategory = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useProductCategories = (
@@ -52,7 +46,7 @@ export const useProductCategories = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: categoriesQueryKeys.list(query),
     queryFn: () =>
       fetchQuery("/vendor/product-categories", {
@@ -61,7 +55,7 @@ export const useProductCategories = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateProductCategory = (
@@ -72,7 +66,7 @@ export const useCreateProductCategory = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.productCategory.create(payload),
+    mutationFn: (payload) => sellerSdk.admin.productCategory.create(payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: categoriesQueryKeys.lists(),
@@ -93,7 +87,7 @@ export const useUpdateProductCategory = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.productCategory.update(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.productCategory.update(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: categoriesQueryKeys.lists(),
@@ -117,7 +111,7 @@ export const useDeleteProductCategory = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.productCategory.delete(id),
+    mutationFn: () => sellerSdk.admin.productCategory.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: categoriesQueryKeys.detail(id),
@@ -142,7 +136,7 @@ export const useUpdateProductCategoryProducts = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.admin.productCategory.updateProducts(id, payload),
+      sellerSdk.admin.productCategory.updateProducts(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: categoriesQueryKeys.lists(),

@@ -1,20 +1,10 @@
-import { FetchError } from "@medusajs/js-sdk"
-import {
-  AdminSalesChannelListResponse,
-  AdminSalesChannelResponse,
-  HttpTypes,
-} from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { productsQueryKeys } from "./products"
+import {FetchError} from "@medusajs/js-sdk"
+import {AdminSalesChannelListResponse, AdminSalesChannelResponse, HttpTypes,} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {productsQueryKeys} from "./products"
 
 const SALES_CHANNELS_QUERY_KEY = "sales-channels" as const
 export const salesChannelsQueryKeys = queryKeysFactory(SALES_CHANNELS_QUERY_KEY)
@@ -31,13 +21,13 @@ export const useSalesChannel = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: salesChannelsQueryKeys.detail(id),
-    queryFn: async () => sdk.admin.salesChannel.retrieve(id),
+    queryFn: async () => sellerSdk.admin.salesChannel.retrieve(id),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useSalesChannels = (
@@ -52,7 +42,7 @@ export const useSalesChannels = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/sales-channels", {
         method: "GET",
@@ -61,7 +51,7 @@ export const useSalesChannels = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateSalesChannel = (
@@ -72,7 +62,7 @@ export const useCreateSalesChannel = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.salesChannel.create(payload),
+    mutationFn: (payload) => sellerSdk.admin.salesChannel.create(payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: salesChannelsQueryKeys.lists(),
@@ -92,7 +82,7 @@ export const useUpdateSalesChannel = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.salesChannel.update(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.salesChannel.update(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: salesChannelsQueryKeys.lists(),
@@ -116,7 +106,7 @@ export const useDeleteSalesChannel = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.salesChannel.delete(id),
+    mutationFn: () => sellerSdk.admin.salesChannel.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: salesChannelsQueryKeys.lists(),
@@ -144,7 +134,7 @@ export const useDeleteSalesChannelLazy = (
   >
 ) => {
   return useMutation({
-    mutationFn: (id: string) => sdk.admin.salesChannel.delete(id),
+    mutationFn: (id: string) => sellerSdk.admin.salesChannel.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: salesChannelsQueryKeys.lists(),
@@ -174,7 +164,7 @@ export const useSalesChannelRemoveProducts = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.admin.salesChannel.batchProducts(id, {
+      sellerSdk.admin.salesChannel.batchProducts(id, {
         remove: payload,
       }),
     onSuccess: (data, variables, context) => {
@@ -213,7 +203,7 @@ export const useSalesChannelAddProducts = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.admin.salesChannel.batchProducts(id, {
+      sellerSdk.admin.salesChannel.batchProducts(id, {
         add: payload,
       }),
     onSuccess: (data, variables, context) => {

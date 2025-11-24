@@ -1,4 +1,4 @@
-import { sdk } from "../config";
+import {sellerSdk} from "../config";
 import {DriverDTO} from "../../types/user";
 import {getAuthHeaders} from "./sessions";
 import {useQuery} from "@tanstack/react-query";
@@ -9,7 +9,7 @@ async function retrieveDriver(driverId: string): Promise<DriverDTO> {
     driver,
   }: {
     driver: DriverDTO;
-  } = await sdk.client.fetch(`/store/drivers/${driverId}`, {
+  } = await sellerSdk.client.fetch(`/store/drivers/${driverId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

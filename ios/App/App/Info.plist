@@ -52,6 +52,19 @@
        <array>
          <string>com.googleusercontent.apps.1079130558258-iqole135c63rblcsl6edp27509ei0hej</string>
        </array>
+       <key>CFBundleURLTypes</key>
+           <array>
+               <dict>
+                   <key>CFBundleTypeRole</key>
+                   <string>Editor</string>
+                   <key>CFBundleURLName</key>
+                   <string>com.yourcompany.yourapp</string>
+                   <key>CFBundleURLSchemes</key>
+                   <array>
+                       <string>myapp</string>
+                   </array>
+               </dict>
+           </array>
      </dict>
     </array>
     <key>NSLocationWhenInUseUsageDescription</key>

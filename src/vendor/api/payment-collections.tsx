@@ -1,10 +1,10 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import { useMutation, UseMutationOptions } from "@tanstack/react-query"
-import {sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { ordersQueryKeys } from "./orders"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {useMutation, UseMutationOptions} from "@tanstack/react-query"
+import {sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {ordersQueryKeys} from "./orders"
 
 const PAYMENT_COLLECTION_QUERY_KEY = "payment-collection" as const
 export const paymentCollectionQueryKeys = queryKeysFactory(
@@ -20,7 +20,7 @@ export const useCreatePaymentCollection = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.paymentCollection.create(payload),
+    mutationFn: (payload) => sellerSdk.admin.paymentCollection.create(payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.details(),
@@ -51,7 +51,7 @@ export const useMarkPaymentCollectionAsPaid = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.admin.paymentCollection.markAsPaid(paymentCollectionId, payload),
+      sellerSdk.admin.paymentCollection.markAsPaid(paymentCollectionId, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.details(),
@@ -83,7 +83,7 @@ export const useDeletePaymentCollection = (
   >
 ) => {
   return useMutation({
-    mutationFn: (id: string) => sdk.admin.paymentCollection.delete(id),
+    mutationFn: (id: string) => sellerSdk.admin.paymentCollection.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.details(),

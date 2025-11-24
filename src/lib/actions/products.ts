@@ -1,4 +1,4 @@
-import {sdk} from "../config";
+import {sellerSdk} from "../config";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {RestaurantProductDTO} from "../../types/restaurant";
 import {getAuthHeaders} from "../data";
@@ -35,7 +35,7 @@ export const useProductActions = () => {
 
       const headers = await getAuthHeaders();
       // we save one product at a time
-      await sdk.client.fetch<{
+      await sellerSdk.client.fetch<{
         createdProducts: RestaurantProductDTO[];
         updatedProducts: RestaurantProductDTO[];
       }>(`/store/restaurants/${restaurantId}/products`, {
@@ -81,7 +81,7 @@ export const useProductActions = () => {
       restaurantId: string;
     }) => {
       const headers = await getAuthHeaders();
-      await sdk.client.fetch(`store/restaurants/${restaurantId}/products`, {
+      await sellerSdk.client.fetch(`store/restaurants/${restaurantId}/products`, {
         method: "DELETE",
         body: {product_ids: [productId]},
         headers: {

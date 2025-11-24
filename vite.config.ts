@@ -16,6 +16,15 @@ export default defineConfig(({mode}) => {
   const TALK_JS_APP_ID = env.VITE_TALK_JS_APP_ID || ""
   const DISABLE_SELLERS_REGISTRATION =
     env.VITE_DISABLE_SELLERS_REGISTRATION || "false"
+  const DEFAULT_REGION = env.VITE_DEFAULT_REGION || ""
+  const STRIPE_KEY = env.VITE_STRIPE_KEY || ""
+  const SITE_NAME = env.VITE_SITE_NAME || ""
+  const SITE_DESCRIPTION = env.VITE_SITE_DESCRIPTION || ""
+  const ALGOLIA_ID = env.VITE_ALGOLIA_ID || ""
+  const ALGOLIA_SEARCH_KEY = env.VITE_ALGOLIA_SEARCH_KEY || ""
+  const GOOGLE_IOS_CLIENT_ID = env.VITE_GOOGLE_IOS_CLIENT_ID || ""
+  const VITE_GOOGLE_WEB_CLIENT_ID = env.VITE_GOOGLE_WEB_CLIENT_ID || ""
+  const GOOGLE_CALLBACK_URL = env.VITE_GOOGLE_CALLBACK_URL || ""
 
   return {
     plugins: [
@@ -31,6 +40,15 @@ export default defineConfig(({mode}) => {
       __DISABLE_SELLERS_REGISTRATION__: JSON.stringify(
         DISABLE_SELLERS_REGISTRATION
       ),
+      __DEFAULT_REGION__: JSON.stringify(DEFAULT_REGION),
+      __STRIPE_KEY__: JSON.stringify(STRIPE_KEY),
+      __SITE_NAME__: JSON.stringify(SITE_NAME),
+      __SITE_DESCRIPTION__: JSON.stringify(SITE_DESCRIPTION),
+      __ALGOLIA_ID__: JSON.stringify(ALGOLIA_ID),
+      __ALGOLIA_SEARCH_KEY__: JSON.stringify(ALGOLIA_SEARCH_KEY),
+      __GOOGLE_IOS_CLIENT_ID__: JSON.stringify(GOOGLE_IOS_CLIENT_ID),
+      __GOOGLE_WEB_CLIENT_ID__: JSON.stringify(VITE_GOOGLE_WEB_CLIENT_ID),
+      __GOOGLE_CALLBACK_URL__: JSON.stringify(GOOGLE_CALLBACK_URL),
     },
     test: {
       globals: true,

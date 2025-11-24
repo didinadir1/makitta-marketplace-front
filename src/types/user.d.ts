@@ -1,4 +1,4 @@
-export type UserRole = "customer" | "restaurant" | "driver"
+export type UserRole = "customer" | "seller"
 
 export type User = RestaurantAdminDTO | DriverDTO
 

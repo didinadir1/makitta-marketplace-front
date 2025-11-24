@@ -1,16 +1,10 @@
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 
-import { FetchError } from "@medusajs/js-sdk"
-import {sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
+import {sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
 
 const RETURN_REASONS_QUERY_KEY = "return_reasons" as const
 export const returnReasonsQueryKeys = queryKeysFactory(RETURN_REASONS_QUERY_KEY)
@@ -27,13 +21,13 @@ export const useReturnReasons = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.returnReason.list(query),
+  const {data, ...rest} = useQuery({
+    queryFn: () => sellerSdk.admin.returnReason.list(query),
     queryKey: returnReasonsQueryKeys.list(query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useReturnReason = (
@@ -49,13 +43,13 @@ export const useReturnReason = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.returnReason.retrieve(id, query),
+  const {data, ...rest} = useQuery({
+    queryFn: () => sellerSdk.admin.returnReason.retrieve(id, query),
     queryKey: returnReasonsQueryKeys.detail(id),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateReturnReason = (
@@ -67,7 +61,7 @@ export const useCreateReturnReason = (
   >
 ) => {
   return useMutation({
-    mutationFn: async (data) => sdk.admin.returnReason.create(data, query),
+    mutationFn: async (data) => sellerSdk.admin.returnReason.create(data, query),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: returnReasonsQueryKeys.lists(),
@@ -88,7 +82,7 @@ export const useUpdateReturnReason = (
   >
 ) => {
   return useMutation({
-    mutationFn: async (data) => sdk.admin.returnReason.update(id, data, query),
+    mutationFn: async (data) => sellerSdk.admin.returnReason.update(id, data, query),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: returnReasonsQueryKeys.lists(),
@@ -112,7 +106,7 @@ export const useDeleteReturnReason = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.returnReason.delete(id),
+    mutationFn: () => sellerSdk.admin.returnReason.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: returnReasonsQueryKeys.lists(),

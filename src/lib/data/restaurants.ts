@@ -1,4 +1,4 @@
-import {sdk} from "../config";
+import {sellerSdk} from "../config";
 import {RestaurantDTO} from "../../types/restaurant";
 import {useQuery} from "@tanstack/react-query";
 
@@ -6,7 +6,7 @@ import {useQuery} from "@tanstack/react-query";
 export async function retrieveRestaurant(
   restaurantId: string
 ): Promise<RestaurantDTO> {
-  const {restaurant}: { restaurant: RestaurantDTO } = await sdk.client.fetch(
+  const {restaurant}: { restaurant: RestaurantDTO } = await sellerSdk.client.fetch(
     `/store/restaurants/${restaurantId}`,
     {
       method: "GET",
@@ -22,7 +22,7 @@ export async function listRestaurants(
   const query = new URLSearchParams(JSON.stringify(filter)).toString();
 
   const {restaurants}: { restaurants: RestaurantDTO[] } =
-    await sdk.client.fetch(`/store/restaurants?${query}`, {
+    await sellerSdk.client.fetch(`/store/restaurants?${query}`, {
       method: "GET",
     });
 
@@ -34,7 +34,7 @@ export async function retrieveRestaurantByHandle(
   handle: string
 ): Promise<RestaurantDTO> {
   const {restaurants}: { restaurants: RestaurantDTO[] } =
-    await sdk.client.fetch(`/store/restaurants?handle=${handle}`, {
+    await sellerSdk.client.fetch(`/store/restaurants?handle=${handle}`, {
       method: "GET",
     });
 

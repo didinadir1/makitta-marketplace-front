@@ -1,16 +1,10 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes, PaginatedResponse } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { customerGroupsQueryKeys } from "./customer-groups"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes, PaginatedResponse} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {customerGroupsQueryKeys} from "./customer-groups"
 import {processCustomers} from "../utils/customer-filtering";
 import {filterOrders} from "../utils/orderFiltering";
 
@@ -30,7 +24,7 @@ export const useCustomer = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: customersQueryKeys.detail(id),
     queryFn: async () =>
       fetchQuery(`/vendor/customers/${id}`, {
@@ -40,7 +34,7 @@ export const useCustomer = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCustomers = (
@@ -60,7 +54,7 @@ export const useCustomers = (
   >,
   filters?: any
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/customers", {
         method: "GET",
@@ -89,7 +83,7 @@ export const useCreateCustomer = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.customer.create(payload),
+    mutationFn: (payload) => sellerSdk.admin.customer.create(payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: customersQueryKeys.lists(),
@@ -109,7 +103,7 @@ export const useUpdateCustomer = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.customer.update(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.customer.update(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: customersQueryKeys.lists(),
@@ -133,7 +127,7 @@ export const useDeleteCustomer = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.customer.delete(id),
+    mutationFn: () => sellerSdk.admin.customer.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: customersQueryKeys.lists(),
@@ -197,7 +191,7 @@ export const useCustomerOrders = (
   >,
   filters?: any
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: [CUSTOMERS_QUERY_KEY, id, "orders"],
     queryFn: async () =>
       fetchQuery(`/vendor/customers/${id}/orders`, {
@@ -209,5 +203,5 @@ export const useCustomerOrders = (
 
   const filteredOrders = filterOrders(data?.orders, filters, filters.sort)
 
-  return { ...data, orders: filteredOrders, ...rest }
+  return {...data, orders: filteredOrders, ...rest}
 }

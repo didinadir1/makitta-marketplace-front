@@ -1,12 +1,12 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query"
+import {useMutation, UseMutationOptions} from "@tanstack/react-query"
 
-import { HttpTypes } from "@medusajs/types"
+import {HttpTypes} from "@medusajs/types"
 
-import {sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { ordersQueryKeys } from "./orders"
-import { FetchError } from "@medusajs/js-sdk"
-import { reservationItemsQueryKeys } from "./reservations"
+import {sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {ordersQueryKeys} from "./orders"
+import {FetchError} from "@medusajs/js-sdk"
+import {reservationItemsQueryKeys} from "./reservations"
 import {inventoryItemsQueryKeys} from "./inventory";
 
 export const useCreateOrderEdit = (
@@ -19,7 +19,7 @@ export const useCreateOrderEdit = (
 ) => {
   return useMutation({
     mutationFn: (payload: HttpTypes.AdminInitiateOrderEditRequest) =>
-      sdk.admin.orderEdit.initiateRequest(payload),
+      sellerSdk.admin.orderEdit.initiateRequest(payload),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.details(),
@@ -43,7 +43,7 @@ export const useRequestOrderEdit = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.orderEdit.request(id),
+    mutationFn: () => sellerSdk.admin.orderEdit.request(id),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.details(),
@@ -75,7 +75,7 @@ export const useConfirmOrderEdit = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.orderEdit.confirm(id),
+    mutationFn: () => sellerSdk.admin.orderEdit.confirm(id),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.details(),
@@ -116,7 +116,7 @@ export const useCancelOrderEdit = (
   options?: UseMutationOptions<any, FetchError, any>
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.orderEdit.cancelRequest(orderId),
+    mutationFn: () => sellerSdk.admin.orderEdit.cancelRequest(orderId),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.details(),
@@ -149,7 +149,7 @@ export const useAddOrderEditItems = (
 ) => {
   return useMutation({
     mutationFn: (payload: HttpTypes.AdminAddOrderEditItems) =>
-      sdk.admin.orderEdit.addItems(id, payload),
+      sellerSdk.admin.orderEdit.addItems(id, payload),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.preview(id),
@@ -173,10 +173,10 @@ export const useUpdateOrderEditOriginalItem = (
 ) => {
   return useMutation({
     mutationFn: ({
-      itemId,
-      ...payload
-    }: HttpTypes.AdminUpdateOrderEditItem & { itemId: string }) => {
-      return sdk.admin.orderEdit.updateOriginalItem(id, itemId, payload)
+                   itemId,
+                   ...payload
+                 }: HttpTypes.AdminUpdateOrderEditItem & { itemId: string }) => {
+      return sellerSdk.admin.orderEdit.updateOriginalItem(id, itemId, payload)
     },
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
@@ -201,10 +201,10 @@ export const useUpdateOrderEditAddedItem = (
 ) => {
   return useMutation({
     mutationFn: ({
-      actionId,
-      ...payload
-    }: HttpTypes.AdminUpdateOrderEditItem & { actionId: string }) => {
-      return sdk.admin.orderEdit.updateAddedItem(id, actionId, payload)
+                   actionId,
+                   ...payload
+                 }: HttpTypes.AdminUpdateOrderEditItem & { actionId: string }) => {
+      return sellerSdk.admin.orderEdit.updateAddedItem(id, actionId, payload)
     },
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
@@ -230,7 +230,7 @@ export const useRemoveOrderEditItem = (
 ) => {
   return useMutation({
     mutationFn: (actionId: string) =>
-      sdk.admin.orderEdit.removeAddedItem(id, actionId),
+      sellerSdk.admin.orderEdit.removeAddedItem(id, actionId),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.preview(id),

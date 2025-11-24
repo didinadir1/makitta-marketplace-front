@@ -1,4 +1,4 @@
-import {sdk} from "../config";
+import {sellerSdk} from "../config";
 import {useQuery} from "@tanstack/react-query";
 import {ProductDTO} from "@medusajs/types";
 import {Product} from "../../types/product";
@@ -10,7 +10,7 @@ export async function retrieveProduct(
 ): Promise<Product> {
   const query = new URLSearchParams(params).toString();
 
-  const {product}: { product: ProductDTO } = await sdk.client.fetch(
+  const {product}: { product: ProductDTO } = await sellerSdk.client.fetch(
     `/store/products/${productId}?${query}`,
     {
       method: "GET",
@@ -22,7 +22,7 @@ export async function retrieveProduct(
 export async function retrieveProductsByRestaurantId(
   restaurantId: string,
 ): Promise<Product[]> {
-  const {products}: { products: ProductDTO[] } = await sdk.client.fetch(
+  const {products}: { products: ProductDTO[] } = await sellerSdk.client.fetch(
     `/store/restaurants/${restaurantId}/products`,
     {
       method: "GET",
@@ -37,7 +37,7 @@ export async function listProducts(
   const query = new URLSearchParams(params).toString();
 
   const {products}: { products: ProductDTO[] } =
-    await sdk.client.fetch(`/store/products?${query}`, {
+    await sellerSdk.client.fetch(`/store/products?${query}`, {
       method: "GET",
     });
   return products.map(productData => new Product(productData));

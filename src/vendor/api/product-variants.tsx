@@ -1,7 +1,7 @@
-import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query"
-import {sdk} from "../../lib/config";
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { FetchError } from "@medusajs/js-sdk"
+import {QueryKey, useQuery, UseQueryOptions} from "@tanstack/react-query"
+import {sellerSdk} from "../../lib/config";
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
 
 const PRODUCT_VARIANT_QUERY_KEY = "product_variant" as const
 export const productVariantQueryKeys = queryKeysFactory(
@@ -15,11 +15,11 @@ export const useVariants = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.productVariant.list(query),
+  const {data, ...rest} = useQuery({
+    queryFn: () => sellerSdk.admin.productVariant.list(query),
     queryKey: productVariantQueryKeys.list(query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }

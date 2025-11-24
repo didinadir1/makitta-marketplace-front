@@ -1,9 +1,16 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type {CapacitorConfig} from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
   appName: 'makitta-front',
-  webDir: 'dist'
+  webDir: 'dist',
+  plugins: {
+    App: {
+      appUrlOpen: {
+        enabled: true,
+      },
+    },
+  },
 };
 
 export default config;

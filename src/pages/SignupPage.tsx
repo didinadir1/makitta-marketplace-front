@@ -12,7 +12,8 @@ import {
   IonPage,
   IonText,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  useIonToast
 } from '@ionic/react';
 import {arrowBack, arrowForward} from 'ionicons/icons';
 import React from 'react';
@@ -20,13 +21,15 @@ import {useHistory} from 'react-router-dom';
 import './SignupPage.css';
 import {Controller, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useAuth} from "../lib/actions";
+import {useSignUpWithEmailPass} from "../lib/actions";
 import {PersonalInfoFormData, personalInfoSchema} from "../validation/signupValidation";
 
 
 const SignupPage: React.FC = () => {
   const history = useHistory();
-  const {signup} = useAuth();
+  const [presentToast] = useIonToast();
+  const {mutateAsync: signup} = useSignUpWithEmailPass();
+
   const {
     control,
     handleSubmit,
@@ -38,14 +41,29 @@ const SignupPage: React.FC = () => {
       phone: '',
       first_name: '',
       last_name: '',
-      actor_type: 'restaurant',
       password: '',
-      confirmedPassword: ''
+      confirmed_password: ''
     }
   });
 
   const onSubmit = async (data: PersonalInfoFormData) => {
-    await signup(data)
+    await signup(data, {
+      onSuccess: () => {
+        history.push('/signup/restaurant-info');
+      },
+      onError: async (error: any) => {
+        console.error('Signup failed:', error);
+        if (error.message === "Identity with email already exists") {
+          history.replace('/');
+        }
+        await presentToast({
+          message: `Signup failed: ${error.message || 'Unknown error'}`,
+          duration: 3000,
+          color: 'danger',
+        });
+
+      }
+    })
   };
 
   return (
@@ -152,7 +170,7 @@ const SignupPage: React.FC = () => {
                 />
 
                 <Controller
-                  name="confirmedPassword"
+                  name="confirmed_password"
                   control={control}
                   render={({field}) => (
                     <IonItem lines="full">
@@ -162,7 +180,8 @@ const SignupPage: React.FC = () => {
                         {...field}
                         placeholder="Confirm your password"
                       />
-                      {errors.confirmedPassword && <IonText color="danger">{errors.confirmedPassword.message}</IonText>}
+                      {errors.confirmed_password &&
+                          <IonText color="danger">{errors.confirmed_password.message}</IonText>}
                     </IonItem>
                   )}
                 />

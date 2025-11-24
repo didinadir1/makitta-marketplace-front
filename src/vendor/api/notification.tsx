@@ -1,9 +1,9 @@
-import { QueryKey, UseQueryOptions, useQuery } from "@tanstack/react-query"
+import {QueryKey, useQuery, UseQueryOptions} from "@tanstack/react-query"
 
-import { HttpTypes } from "@medusajs/types"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { FetchError } from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
 
 //todo implement notification system
 
@@ -23,13 +23,13 @@ export const useNotification = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: notificationQueryKeys.detail(id),
-    queryFn: async () => sdk.admin.notification.retrieve(id, query),
+    queryFn: async () => sellerSdk.admin.notification.retrieve(id, query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useNotifications = (
@@ -44,7 +44,7 @@ export const useNotifications = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/notifications", {
         method: "GET",
@@ -54,5 +54,5 @@ export const useNotifications = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }

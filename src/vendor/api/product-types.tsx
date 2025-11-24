@@ -1,15 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
 
 const PRODUCT_TYPES_QUERY_KEY = "product_types" as const
 export const productTypesQueryKeys = queryKeysFactory(PRODUCT_TYPES_QUERY_KEY)
@@ -27,13 +21,13 @@ export const useProductType = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.productType.retrieve(id, query),
+  const {data, ...rest} = useQuery({
+    queryFn: () => sellerSdk.admin.productType.retrieve(id, query),
     queryKey: productTypesQueryKeys.detail(id),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useProductTypes = (
@@ -48,7 +42,7 @@ export const useProductTypes = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/product-types", {
         method: "GET",
@@ -58,7 +52,7 @@ export const useProductTypes = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateProductType = (
@@ -75,7 +69,7 @@ export const useCreateProductType = (
         body: {
           request: {
             type: "product_type",
-            data: { value: payload.value },
+            data: {value: payload.value},
           },
         },
       }),
@@ -99,7 +93,7 @@ export const useUpdateProductType = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.productType.update(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.productType.update(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: productTypesQueryKeys.detail(id),
@@ -123,7 +117,7 @@ export const useDeleteProductType = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.productType.delete(id),
+    mutationFn: () => sellerSdk.admin.productType.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: productTypesQueryKeys.detail(id),

@@ -1,4 +1,4 @@
-import {sdk} from "../config";
+import {sellerSdk} from "../config";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {getAuthHeaders} from "../data";
 import {DeliveryDTO, DeliveryStatus} from "../../types/delivery";
@@ -9,7 +9,7 @@ const claimDelivery = async (
   deliveryId: string,
   driverId: string,
 ): Promise<DeliveryDTO> => {
-  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sellerSdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/claim`,
     {
       method: "POST",
@@ -28,7 +28,7 @@ const claimDelivery = async (
 const pickUpDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sellerSdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/pick-up`,
     {
       method: "POST",
@@ -45,7 +45,7 @@ const pickUpDelivery = async (
 const completeDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sellerSdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/complete`,
     {
       method: "POST",
@@ -62,7 +62,7 @@ const completeDelivery = async (
 const acceptDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sellerSdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/accept`,
     {
       method: "POST",
@@ -80,7 +80,7 @@ const acceptDelivery = async (
 const prepareDelivery = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sellerSdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/prepare`,
     {
       method: "POST",
@@ -97,7 +97,7 @@ const prepareDelivery = async (
 const preparationReady = async (
   deliveryId: string,
 ): Promise<DeliveryDTO> => {
-  const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+  const {delivery} = await sellerSdk.client.fetch<{ delivery: DeliveryDTO }>(
     `/store/deliveries/${deliveryId}/ready`,
     {
       method: "POST",
@@ -170,7 +170,7 @@ export const useDeliveryActions = () => {
       deliveryId: string;
       driverId: string;
     }) => {
-      await sdk.client.fetch(`/store/deliveries/${deliveryId}/pass`, {
+      await sellerSdk.client.fetch(`/store/deliveries/${deliveryId}/pass`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -193,7 +193,7 @@ export const useDeliveryActions = () => {
   });
   const declineDeliveryMutation = useMutation({
     mutationFn: async (deliveryId: string) => {
-      const {delivery} = await sdk.client.fetch<{ delivery: DeliveryDTO }>(
+      const {delivery} = await sellerSdk.client.fetch<{ delivery: DeliveryDTO }>(
         `/store/deliveries/${deliveryId}/decline`,
         {
           method: "POST",

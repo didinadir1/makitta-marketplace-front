@@ -1,16 +1,10 @@
-import { HttpTypes, PaginatedResponse } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { pricePreferencesQueryKeys } from "./price-preferences"
-import { FetchError } from "@medusajs/js-sdk"
+import {HttpTypes, PaginatedResponse} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
+import {pricePreferencesQueryKeys} from "./price-preferences"
+import {FetchError} from "@medusajs/js-sdk"
 
 const REGIONS_QUERY_KEY = "regions" as const
 export const regionsQueryKeys = queryKeysFactory(REGIONS_QUERY_KEY)
@@ -28,13 +22,13 @@ export const useRegion = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: regionsQueryKeys.detail(id, query),
-    queryFn: async () => sdk.admin.region.retrieve(id, query),
+    queryFn: async () => sellerSdk.admin.region.retrieve(id, query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useRegions = (
@@ -51,13 +45,13 @@ export const useRegions = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
-    queryFn: () => fetchQuery("/vendor/regions", { method: "GET", query }),
+  const {data, ...rest} = useQuery({
+    queryFn: () => fetchQuery("/vendor/regions", {method: "GET", query}),
     queryKey: regionsQueryKeys.list(query),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateRegion = (
@@ -68,7 +62,7 @@ export const useCreateRegion = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.region.create(payload),
+    mutationFn: (payload) => sellerSdk.admin.region.create(payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: regionsQueryKeys.lists(),
@@ -96,7 +90,7 @@ export const useUpdateRegion = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.region.update(id, payload),
+    mutationFn: (payload) => sellerSdk.admin.region.update(id, payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: regionsQueryKeys.lists(),
@@ -127,7 +121,7 @@ export const useDeleteRegion = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.region.delete(id),
+    mutationFn: () => sellerSdk.admin.region.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: regionsQueryKeys.lists(),

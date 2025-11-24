@@ -5,26 +5,45 @@ import {Storage} from '@ionic/storage';
 export const backendUrl = __BACKEND_URL__ ?? "/"
 export const publishableApiKey = __PUBLISHABLE_API_KEY__ ?? ""
 
-const CUSTOMER_JWT_KEY = "medusa_customer_token";
-const VENDOR_JWT_KEY = "medusa_vendor_token";
+export const CUSTOMER_JWT_KEY = "medusa_customer_token";
+export const SELLER_JWT_KEY = "medusa_seller_token";
 
-export const medusaStorage = new Storage().create()
+export const medusaStorage = new Storage()
+await medusaStorage.create()
 
-// const appStorage = {setItem: medusaStorage.set, getItem: medusaStorage.get, removeItem: medusaStorage.remove};
-
-export const sdk = new Medusa({
+const baseSdkConfig = {
   baseUrl: backendUrl,
-  debug: import.meta.env.NODE_ENV === "development",
-  publishableKey: publishableApiKey,
-  // auth: {
-  //   type: "jwt",
-  //   jwtTokenStorageMethod: "custom",
-  //   storage: appStorage,
-  // }
-});
+  debug: true,
+  publishableKey: publishableApiKey
+};
+const sdkStorage = {
+  setItem: (key: string, value: any) => medusaStorage.set(key, value),
+  getItem: (key: string) => medusaStorage.get(key),
+  removeItem: (key: string) => medusaStorage.remove(key),
+};
+export const sellerSdk = new Medusa({
+    ...baseSdkConfig,
+    auth: {
+      type: "jwt",
+      jwtTokenStorageKey: SELLER_JWT_KEY,
+      jwtTokenStorageMethod: "custom",
+      storage: sdkStorage,
+    }
+  })
+;
+export const customerSdk = new Medusa({
+    ...baseSdkConfig,
+    auth: {
+      type: "jwt",
+      jwtTokenStorageKey: CUSTOMER_JWT_KEY,
+      jwtTokenStorageMethod: "custom",
+      storage: sdkStorage,
+    }
+  })
+;
 
 export const uploadFilesQuery = async (files: any[]) => {
-  const token = await (await medusaStorage).get(VENDOR_JWT_KEY);
+  const token = await medusaStorage.get(SELLER_JWT_KEY);
 
   const formData = new FormData()
 
@@ -59,7 +78,7 @@ export const fetchQuery = async (
   }
 ) => {
 
-  const token = await (await medusaStorage).get(url.startsWith("/vendor") ? VENDOR_JWT_KEY : CUSTOMER_JWT_KEY);
+  const token = await medusaStorage.get(url.startsWith("/vendor") ? SELLER_JWT_KEY : CUSTOMER_JWT_KEY);
 
   const bearer = token || ""
   const params = Object.entries(query || {}).reduce(

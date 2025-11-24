@@ -1,15 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
 
 const TAGS_QUERY_KEY = "tags" as const
 export const productTagsQueryKeys = queryKeysFactory(TAGS_QUERY_KEY)
@@ -27,7 +21,7 @@ export const useProductTag = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: productTagsQueryKeys.detail(id, query),
     queryFn: async () =>
       fetchQuery(`/vendor/product-tags/${id}`, {
@@ -36,7 +30,7 @@ export const useProductTag = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useProductTags = (
@@ -51,7 +45,7 @@ export const useProductTags = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: productTagsQueryKeys.list(query),
     queryFn: async () =>
       fetchQuery("/vendor/product-tags", {
@@ -61,7 +55,7 @@ export const useProductTags = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateProductTag = (
@@ -98,7 +92,7 @@ export const useUpdateProductTag = (
   >
 ) => {
   return useMutation({
-    mutationFn: async (data) => sdk.admin.productTag.update(id, data, query),
+    mutationFn: async (data) => sellerSdk.admin.productTag.update(id, data, query),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: productTagsQueryKeys.lists(),
@@ -122,7 +116,7 @@ export const useDeleteProductTag = (
   >
 ) => {
   return useMutation({
-    mutationFn: async () => sdk.admin.productTag.delete(id),
+    mutationFn: async () => sellerSdk.admin.productTag.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: productTagsQueryKeys.lists(),

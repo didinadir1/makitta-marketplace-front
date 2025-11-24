@@ -1,5 +1,5 @@
 import {HttpTypes} from "@medusajs/types";
-import {medusaStorage, sdk} from "../config";
+import {medusaStorage, sellerSdk} from "../config";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {useEffect, useState} from "react";
 import {User} from "../../types/user";
@@ -23,7 +23,7 @@ export const removeCartId = async () => {
 // Cart functions
 export const createCart = async (data: HttpTypes.StoreCreateCart, restaurant_id: string, user: User) => {
   try {
-    const {regions} = await sdk.store.region.list();
+    const {regions} = await sellerSdk.store.region.list();
     const region = regions[0];
 
     const body = {
@@ -35,7 +35,7 @@ export const createCart = async (data: HttpTypes.StoreCreateCart, restaurant_id:
       ...data,
     } as HttpTypes.StoreCreateCart & { items: HttpTypes.StoreAddCartLineItem[] };
 
-    const {cart} = await sdk.store.cart.create(
+    const {cart} = await sellerSdk.store.cart.create(
       body,
       {},
       {
@@ -69,7 +69,7 @@ export const addToCart = async (variantId: string, restaurantId: string, user: U
       throw new Error("Error creating cart");
     }
 
-    const {cart: updatedCart} = await sdk.store.cart.createLineItem(cartId, {
+    const {cart: updatedCart} = await sellerSdk.store.cart.createLineItem(cartId, {
       variant_id: variantId,
       quantity: 1,
     });
@@ -89,7 +89,7 @@ export const removeItemFromCart = async (lineItemId: string) => {
       throw new Error("No cart found");
     }
 
-    await sdk.store.cart.deleteLineItem(cartId, lineItemId);
+    await sellerSdk.store.cart.deleteLineItem(cartId, lineItemId);
     return {success: true};
   } catch (error) {
     console.error('Error removing item from cart:', error);
@@ -104,7 +104,7 @@ export const transferCart = async () => {
       throw new Error("No cart found to transfer");
     }
 
-    const {cart} = await sdk.store.cart.transferCart(cartId, {},await getAuthHeaders());
+    const {cart} = await sellerSdk.store.cart.transferCart(cartId, {}, await getAuthHeaders());
     await setCartId(cart.id);
     return cart;
   } catch (error) {
@@ -137,7 +137,7 @@ export const useCart = () => {
     queryKey: ['cart', cartId],
     queryFn: async () => {
       if (!cartId) return null;
-      const {cart} = await sdk.store.cart.retrieve(
+      const {cart} = await sellerSdk.store.cart.retrieve(
         cartId,
         {
           fields:
@@ -202,7 +202,7 @@ export const useCart = () => {
     }) => {
       if (!cartId) throw new Error("No cart found");
 
-      const {cart} = await sdk.store.cart.updateLineItem(cartId, lineItemId, {
+      const {cart} = await sellerSdk.store.cart.updateLineItem(cartId, lineItemId, {
         quantity,
       });
       return cart;

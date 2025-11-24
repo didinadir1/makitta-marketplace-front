@@ -1,15 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../utils/query-client"
+import {queryKeysFactory} from "../utils/query-key-factory"
 
 const INVITES_QUERY_KEY = "invites" as const
 const invitesQueryKeys = queryKeysFactory(INVITES_QUERY_KEY)
@@ -26,13 +20,13 @@ export const useInvite = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: invitesQueryKeys.detail(id),
-    queryFn: async () => sdk.admin.invite.retrieve(id),
+    queryFn: async () => sellerSdk.admin.invite.retrieve(id),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useInvites = (
@@ -47,7 +41,7 @@ export const useInvites = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/invites", {
         method: "GET",
@@ -57,7 +51,7 @@ export const useInvites = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateInvite = (
@@ -71,7 +65,7 @@ export const useCreateInvite = (
     mutationFn: (payload) =>
       fetchQuery("/vendor/invites", {
         method: "POST",
-        body: { ...payload, role: "member" },
+        body: {...payload, role: "member"},
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
@@ -88,7 +82,7 @@ export const useResendInvite = (
   options?: UseMutationOptions<HttpTypes.AdminInviteResponse, FetchError, void>
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.invite.resend(id),
+    mutationFn: () => sellerSdk.admin.invite.resend(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: invitesQueryKeys.lists(),
@@ -111,7 +105,7 @@ export const useDeleteInvite = (
   >
 ) => {
   return useMutation({
-    mutationFn: () => sdk.admin.invite.delete(id),
+    mutationFn: () => sellerSdk.admin.invite.delete(id),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: invitesQueryKeys.lists(),
@@ -135,14 +129,14 @@ export const useAcceptInvite = (
 ) => {
   return useMutation({
     mutationFn: (payload) => {
-      const { auth_token, ...rest } = payload
+      const {auth_token, ...rest} = payload
 
       return fetchQuery("/vendor/invites/accept", {
         method: "POST",
         headers: {
           authorization: `Bearer ${auth_token}`,
         },
-        body: { token: inviteToken, ...rest },
+        body: {token: inviteToken, ...rest},
       })
     },
     onSuccess: (data, variables, context) => {

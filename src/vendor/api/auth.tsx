@@ -1,20 +1,20 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import { UseMutationOptions, useMutation } from "@tanstack/react-query"
-import {fetchQuery, sdk} from "../../lib/config";
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {useMutation, UseMutationOptions} from "@tanstack/react-query"
+import {fetchQuery, sellerSdk} from "../../lib/config";
 
 export const useSignInWithEmailPass = (
   options?: UseMutationOptions<
     | string
     | {
-        location: string
-      },
+    location: string
+  },
     FetchError,
     HttpTypes.AdminSignUpWithEmailPassword
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.auth.login("seller", "emailpass", payload),
+    mutationFn: (payload) => sellerSdk.auth.login("seller", "emailpass", payload),
     onSuccess: async (data, variables, context) => {
       options?.onSuccess?.(data, variables, context)
     },
@@ -27,13 +27,13 @@ export const useSignUpWithEmailPass = (
     string,
     FetchError,
     HttpTypes.AdminSignInWithEmailPassword & {
-      confirmPassword: string
-      name: string
-    }
+    confirmPassword: string
+    name: string
+  }
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.auth.register("seller", "emailpass", payload),
+    mutationFn: (payload) => sellerSdk.auth.register("seller", "emailpass", payload),
     onSuccess: async (_, variables) => {
       const seller = {
         name: variables.name,
@@ -59,7 +59,7 @@ export const useSignUpForInvite = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.auth.register("seller", "emailpass", payload),
+    mutationFn: (payload) => sellerSdk.auth.register("seller", "emailpass", payload),
     ...options,
   })
 }
@@ -69,7 +69,7 @@ export const useResetPasswordForEmailPass = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.auth.resetPassword("seller", "emailpass", {
+      sellerSdk.auth.resetPassword("seller", "emailpass", {
         identifier: payload.email,
       }),
     onSuccess: async (data, variables, context) => {
@@ -81,7 +81,7 @@ export const useResetPasswordForEmailPass = (
 
 export const useLogout = (options?: UseMutationOptions<void, FetchError>) => {
   return useMutation({
-    mutationFn: () => sdk.auth.logout(),
+    mutationFn: () => sellerSdk.auth.logout(),
     ...options,
   })
 }
@@ -92,7 +92,7 @@ export const useUpdateProviderForEmailPass = (
 ) => {
   return useMutation({
     mutationFn: (payload) =>
-      sdk.auth.updateProvider("seller", "emailpass", payload, token),
+      sellerSdk.auth.updateProvider("seller", "emailpass", payload, token),
     onSuccess: async (data, variables, context) => {
       options?.onSuccess?.(data, variables, context)
     },
