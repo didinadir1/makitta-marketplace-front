@@ -1,16 +1,10 @@
-import { HttpTypes } from "@medusajs/types"
-import { FetchError } from "@medusajs/js-sdk"
-import {
-  QueryKey,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query"
+import {HttpTypes} from "@medusajs/types"
+import {FetchError} from "@medusajs/js-sdk"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { campaignsQueryKeys } from "./campaigns"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
+import {campaignsQueryKeys} from "./campaigns"
 
 const PROMOTIONS_QUERY_KEY = "promotions" as const
 export const promotionsQueryKeys = {
@@ -45,17 +39,17 @@ export const usePromotion = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: promotionsQueryKeys.detail(id),
     queryFn: async () =>
       fetchQuery(`/vendor/promotions/${id}`, {
         method: "GET",
-        query: { fields: "+status" },
+        query: {fields: "+status"},
       }),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const usePromotionRules = (
@@ -79,7 +73,7 @@ export const usePromotionRules = (
     }
   }
 
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: promotionsQueryKeys.listRules(id, ruleType, query),
     queryFn: async () =>
       fetchQuery(`/vendor/promotions/${id}/${ruleType}`, {
@@ -91,7 +85,7 @@ export const usePromotionRules = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const usePromotions = (
@@ -106,7 +100,7 @@ export const usePromotions = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: promotionsQueryKeys.list(query),
     queryFn: async () =>
       fetchQuery("/vendor/promotions", {
@@ -116,7 +110,7 @@ export const usePromotions = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const usePromotionRuleAttributes = (
@@ -132,7 +126,7 @@ export const usePromotionRuleAttributes = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: promotionsQueryKeys.listRuleAttributes(ruleType, promotionType),
     queryFn: async () =>
       fetchQuery(`/vendor/promotions/rule-attribute-options/${ruleType}`, {
@@ -144,7 +138,7 @@ export const usePromotionRuleAttributes = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const usePromotionRuleValues = (
@@ -161,7 +155,7 @@ export const usePromotionRuleValues = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: promotionsQueryKeys.listRuleValues(
       ruleType,
       ruleValue,
@@ -182,7 +176,7 @@ export const usePromotionRuleValues = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useDeletePromotion = (
@@ -276,7 +270,7 @@ export const usePromotionAddRules = (
     mutationFn: (payload) =>
       fetchQuery(`/vendor/promotions/${id}/${ruleType}/batch`, {
         method: "POST",
-        body: { create: payload.rules },
+        body: {create: payload.rules},
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
@@ -302,7 +296,7 @@ export const usePromotionRemoveRules = (
     mutationFn: (payload) =>
       fetchQuery(`/vendor/promotions/${id}/${ruleType}/batch`, {
         method: "POST",
-        body: { delete: payload.rules },
+        body: {delete: payload.rules},
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
@@ -326,7 +320,7 @@ export const usePromotionUpdateRules = (
 ) => {
   return useMutation({
     mutationFn: async (payload) => {
-      const { rules } = await fetchQuery(
+      const {rules} = await fetchQuery(
         `/vendor/promotions/${id}/${ruleType}`,
         {
           method: "GET",
@@ -337,7 +331,7 @@ export const usePromotionUpdateRules = (
       console.log("rules", rulesIds)
       await fetchQuery(`/vendor/promotions/${id}/${ruleType}/batch`, {
         method: "POST",
-        body: { delete: rulesIds },
+        body: {delete: rulesIds},
       })
 
       return fetchQuery(`/vendor/promotions/${id}/${ruleType}/batch`, {

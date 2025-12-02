@@ -1,8 +1,8 @@
 import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
-import {queryClient} from "../utils/query-client"
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {fetchQuery, sellerSdk} from "../../lib/config";
 import {inventoryItemsQueryKeys} from "./inventory";
 import {ProductAttributesResponse} from "../types/products";

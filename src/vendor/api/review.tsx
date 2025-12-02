@@ -1,15 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { PaginatedResponse } from "@medusajs/types"
-import {
-  QueryKey,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
+import {PaginatedResponse} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
+import {queryClient} from "../../lib/utils/query-client"
 
 const REVIEWS_QUERY_KEY = "reviews" as const
 export const reviewsQueryKeys = queryKeysFactory(REVIEWS_QUERY_KEY)
@@ -22,7 +16,7 @@ export const useReview = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: reviewsQueryKeys.detail(id),
     queryFn: async () =>
       fetchQuery(`/vendor/sellers/me/reviews/${id}`, {
@@ -32,7 +26,7 @@ export const useReview = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useReviews = (
@@ -51,7 +45,7 @@ export const useReviews = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/sellers/me/reviews", {
         method: "GET",
@@ -62,7 +56,7 @@ export const useReviews = (
     ...options,
   })
 
-  return { ...data, reviews: data?.reviews.filter(Boolean) || [], ...rest }
+  return {...data, reviews: data?.reviews.filter(Boolean) || [], ...rest}
 }
 
 export const useUpdateReview = (

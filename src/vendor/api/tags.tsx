@@ -2,8 +2,8 @@ import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 import {fetchQuery, sellerSdk} from "../../lib/config";
-import {queryClient} from "../utils/query-client"
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 
 const TAGS_QUERY_KEY = "tags" as const
 export const productTagsQueryKeys = queryKeysFactory(TAGS_QUERY_KEY)

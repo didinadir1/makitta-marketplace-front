@@ -1,34 +1,28 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {StoreVendor, TeamMemberProps} from "../types/user";
 
-const USERS_QUERY_KEY = "users" as const
+const USERS_QUERY_KEY = "seller-users" as const
 const usersQueryKeys = {
   ...queryKeysFactory(USERS_QUERY_KEY),
   me: () => [USERS_QUERY_KEY, "me"],
 }
 
-export const useMe = (
+export const useSellerMe = (
   options?: UseQueryOptions<
     HttpTypes.AdminUserResponse,
     FetchError,
     HttpTypes.AdminUserResponse & {
-      seller: StoreVendor
-    },
+    seller: StoreVendor
+  },
     QueryKey
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: async () =>
       fetchQuery("/vendor/sellers/me", {
         method: "GET",
@@ -47,7 +41,7 @@ export const useMe = (
   }
 }
 
-export const useUpdateMe = (
+export const useSellerUpdateMe = (
   options?: UseMutationOptions<
     HttpTypes.AdminUserResponse,
     FetchError,
@@ -76,8 +70,8 @@ export const useUpdateMe = (
   })
 }
 
-export const useOnboarding = () => {
-  const { data, ...rest } = useQuery({
+export const useSellerOnboarding = () => {
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/sellers/me/onboarding", {
         method: "GET",
@@ -92,7 +86,7 @@ export const useOnboarding = () => {
   }
 }
 
-export const useUpdateOnboarding = () => {
+export const useSellerUpdateOnboarding = () => {
   return useMutation({
     mutationFn: () =>
       fetchQuery("/vendor/sellers/me/onboarding", {
@@ -107,21 +101,21 @@ export const useUpdateOnboarding = () => {
   })
 }
 
-export const useUserMe = (
+export const useSellerUserMe = (
   query?: HttpTypes.AdminUserParams,
   options?: Omit<
     UseQueryOptions<
       HttpTypes.AdminUserResponse,
       FetchError,
       HttpTypes.AdminUserResponse & {
-        member: TeamMemberProps
-      },
+      member: TeamMemberProps
+    },
       QueryKey
     >,
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/me`, {
         method: "GET",
@@ -131,11 +125,11 @@ export const useUserMe = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
-export const useStatistics = ({ from, to }: { from: string; to: string }) => {
-  const { data, ...rest } = useQuery({
+export const useSellerStatistics = ({from, to}: { from: string; to: string }) => {
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(
         `/vendor/statistics?time_from=${from}T00:00:00Z&time_to=${to}T23:59:59Z`,
@@ -146,10 +140,10 @@ export const useStatistics = ({ from, to }: { from: string; to: string }) => {
     queryKey: [USERS_QUERY_KEY, "statistics"],
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
-export const useUser = (
+export const useSellerUser = (
   id: string,
   query?: HttpTypes.AdminUserParams,
   options?: Omit<
@@ -157,14 +151,14 @@ export const useUser = (
       HttpTypes.AdminUserResponse,
       FetchError,
       HttpTypes.AdminUserResponse & {
-        member: TeamMemberProps
-      },
+      member: TeamMemberProps
+    },
       QueryKey
     >,
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/members/${id}`, {
         method: "GET",
@@ -174,10 +168,10 @@ export const useUser = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
-export const useUsers = (
+export const useSellerUsers = (
   query?: HttpTypes.AdminUserListParams,
   options?: Omit<
     UseQueryOptions<
@@ -189,7 +183,7 @@ export const useUsers = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/members", {
         method: "GET",
@@ -199,10 +193,10 @@ export const useUsers = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
-export const useUpdateUser = (
+export const useSellerUpdateUser = (
   id: string,
   options?: UseMutationOptions<
     TeamMemberProps,
@@ -242,7 +236,7 @@ export const useUpdateUser = (
   })
 }
 
-export const useDeleteUser = (
+export const useSellerDeleteUser = (
   id: string,
   options?: UseMutationOptions<
     HttpTypes.AdminUserDeleteResponse,

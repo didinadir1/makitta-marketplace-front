@@ -1,16 +1,10 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { customersQueryKeys } from "./customers"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
+import {customersQueryKeys} from "./customers"
 import {filterCustomerGroups} from "../utils/customerGroupFiltering";
 
 const CUSTOMER_GROUPS_QUERY_KEY = "customer_groups" as const
@@ -31,7 +25,7 @@ export const useCustomerGroup = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: customerGroupsQueryKeys.detail(id, query),
     queryFn: async () =>
       fetchQuery(`/vendor/customer-groups/${id}`, {
@@ -41,7 +35,7 @@ export const useCustomerGroup = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 export const useCustomerGroups = (
   query?: HttpTypes.AdminGetCustomerGroupsParams,
@@ -50,15 +44,15 @@ export const useCustomerGroups = (
       HttpTypes.AdminGetCustomerGroupsParams,
       FetchError,
       HttpTypes.AdminCustomerGroupListResponse & {
-        customer_group?: any
-      },
+      customer_group?: any
+    },
       QueryKey
     >,
     "queryFn" | "queryKey"
   >,
   filters?: any
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/customer-groups", {
         method: "GET",
@@ -171,7 +165,7 @@ export const useDeleteCustomerGroupLazy = (
   >
 ) => {
   return useMutation({
-    mutationFn: ({ id }) =>
+    mutationFn: ({id}) =>
       fetchQuery(`/vendor/customer-groups/${id}`, {
         method: "DELETE",
       }),
@@ -201,7 +195,7 @@ export const useAddCustomersToGroup = (
     mutationFn: (payload) =>
       fetchQuery(`/vendor/customer-groups/${id}/customers`, {
         method: "POST",
-        body: { add: payload },
+        body: {add: payload},
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
@@ -232,7 +226,7 @@ export const useRemoveCustomersFromGroup = (
     mutationFn: (payload) =>
       fetchQuery(`/vendor/customer-groups/${id}/customers`, {
         method: "POST",
-        body: { remove: payload },
+        body: {remove: payload},
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({

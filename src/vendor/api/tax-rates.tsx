@@ -2,8 +2,8 @@ import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 import {sellerSdk} from "../../lib/config";
-import {queryClient} from "../utils/query-client"
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {taxRegionsQueryKeys} from "./tax-regions"
 
 const TAX_RATES_QUERY_KEY = "tax_rates" as const

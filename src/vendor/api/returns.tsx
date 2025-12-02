@@ -3,8 +3,8 @@ import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} f
 
 import {FetchError} from "@medusajs/js-sdk"
 import {fetchQuery, sellerSdk} from "../../lib/config";
-import {queryClient} from "../utils/query-client"
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {ordersQueryKeys} from "./orders"
 
 const RETURNS_QUERY_KEY = "returns" as const

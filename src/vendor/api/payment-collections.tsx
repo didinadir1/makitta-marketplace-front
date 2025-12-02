@@ -2,8 +2,8 @@ import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {useMutation, UseMutationOptions} from "@tanstack/react-query"
 import {sellerSdk} from "../../lib/config";
-import {queryClient} from "../utils/query-client"
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {ordersQueryKeys} from "./orders"
 
 const PAYMENT_COLLECTION_QUERY_KEY = "payment-collection" as const

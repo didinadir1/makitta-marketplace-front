@@ -2,7 +2,7 @@ import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useQuery, UseQueryOptions} from "@tanstack/react-query"
 import {fetchQuery} from "../../lib/config";
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 
 const FULFILLMENT_PROVIDERS_QUERY_KEY = "fulfillment_providers" as const
 export const fulfillmentProvidersQueryKeys = queryKeysFactory(

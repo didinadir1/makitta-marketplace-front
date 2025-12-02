@@ -1,16 +1,10 @@
-import {
-  QueryKey,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import convertShippingProfileNames from "../utils/convert-shipping-profile-names";
 
 const SHIPPING_PROFILE_QUERY_KEY = "shipping_profile" as const
@@ -55,7 +49,7 @@ export const useShippingProfile = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/shipping-profiles/${id}`, {
         method: "GET",
@@ -89,7 +83,7 @@ export const useShippingProfiles = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/shipping-profiles", {
         method: "GET",
@@ -102,7 +96,7 @@ export const useShippingProfiles = (
     convertShippingProfileNames(sp)
   )
 
-  return { ...data, shipping_profiles, ...rest }
+  return {...data, shipping_profiles, ...rest}
 }
 
 export const useUpdateShippingProfile = (
@@ -113,7 +107,7 @@ export const useUpdateShippingProfile = (
     HttpTypes.AdminUpdateShippingProfile
   >
 ) => {
-  const { data, ...rest } = useMutation({
+  const {data, ...rest} = useMutation({
     mutationFn: (payload) =>
       fetchQuery(`/vendor/shipping-profiles/${id}`, {
         method: "POST",
@@ -132,7 +126,7 @@ export const useUpdateShippingProfile = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useDeleteShippingProfile = (

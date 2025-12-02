@@ -1,4 +1,4 @@
-import {Redirect, Route, useLocation} from 'react-router-dom'; // Import useLocation
+import {Redirect, Route} from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -10,20 +10,15 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
-import {business, cart, chatbubble, person, restaurant, store} from 'ionicons/icons'; // Added store icon for the new store tab
+import {cart, chatbubble, home, person, storefront} from 'ionicons/icons';
 import DishesPage from './pages/DishesPage';
-import RestaurantPage from './pages/RestaurantPage';
-import ProfilePage from './pages/ProfilePage';
+import StorePage from './pages/StorePage';
 import DishDetailPage from './pages/DishDetailPage';
-import RestaurantDetailPage from './pages/RestaurantDetailPage';
-import CartPage from './pages/CartPage'; // Import the new CartPage
-import ProfileEditPage from './pages/ProfileEditPage'; // Import the new ProfileEditPage
-import {CartProvider} from './state/cartState'; // Import CartProvider
-import {ProductContextProvider} from './state/productState'; // Import AppContextProvider
-import EntryPage from './pages/EntryPage'; // Import the new EntryPage
-import LoginPage from './pages/LoginPage'; // Import the new LoginPage
-import SignupPage from './pages/SignupPage'; // Import the new SignupPage
-import StorePage from './pages/StorePage'; // Import the new StorePage for seller store management
+import ProfileEditPage from './pages/ProfileEditPage';
+import {CartProvider} from './state/cartState';
+import {ProductContextProvider} from './state/productState';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -57,17 +52,39 @@ import {useEffect} from "react";
 import {SocialLogin} from "@capgo/capacitor-social-login";
 import MyAccountPage from "./pages/MyAccountPage";
 import StoreCreationPage from "./pages/StoreCreationPage";
-import {useUser} from "./lib/data";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
-import {queryClient} from "./vendor/utils/query-client";
+import {queryClient} from "./lib/utils/query-client";
+import {useMe} from "./lib/data";
+import CartPage from "./pages/CartPage";
+import MessagesPage from "./pages/MessagesPage";
 
 setupIonicReact();
 
+const ProtectedRoute: React.FC<{
+  path: string;
+  component: React.ComponentType<any>;
+  exact?: boolean;
+}> = ({component: Component, ...rest}) => {
+
+  const {user} = useMe()
+
+
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        user?.id ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login"/>
+        )
+      }
+    />
+  );
+};
+
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
-  const location = useLocation(); // Get the current location
-  const {data: user} = useUser();
-
 
   useEffect(() => {
     SocialLogin.initialize(
@@ -81,82 +98,48 @@ const TabsContainer: React.FC = () => {
   }, []);
 
 
-  // Determine if the tab bar should be visible
-  const showTabBar = location.pathname !== '/entry' && location.pathname !== '/signup';
-
   return (
     <IonTabs>
       <IonRouterOutlet>
-        {/* Entry point */}
-        <Route exact path="/entry" component={EntryPage}/>
-        {/* Login page for restaurants */}
+        {/* Tab routes - these should come first for proper tab functionality */}
+        <Route exact path="/" component={DishesPage}/>
+        <ProtectedRoute exact path="/profile" component={MyAccountPage}/>
+        <ProtectedRoute exact path="/profile/account" component={ProfileEditPage}/>
+        <ProtectedRoute exact path="/store" component={StorePage}/>
+        <ProtectedRoute exact path="/store/create-store" component={StoreCreationPage}/>
+        <ProtectedRoute exact path="/store/edit-store" component={StoreCreationPage}/>
         <Route exact path="/login" component={LoginPage}/>
-        {/* Signup page for restaurants */}
         <Route exact path="/signup" component={SignupPage}/>
+        <ProtectedRoute exact path="/cart" component={CartPage}/>
+        <ProtectedRoute exact path={"/messages"} component={MessagesPage}/>
 
-        {/* Normal mode routes */}
-        <Route exact path="/dishes" component={DishesPage}/>
-        <Route exact path="/restaurants" component={RestaurantPage}/>
-        <Route exact path="/cart" component={CartPage}/>
-        <Route exact path="/store" component={StorePage}/> {/* New route for store management page */}
-
-        {/* Common routes */}
-        <Route exact path="/profile" component={ProfilePage}/>
-        <Route exact path="/profile/edit" component={ProfileEditPage}/>
-        <Route exact path="/profile/my-account" component={MyAccountPage}/>
-        <Route exact path="/profile/create-store" component={StoreCreationPage}/>
-        <Route exact path="/profile/my-account/edit-store" component={StoreCreationPage}/>
+        {/* Detail and sub-pages */}
         <Route exact path="/dish/:id" component={DishDetailPage}/>
-        <Route
-          exact
-          path="/restaurant/:id"
-          render={({match}) =>
-            match.params.id !== user?.restaurant_id ? (
-              <RestaurantDetailPage/>
-            ) : (
-              // todo maybe redirect to fallback page
-              <Redirect to="/restaurants"/>
-            )
-          }
-        />
-        <Route exact path="/">
-          <Redirect to="/entry"/>
-        </Route>
+
       </IonRouterOutlet>
 
-      {/* Conditional Tab Bars */}
-      {showTabBar && (
-
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="dishes" href="/dishes">
-            <IonIcon aria-hidden="true" icon={restaurant}/>
-            <IonLabel>Dishes</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="restaurants" href="/restaurants">
-            <IonIcon aria-hidden="true" icon={business}/>
-            <IonLabel>Restaurants</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="cart" href="/cart">
-            <IonIcon aria-hidden="true" icon={cart}/>
-            <IonLabel>Cart</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="messages" href="/messages">
-            <IonIcon aria-hidden="true" icon={chatbubble}/> {/* Changed icon */}
-            <IonLabel>Messages</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="profile" href={`${user?.id ? '/profile' : '/login'}`}>
-            <IonIcon aria-hidden="true" icon={person}/>
-            <IonLabel>Profile</IonLabel>
-          </IonTabButton>
-          {/* New store tab, only visible if user is a seller (has restaurant_id) */}
-          {user?.restaurant_id && (
-            <IonTabButton tab="store" href="/store">
-              <IonIcon aria-hidden="true" icon={store}/>
-              <IonLabel>Store</IonLabel>
-            </IonTabButton>
-          )}
-        </IonTabBar>
-      )}
+      <IonTabBar slot="bottom">
+        <IonTabButton tab="home" href="/">
+          <IonIcon aria-hidden="true" icon={home}/>
+          <IonLabel>Home</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="cart" href="/cart">
+          <IonIcon aria-hidden="true" icon={cart}/>
+          <IonLabel>Cart</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="store" href="/store">
+          <IonIcon aria-hidden="true" icon={storefront}/>
+          <IonLabel>Store</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="messages" href="/messages">
+          <IonIcon aria-hidden="true" icon={chatbubble}/>
+          <IonLabel>Messages</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="profile" href="/profile">
+          <IonIcon aria-hidden="true" icon={person}/>
+          <IonLabel>Profile</IonLabel>
+        </IonTabButton>
+      </IonTabBar>
     </IonTabs>
   );
 };
@@ -165,11 +148,17 @@ const App: React.FC = () => (
   <IonApp>
     <QueryClientProvider client={queryClient}>
       <IonReactRouter>
-        <CartProvider>
-          <ProductContextProvider> {/* Wrap with AppContextProvider */}
-            <TabsContainer/>
-          </ProductContextProvider>
-        </CartProvider>
+        {/* Routes outside tabs - for pages that shouldn't show tabs */}
+
+        {/* Main app with tabs */}
+        <Route path="/">
+          <CartProvider>
+            <ProductContextProvider>
+              <TabsContainer/>
+            </ProductContextProvider>
+          </CartProvider>
+        </Route>
+
         <ReactQueryDevtools initialIsOpen={false}/>
       </IonReactRouter>
     </QueryClientProvider>
