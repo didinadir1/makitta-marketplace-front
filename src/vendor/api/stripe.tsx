@@ -1,18 +1,14 @@
-import {
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-} from "@tanstack/react-query"
+import {useMutation, UseMutationOptions, useQuery,} from "@tanstack/react-query"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { FetchError } from "@medusajs/js-sdk"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {FetchError} from "@medusajs/js-sdk"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 
 const STRIPE_QUERY_KEY = "stripe" as const
 export const stripeQueryKeys = queryKeysFactory(STRIPE_QUERY_KEY)
 
 export const useStripeAccount = () => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/payout-account", {
         method: "GET",
@@ -20,7 +16,7 @@ export const useStripeAccount = () => {
     queryKey: [STRIPE_QUERY_KEY, "account"],
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateStripeAccount = (

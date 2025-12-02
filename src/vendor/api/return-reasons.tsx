@@ -3,8 +3,8 @@ import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} f
 
 import {FetchError} from "@medusajs/js-sdk"
 import {sellerSdk} from "../../lib/config";
-import {queryClient} from "../utils/query-client"
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 
 const RETURN_REASONS_QUERY_KEY = "return_reasons" as const
 export const returnReasonsQueryKeys = queryKeysFactory(RETURN_REASONS_QUERY_KEY)

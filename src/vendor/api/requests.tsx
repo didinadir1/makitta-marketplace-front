@@ -1,15 +1,9 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { PaginatedResponse } from "@medusajs/types"
-import {
-  QueryKey,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query"
-import { queryKeysFactory } from "../utils/query-key-factory"
+import {FetchError} from "@medusajs/js-sdk"
+import {PaginatedResponse} from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
+import {queryClient} from "../../lib/utils/query-client"
 
 const REQUESTS_QUERY_KEY = "requests" as const
 export const requestsQueryKeys = queryKeysFactory(REQUESTS_QUERY_KEY)
@@ -31,7 +25,7 @@ export const useRequest = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: requestsQueryKeys.detail(id),
     queryFn: async () =>
       fetchQuery(`/vendor/requests/${id}`, {
@@ -41,7 +35,7 @@ export const useRequest = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useRequests = (
@@ -60,7 +54,7 @@ export const useRequests = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/requests", {
         method: "GET",
@@ -71,7 +65,7 @@ export const useRequests = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateVendorRequest = (
@@ -142,17 +136,17 @@ export const useOrderReturnRequest = (
   id: string,
   options?: UseQueryOptions<any, FetchError, any>
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: [REQUESTS_QUERY_KEY, "return-request", id],
     queryFn: () =>
       fetchQuery(`/vendor/return-request/${id}`, {
         method: "GET",
-        query: { fields: "*order" },
+        query: {fields: "*order"},
       }),
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useOrderReturnRequests = (
@@ -171,7 +165,7 @@ export const useOrderReturnRequests = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/return-request", {
         method: "GET",

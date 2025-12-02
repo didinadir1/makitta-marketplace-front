@@ -1,17 +1,11 @@
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { fulfillmentProvidersQueryKeys } from "./fulfillment-providers"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
+import {fulfillmentProvidersQueryKeys} from "./fulfillment-providers"
 
 const STOCK_LOCATIONS_QUERY_KEY = "stock_locations" as const
 export const stockLocationsQueryKeys = queryKeysFactory(
@@ -31,7 +25,7 @@ export const useStockLocation = (
     "queryKey" | "queryFn"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/stock-locations/${id}`, {
         method: "GET",
@@ -41,7 +35,7 @@ export const useStockLocation = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useStockLocations = (
@@ -57,7 +51,7 @@ export const useStockLocations = (
   >,
   filters?: { id?: string[] }
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/stock-locations", {
         method: "GET",
@@ -67,7 +61,7 @@ export const useStockLocations = (
   })
 
   if (!filters) {
-    return { ...data, ...rest }
+    return {...data, ...rest}
   }
 
   const stock_locations = data?.stock_locations.filter((location) =>
@@ -75,7 +69,7 @@ export const useStockLocations = (
   )
 
   const count = stock_locations?.length || 0
-  return { count, stock_locations, ...rest }
+  return {count, stock_locations, ...rest}
 }
 
 export const useCreateStockLocation = (
@@ -92,14 +86,14 @@ export const useCreateStockLocation = (
         body: payload,
       }),
     onSuccess: async (data, variables, context) => {
-      const { sales_channels } = await fetchQuery("/vendor/sales-channels", {
+      const {sales_channels} = await fetchQuery("/vendor/sales-channels", {
         method: "GET",
       })
       await fetchQuery(
         `/vendor/stock-locations/${data.stock_location.id}/sales-channels`,
         {
           method: "POST",
-          body: { add: [sales_channels?.[0].id || null] },
+          body: {add: [sales_channels?.[0].id || null]},
         }
       )
       await queryClient.invalidateQueries({

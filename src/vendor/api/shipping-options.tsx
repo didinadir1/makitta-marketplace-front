@@ -1,17 +1,11 @@
-import {
-  QueryKey,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
 
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
+import {FetchError} from "@medusajs/js-sdk"
+import {HttpTypes} from "@medusajs/types"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import { stockLocationsQueryKeys } from "./stock-locations"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
+import {stockLocationsQueryKeys} from "./stock-locations"
 
 const SHIPPING_OPTIONS_QUERY_KEY = "shipping_options" as const
 export const shippingOptionsQueryKeys = queryKeysFactory(
@@ -28,7 +22,7 @@ export const useShippingOption = (
     QueryKey
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery(`/vendor/shipping-options/${id}`, {
         method: "GET",
@@ -38,7 +32,7 @@ export const useShippingOption = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useShippingOptions = (
@@ -53,7 +47,7 @@ export const useShippingOptions = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/shipping-options", {
         method: "GET",
@@ -63,7 +57,7 @@ export const useShippingOptions = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useCreateShippingOptions = (

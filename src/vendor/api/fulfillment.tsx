@@ -1,10 +1,10 @@
 import {useMutation, UseMutationOptions} from "@tanstack/react-query"
 
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 
 import {HttpTypes} from "@medusajs/types"
 import {sellerSdk} from "../../lib/config";
-import {queryClient} from "../utils/query-client"
+import {queryClient} from "../../lib/utils/query-client"
 import {ordersQueryKeys} from "./orders"
 import {FetchError} from "@medusajs/js-sdk"
 

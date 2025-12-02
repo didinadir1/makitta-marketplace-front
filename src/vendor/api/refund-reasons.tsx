@@ -1,7 +1,7 @@
 import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useQuery, UseQueryOptions} from "@tanstack/react-query"
 import {sellerSdk} from "../../lib/config";
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {FetchError} from "@medusajs/js-sdk"
 
 const REFUND_REASON_QUERY_KEY = "refund-reason" as const

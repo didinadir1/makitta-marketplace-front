@@ -3,7 +3,7 @@ import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useQuery, UseQueryOptions} from "@tanstack/react-query"
 
 import {fetchQuery, sellerSdk} from "../../lib/config";
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 
 const CURRENCIES_QUERY_KEY = "currencies" as const
 const currenciesQueryKeys = queryKeysFactory(CURRENCIES_QUERY_KEY)

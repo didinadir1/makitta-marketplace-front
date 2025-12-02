@@ -9,8 +9,8 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query"
 import {fetchQuery, sellerSdk} from "../../lib/config";
-import {queryClient} from "../utils/query-client"
-import {queryKeysFactory} from "../utils/query-key-factory"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {salesChannelsQueryKeys} from "./sales-channels"
 
 const API_KEYS_QUERY_KEY = "api_keys" as const

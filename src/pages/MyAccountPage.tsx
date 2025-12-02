@@ -1,17 +1,4 @@
-import {
-  IonBackButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  useIonAlert,
-} from '@ionic/react'; // Added IonToggle
+import {IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, useIonAlert,} from '@ionic/react'; // Added IonToggle
 import React from 'react';
 import './MyAccountPage.css';
 import {
@@ -24,12 +11,13 @@ import {
 import useRestaurant from "../lib/data/restaurants";
 import {useUser} from "../lib/data";
 import {useHistory} from "react-router-dom";
-import {useAuth} from "../lib/actions"; // Import necessary icons and chevronForwardOutline
+import {useLogout} from "../lib/actions";
+import {queryClient} from "../lib/utils/query-client"; // Import necessary icons and chevronForwardOutline
 
 const MyAccountPage: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Use the useIonAlert hook
   const history = useHistory();
-  const {logout} = useAuth()
+  const {mutateAsync: logout} = useLogout()
 
 
   const {data: user} = useUser();
@@ -37,8 +25,7 @@ const MyAccountPage: React.FC = () => {
 
 
   const handleAccountClick = () => {
-    console.log('Navigate to Account Settings');
-    // router.push('/profile/account'); // Example navigation
+    history.push('/profile/account'); // Example navigation
   };
 
   const handleHelpClick = () => {
@@ -63,27 +50,24 @@ const MyAccountPage: React.FC = () => {
         {
           text: 'Log Out',
           handler: async () => {
-            await logout()
+            await logout(undefined, {
+              onSuccess: () => {
+                queryClient.clear()
+                history.replace("/login")
+              },
+            })
           },
         },
       ],
     });
   };
   const handleEditStoreClick = async () => {
-    history.push("/profile/my-account/edit-store");
+    history.push("/store/");
   };
 
 
   return (
     <IonPage>
-      <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/profile" className="back-button"/>
-          </IonButtons>
-          <IonTitle>Edit Profile</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen className="ion-padding">
         <IonList lines="full" className="profile-menu-list">
           <IonItem button onClick={handleAccountClick} detail={true}> {/* Use detail={true} for chevron */}

@@ -1,19 +1,10 @@
-import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
-import { HttpTypes } from "@medusajs/types"
+import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
+import {HttpTypes} from "@medusajs/types"
 import {fetchQuery} from "../../lib/config";
-import { queryClient } from "../utils/query-client"
-import { queryKeysFactory } from "../utils/query-key-factory"
-import {
-  inventoryItemLevelsQueryKeys,
-  inventoryItemsQueryKeys,
-} from "./inventory"
-import { FetchError } from "@medusajs/js-sdk"
+import {queryClient} from "../../lib/utils/query-client"
+import {queryKeysFactory} from "../../lib/utils/query-key-factory"
+import {inventoryItemLevelsQueryKeys, inventoryItemsQueryKeys,} from "./inventory"
+import {FetchError} from "@medusajs/js-sdk"
 
 const RESERVATION_ITEMS_QUERY_KEY = "reservation_items" as const
 export const reservationItemsQueryKeys = queryKeysFactory(
@@ -33,7 +24,7 @@ export const useReservationItem = (
     "queryFn" | "queryKey"
   >
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryKey: reservationItemsQueryKeys.detail(id),
     queryFn: async () =>
       fetchQuery(`/vendor/reservations/${id}`, {
@@ -43,7 +34,7 @@ export const useReservationItem = (
     ...options,
   })
 
-  return { ...data, ...rest }
+  return {...data, ...rest}
 }
 
 export const useReservationItems = (
@@ -59,7 +50,7 @@ export const useReservationItems = (
   >,
   filters?: { inventory_item_id: string[] }
 ) => {
-  const { data, ...rest } = useQuery({
+  const {data, ...rest} = useQuery({
     queryFn: () =>
       fetchQuery("/vendor/reservations", {
         method: "GET",
@@ -70,7 +61,7 @@ export const useReservationItems = (
   })
 
   if (!filters) {
-    return { ...data, ...rest }
+    return {...data, ...rest}
   }
   const reservations =
     data?.reservations.filter((r) =>
@@ -158,7 +149,7 @@ export const useDeleteReservationItem = (
 ) => {
   return useMutation({
     mutationFn: () =>
-      fetchQuery(`/vendor/reservations/${id}`, { method: "DELETE" }),
+      fetchQuery(`/vendor/reservations/${id}`, {method: "DELETE"}),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
         queryKey: reservationItemsQueryKeys.lists(),
