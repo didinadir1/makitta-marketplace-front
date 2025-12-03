@@ -17,7 +17,7 @@ const StorePage: React.FC = () => {
 
   return (
     <IonPage>
-      {seller?.id && (<IonHeader>
+      <IonHeader>
         <div className="profile-header" onClick={handleEditClick}> {/* Use a div for the header area */}
           <div className="profile-info-container"> {/* Container for avatar and name */}
             <IonAvatar className="profile-avatar">
@@ -36,7 +36,7 @@ const StorePage: React.FC = () => {
             <IonIcon icon={chevronForwardOutline} slot="icon-only" size="large"/>
           </IonButton>
         </div>
-      </IonHeader>)}
+      </IonHeader>
       <IonContent>
         {seller?.id ? (<MyStoreSection/>) : (
           <div className="create-store-container">
