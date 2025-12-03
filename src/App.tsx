@@ -1,9 +1,9 @@
 import {Redirect, Route} from 'react-router-dom';
 import {
-  IonApp,
+  IonApp, IonContent,
   IonIcon,
   IonLabel,
-  IonRouterOutlet,
+  IonRouterOutlet, IonSpinner,
   IonTabBar,
   IonTabButton,
   IonTabs,
@@ -64,25 +64,40 @@ const ProtectedRoute: React.FC<{
   path: string;
   component: React.ComponentType<any>;
   exact?: boolean;
-}> = ({component: Component, ...rest}) => {
-
-  const {user} = useMe()
-
+}> = ({ component: Component, ...rest }) => {
+  const { user, isLoading, isError } = useMe();
 
   return (
     <Route
       {...rest}
-      render={(props) =>
-        user?.id ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/login"/>
-        )
-      }
+      render={(props) => {
+        // Show loading spinner while checking authentication
+        if (isLoading) {
+          return (
+            <IonContent className="ion-padding">
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%'
+              }}>
+                <IonSpinner name="crescent" />
+              </div>
+            </IonContent>
+          );
+        }
+
+        // If there's an error or no user, redirect to login
+        if (isError || !user?.id) {
+          return <Redirect to="/login" />;
+        }
+
+        // User is authenticated, render the component
+        return <Component {...props} />;
+      }}
     />
   );
 };
-
 // Create a TabsContainer component to use the mode context
 const TabsContainer: React.FC = () => {
 
@@ -102,7 +117,7 @@ const TabsContainer: React.FC = () => {
     <IonTabs>
       <IonRouterOutlet>
         {/* Tab routes - these should come first for proper tab functionality */}
-        <Route exact path="/" component={DishesPage}/>
+        <Route exact path="/home" component={DishesPage}/>
         <ProtectedRoute exact path="/profile" component={MyAccountPage}/>
         <ProtectedRoute exact path="/profile/account" component={ProfileEditPage}/>
         <ProtectedRoute exact path="/store" component={StorePage}/>
@@ -116,10 +131,15 @@ const TabsContainer: React.FC = () => {
         {/* Detail and sub-pages */}
         <Route exact path="/dish/:id" component={DishDetailPage}/>
 
+        {/* Redirect root to /home */}
+        <Route exact path="/">
+          <Redirect to="/home"/>
+        </Route>
+
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
-        <IonTabButton tab="home" href="/">
+        <IonTabButton tab="home" href="/home">
           <IonIcon aria-hidden="true" icon={home}/>
           <IonLabel>Home</IonLabel>
         </IonTabButton>

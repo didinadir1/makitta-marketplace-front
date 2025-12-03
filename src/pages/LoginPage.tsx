@@ -51,22 +51,22 @@ const LoginPage: React.FC = () => {
           await loginMutation({email, password, actor_type: "seller"}, {
             onSuccess: async () => {
               await dismiss();
-              await presentToast({
-                message: 'Login successful!',
-                duration: 2000,
-                color: 'success',
-              })
-              history.replace("/entry")
             },
             onError: async () => {
               await dismiss();
               await presentToast({
-                message: 'Login successful!',
+                message: 'create a seller account !',
                 duration: 2000,
-                color: 'success',
+                color: 'danger',
               })
             }
           })
+          await presentToast({
+            message: 'Login successful!',
+            duration: 2000,
+            color: 'success',
+          })
+          history.replace("/home")
         },
         onError: async (error: any) => {
           await dismiss();
