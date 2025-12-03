@@ -14,27 +14,44 @@ const StorePage: React.FC = () => {
     history.push("/store/edit-store")
   };
 
+  // Placeholder data for reviews and products sold - replace with actual API data
+  const storeStats = {
+    averageRating: 4.5,
+    totalReviews: 128,
+    productsSold: 456,
+  };
 
   return (
     <IonPage>
-      <IonHeader>
-        <div className="profile-header" onClick={handleEditClick}> {/* Use a div for the header area */}
-          <div className="profile-info-container"> {/* Container for avatar and name */}
-            <IonAvatar className="profile-avatar">
-              <img src={seller?.photo ?? "public/store-default-image.png"} alt="Profile"/>
-            </IonAvatar>
-            <div className="profile-name-container"> {/* Container for name and potential subtitle */}
-              <IonLabel
-                className="profile-name">{seller?.name}</IonLabel>
-              {/* Add a subtitle or email here if available in mockUser */}
-              {/*todo fetch store name*/}
-              <IonNote
-                color="medium">{`${seller?.id ?? "Manage my profile"}`}</IonNote>
+      <IonHeader className="store-header">
+        <div className="store-header-background">
+          <div className="store-header-content">
+            <div className="store-info-section">
+              <IonAvatar className="store-avatar">
+                <img src={seller?.photo ?? "public/store-default-image.png"} alt="Store"/>
+              </IonAvatar>
+              <div className="store-details">
+                <IonLabel className="store-name">{seller?.name ?? "Store Name"}</IonLabel>
+                <div className="store-stats">
+                  <div className="stat-item">
+                    <IonLabel className="stat-value">{storeStats.averageRating}</IonLabel>
+                    <IonNote className="stat-label">Avg Rating</IonNote>
+                  </div>
+                  <div className="stat-item">
+                    <IonLabel className="stat-value">{storeStats.totalReviews}</IonLabel>
+                    <IonNote className="stat-label">Reviews</IonNote>
+                  </div>
+                  <div className="stat-item">
+                    <IonLabel className="stat-value">{storeStats.productsSold}</IonLabel>
+                    <IonNote className="stat-label">Sold</IonNote>
+                  </div>
+                </div>
+              </div>
             </div>
+            <IonButton fill="clear" className="edit-store-button" onClick={handleEditClick}>
+              <IonIcon icon={chevronForwardOutline} slot="icon-only" size="large"/>
+            </IonButton>
           </div>
-          <IonButton fill="clear" className="edit-profile-button">
-            <IonIcon icon={chevronForwardOutline} slot="icon-only" size="large"/>
-          </IonButton>
         </div>
       </IonHeader>
       <IonContent>
