@@ -47,7 +47,8 @@ export const uploadFilesQuery = async (files: any[]) => {
 
   const formData = new FormData()
 
-  for (const {file} of files) {
+
+  for (const file of files) {
     formData.append("files", file)
   }
 

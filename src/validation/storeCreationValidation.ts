@@ -13,7 +13,3 @@ export const storeDetailsSchema = z.object({
 
 export type StoreDetailsFormData = z.infer<typeof storeDetailsSchema>;
 
-// Combined schema for the entire form
-export const fullStoreCreationSchema = storeDetailsSchema;
-
-export type FullStoreCreationFormData = z.infer<typeof fullStoreCreationSchema>;

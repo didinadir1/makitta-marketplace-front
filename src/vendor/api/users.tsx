@@ -1,10 +1,10 @@
 import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {QueryKey, useMutation, UseMutationOptions, useQuery, UseQueryOptions,} from "@tanstack/react-query"
-import {fetchQuery} from "../../lib/config";
+import {fetchQuery, medusaStorage, SELLER_JWT_KEY} from "../../lib/config";
 import {queryClient} from "../../lib/utils/query-client"
 import {queryKeysFactory} from "../../lib/utils/query-key-factory"
-import {StoreVendor, TeamMemberProps} from "../types/user";
+import {StoreVendor, TeamMemberCreateProps, TeamMemberProps} from "../types/user";
 
 const USERS_QUERY_KEY = "seller-users" as const
 const usersQueryKeys = {
@@ -40,6 +40,36 @@ export const useSellerMe = (
     ...rest,
   }
 }
+
+export const useSellerCreate = (
+  options?: UseMutationOptions<
+    HttpTypes.AdminStoreResponse & { sellerToken: string },
+    FetchError,
+    StoreVendor & { member: TeamMemberCreateProps }
+  >
+) => {
+  return useMutation({
+    mutationFn: (body) =>
+      fetchQuery("/store", {
+        method: "POST",
+        body,
+      }),
+    onSuccess: async (data, variables, context) => {
+      await medusaStorage.set(SELLER_JWT_KEY, data.sellerToken);
+
+      await queryClient.invalidateQueries({
+        queryKey: usersQueryKeys.lists(),
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: usersQueryKeys.me(),
+      })
+
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
+};
 
 export const useSellerUpdateMe = (
   options?: UseMutationOptions<

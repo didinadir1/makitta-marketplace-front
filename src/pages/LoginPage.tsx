@@ -14,7 +14,7 @@ import {
 import {logoGoogle} from 'ionicons/icons'; // Google icon
 import React, {useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
-import {useLinkGoogleAccount, useLogInWithEmailPass, useLogInWithGoogle} from '../lib/actions/customer'; // Import useAuth hook
+import {useLinkGoogleAccount, useLogInWithEmailPass, useLogInWithGoogle} from '../lib/actions'; // Import useAuth hook
 import './LoginPage.css';
 import {GoogleLoginResponseOnline, SocialLogin} from "@capgo/capacitor-social-login";
 import {CUSTOMER_JWT_KEY, medusaStorage, SELLER_JWT_KEY} from "../lib/config";
@@ -136,6 +136,12 @@ const LoginPage: React.FC = () => {
             await medusaStorage.set(SELLER_JWT_KEY, response.sellerToken);
           }
         }
+        await presentToast({
+          message: 'Login successful!',
+          duration: 2000,
+          color: 'success',
+        })
+        history.replace('/');
       },
       onError: async (error: any) => {
         await dismiss();

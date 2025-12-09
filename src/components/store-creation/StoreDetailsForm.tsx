@@ -1,16 +1,16 @@
 import React from 'react';
 import {IonIcon, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea, useIonToast} from '@ionic/react';
 import {Control, Controller, FieldErrors, UseFormSetValue} from 'react-hook-form';
-import {FullStoreCreationFormData} from '../../validation/storeCreationValidation';
 import ImageUploadField from "./ImageUploadField";
 import {locationOutline} from "ionicons/icons";
 import getCurrentLocation from "../../lib/utils/geolocation";
+import {StoreDetailsFormData} from "../../validation/storeCreationValidation";
 
 interface StoreDetailsFormProps {
-  control: Control<FullStoreCreationFormData>;
-  errors: FieldErrors<FullStoreCreationFormData>;
+  control: Control<StoreDetailsFormData>;
+  errors: FieldErrors<StoreDetailsFormData>;
   defaultFile?: File;
-  setValue: UseFormSetValue<FullStoreCreationFormData>; // Add setValue to props
+  setValue: UseFormSetValue<StoreDetailsFormData>; // Add setValue to props
 }
 
 const StoreDetailsForm: React.FC<StoreDetailsFormProps> = ({control, errors, defaultFile, setValue}) => {

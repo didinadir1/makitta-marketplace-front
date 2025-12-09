@@ -16,26 +16,24 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {
-  FullStoreCreationFormData,
-  fullStoreCreationSchema,
-  storeDetailsSchema,
-} from '../validation/storeCreationValidation';
+import {StoreDetailsFormData, storeDetailsSchema,} from '../validation/storeCreationValidation';
 import './StoreCreationPage.css';
 import StoreDetailsForm from '../components/store-creation/StoreDetailsForm'; // Import Step 1 component
-import {useRestaurantActions} from "../lib/actions";
-import {useUser} from "../lib/data";
-import useRestaurant from "../lib/data/restaurants";
-import areFilesIdentical from "../lib/util/files"; // Import Step 2 component
+import {useMe} from "../lib/data";
+import areFilesIdentical from "../lib/util/files";
+import {useSellerCreate, useSellerMe, useSellerUpdateMe} from "../vendor/api";
+import {HttpTypes} from "@medusajs/types";
+import {uploadFilesQuery} from "../lib/config"; // Import Step 2 component
 
 
 const StoreCreationPage: React.FC = () => {
   const history = useHistory();
-  const {createRestaurant, updateRestaurant} = useRestaurantActions()
   const [presentToast] = useIonToast();
 
-  const {data: user} = useUser();
-  const {data: restaurant} = useRestaurant(user?.restaurant_id || "");
+  const {user} = useMe();
+  const {seller} = useSellerMe();
+  const {mutateAsync: createSeller} = useSellerCreate();
+  const {mutateAsync: updateSeller} = useSellerUpdateMe();
 
   const isEditPage = history.location.pathname.includes("edit-store")
 
@@ -45,11 +43,10 @@ const StoreCreationPage: React.FC = () => {
     control,
     handleSubmit,
     formState: {errors, isValid, isSubmitting},
-    trigger, // Use trigger for step-specific validation
     watch,
     setValue,
-  } = useForm<FullStoreCreationFormData>({
-    resolver: zodResolver(fullStoreCreationSchema),
+  } = useForm<StoreDetailsFormData>({
+    resolver: zodResolver(storeDetailsSchema),
     defaultValues: {
       name: '',
       address: '',
@@ -59,17 +56,17 @@ const StoreCreationPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (restaurant) {
-      setValue("name", restaurant.name || "");
-      setValue("address", restaurant.address || "");
-      setValue("description", restaurant.description || "");
+    if (seller) {
+      setValue("name", seller.name || "");
+      setValue("address", seller.address_line || "");
+      setValue("description", seller.description || "");
     }
 
-    if (restaurant?.image_url) {
-      const url = new URL(restaurant.image_url);
+    if (seller?.photo) {
+      const url = new URL(seller.photo);
       const fileName = url.pathname.replace(/^.*[\\/]/, "");
 
-      fetch(restaurant.image_url)
+      fetch(seller.photo)
         .then(response => response.blob())
         .then(blob => {
           setDefaultImage(new File([blob], fileName, {type: blob.type}));
@@ -77,24 +74,96 @@ const StoreCreationPage: React.FC = () => {
         })
         .catch(error => console.error('Error fetching image:', error));
     }
-  }, [restaurant]);
+  }, [seller]);
 
-  // Function to handle the final submission
-  const onSubmit: SubmitHandler<FullStoreCreationFormData> = async (data) => {
-    const isStepValid = await trigger(Object.keys(storeDetailsSchema.shape) as (Array<keyof FullStoreCreationFormData>));
-    if (isStepValid) {
-      if (isEditPage) {
-        let updatedValues = Object.fromEntries(
-          Object.entries(data).filter(([key, value]) => key !== "image" && value !== restaurant![key as keyof typeof restaurant])
+
+  const onSubmit: SubmitHandler<StoreDetailsFormData> = async (values) => {
+    let uploadedMedia: (HttpTypes.AdminFile & {
+      isThumbnail: boolean
+    })[] = [];
+    try {
+      const haveImageChanged = !await areFilesIdentical(defaultImage, values.image)
+      console.log({haveImageChanged, defaultImage, newFile: values.image})
+      if (haveImageChanged) {
+        uploadedMedia = await uploadFilesQuery([values.image]).then((r: any) =>
+          r.files.map((f: any) => ({
+            ...f,
+            isThumbnail: false,
+          }))
         )
-        const haveImageChanged = await areFilesIdentical(defaultImage, watch("image"))
-        if (haveImageChanged) {
-          updatedValues = {...updatedValues, image: watch("image")!}
-        }
-        await updateRestaurant({id: restaurant!.id, ...updatedValues})
-      } else await createRestaurant(data)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        presentToast({
+          message: "couldn't upload file",
+          duration: 2000,
+          color: 'danger',
+        })
+      }
     }
-  };
+
+
+    if (isEditPage) {
+
+      await updateSeller(
+        {
+          name: values.name,
+          address_line: values.address,
+          description: values.description,
+          photo: uploadedMedia[0].url || seller?.photo || "",
+        },
+        {
+          onSuccess: () => {
+            presentToast({
+              message: 'Store updated successfully!',
+              duration: 2000,
+              color: 'success',
+            })
+
+            history.push('/store')
+          },
+          onError: (error) => {
+            presentToast({
+              message: error.message || "couldn't update store",
+              duration: 2000,
+              color: 'danger',
+            })
+          },
+        }
+      )
+    } else {
+      await createSeller(
+        {
+          name: values.name,
+          email: user?.email || "",
+          phone: user?.phone || "",
+          address_line: values.address,
+          description: values.description,
+          photo: uploadedMedia[0].url || "",
+          member: {name: user?.first_name + " " + user?.last_name, email: user?.email, phone: user?.phone}
+        },
+        {
+          onSuccess: () => {
+            presentToast({
+              message: 'Store created successfully!',
+              duration: 2000,
+              color: 'success',
+            })
+
+            history.push('/store')
+          },
+          onError: (error) => {
+            presentToast({
+              message: error.message || "couldn't create store",
+              duration: 2000,
+              color: 'danger',
+            })
+          },
+        }
+      )
+    }
+  }
+
 
   return (
     <IonPage>
@@ -112,7 +181,7 @@ const StoreCreationPage: React.FC = () => {
         <div className="signup-content">
           <IonText className="step-header">
             <h2>Store Information</h2>
-            <p>Tell us about your restaurant</p>
+            <p>Tell us about your store</p>
           </IonText>
           {/* Wrap form content in <form> and use handleSubmit */}
           <form onSubmit={handleSubmit(onSubmit)}>

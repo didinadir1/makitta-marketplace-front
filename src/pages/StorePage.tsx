@@ -1,7 +1,7 @@
 import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonLabel, IonNote, IonPage,} from '@ionic/react'; // Added IonToggle
 import React from 'react';
 import './StorePage.css';
-import {chevronForwardOutline, settingsOutline} from 'ionicons/icons';
+import {settingsOutline} from 'ionicons/icons';
 import MyStoreSection from "../components/store/MyStoreSection";
 import {useHistory} from "react-router-dom";
 import {useSellerMe} from "../vendor/api"; // Import necessary icons and chevronForwardOutline
@@ -23,7 +23,7 @@ const StorePage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader className="store-header">
+      {seller && (<IonHeader className="store-header">
         <div className="store-header-background">
           <div className="store-header-content">
             <div className="store-info-section">
@@ -49,11 +49,11 @@ const StorePage: React.FC = () => {
               </div>
             </div>
             <IonButton fill="clear" className="edit-store-button" onClick={handleEditClick}>
-              <IonIcon icon={settingsOutline} slot="icon-only" />
+              <IonIcon icon={settingsOutline} slot="icon-only"/>
             </IonButton>
           </div>
         </div>
-      </IonHeader>
+      </IonHeader>)}
       <IonContent>
         {seller?.id ? (<MyStoreSection/>) : (
           <div className="create-store-container">

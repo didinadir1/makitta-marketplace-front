@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import {HttpTypes} from "@medusajs/types"
 
 export interface Review {
   id: string
@@ -35,6 +35,11 @@ export interface TeamMemberProps {
   email?: string
   photo?: string
   bio?: string
-  phone?: string
+  phone?: string | null
   role: string
 }
+
+export interface TeamMemberCreateProps extends Omit<TeamMemberProps, "id" | "seller_id" | "role"> {
+  role?: string
+}
+
