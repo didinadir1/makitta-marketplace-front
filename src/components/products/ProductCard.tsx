@@ -81,6 +81,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   }
 
+  // Helper to format price
+  const formatPrice = (price: number | undefined) => {
+    if (!price) return 'N/A';
+    return `$${price.toFixed(2)}`;
+  };
+
+  // Get the first variant's price if available
+  const price = product.variants?.[0]?.prices?.[0]?.amount ? product.variants[0].prices[0].amount / 100 : undefined;
+
   return (
     <IonItemSliding ref={itemRef}>
       {/* Options for swiping right (start) */}
@@ -103,19 +112,23 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="product-details">
               <IonLabel>
                 <IonText color="dark">
-                  <h3>{product.title}</h3>
+                  <h3 className="product-title">{product.title}</h3>
                 </IonText>
               </IonLabel>
-              <div className="product-info">
-                <IonText color="secondary">
-                  <p className="product-price">
-                  {/*todo show price*/}
-                  </p>
+              <div className="product-meta">
+                <IonText color="primary" className="product-price">
+                  {formatPrice(price)}
                 </IonText>
+                <IonChip color="success" className="product-status">
+                  {product.status === 'published' ? 'Active' : 'Draft'}
+                </IonChip>
               </div>
-              <IonText color="medium">
+              <IonText color="medium" className="product-description">
+                {product.description ? product.description.substring(0, 80) + '...' : 'No description available'}
+              </IonText>
+              <IonText color="medium" className="product-categories">
                 {/* You might want to map category ID to a name here */}
-                <p className="product-categories">{product?.categories?.map(category => category.name).join(', ')}</p>
+                Categories: {product?.categories?.map(category => category.name).join(', ') || 'None'}
               </IonText>
             </div>
           </div>
