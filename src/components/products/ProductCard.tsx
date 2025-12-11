@@ -14,10 +14,10 @@ import {
 import {createOutline, trashOutline} from 'ionicons/icons';
 import React, {useRef} from 'react';
 import './ProductCard.css';
-import {Product} from "../../types/product"; // Import the CSS for styling
+import {AdminProduct} from "@medusajs/types"; // Import the CSS for styling
 
 interface ProductCardProps {
-  product: Product;
+  product: AdminProduct;
   onEditClick: (productId: string) => void;
   onDeleteClick?: (productId: string) => void; // Optional delete handler
 }
@@ -109,16 +109,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <div className="product-info">
                 <IonText color="secondary">
                   <p className="product-price">
-                    ${(product.metadata?.basePrice ?? 0).toFixed(2)}
+                  {/*todo show price*/}
                   </p>
                 </IonText>
-                <IonChip
-                  disabled
-                  color={product.is_currently_available ? "success" : "tertiary"}>
-                  {product.is_currently_available
-                    ? "scheduled"
-                    : "not scheduled"}
-                </IonChip>
               </div>
               <IonText color="medium">
                 {/* You might want to map category ID to a name here */}
