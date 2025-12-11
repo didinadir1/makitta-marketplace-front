@@ -9,6 +9,7 @@ ion-segment {
     white-space: nowrap;
     display: flex;
     flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .my-store-content {
@@ -28,6 +29,25 @@ ion-segment-button {
     min-height: 40px;
     padding: 8px 0;
     flex-shrink: 0;
+}
+
+/* Responsive button widths */
+@media (max-width: 767px) {
+    ion-segment-button {
+        flex: 0 0 calc(100vw / 3);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    ion-segment-button {
+        flex: 0 0 calc(100vw / 5);
+    }
+}
+
+@media (min-width: 1024px) {
+    ion-segment-button {
+        flex: 0 0 calc(100vw / 7);
+    }
 }
 
 ion-segment-button ion-icon {
