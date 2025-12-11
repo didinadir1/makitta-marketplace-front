@@ -4,10 +4,7 @@ import {addOutline} from 'ionicons/icons';
 import ProductList from './ProductList';
 import ProductFormModal from './ProductFormModal';
 import './ProductsTab.css';
-import {useUser} from "../../lib/data";
-import useRestaurant from "../../lib/data/restaurants";
 import {Product} from "../../types/product";
-import {useProductActions} from "../../lib/actions/products";
 
 const ProductsTab: React.FC = () => {
   const [presentAlert] = useIonAlert(); // Hook for presenting alerts
@@ -16,9 +13,6 @@ const ProductsTab: React.FC = () => {
   const [currentProduct, setCurrentProduct] = useState<Product | undefined>(undefined);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const {data: user} = useUser();
-  const {data: restaurant} = useRestaurant(user?.restaurant_id);
-  const {deleteProduct} = useProductActions();
 
   const handleOpenModal = () => {
     setCurrentProduct(undefined); // Reset for new product
@@ -27,11 +21,7 @@ const ProductsTab: React.FC = () => {
 
 
   const handleEditProduct = (productId: string) => {
-    const productToEdit = restaurant?.products?.find(p => p.id === productId);
-    if (productToEdit) {
-      setCurrentProduct(productToEdit);
-      setIsModalOpen(true);
-    }
+    // todo handle product editing
   };
 
   const handleDeleteProduct = async (productId: string) => {
@@ -55,9 +45,7 @@ const ProductsTab: React.FC = () => {
           text: 'Delete',
           role: 'destructive',
           handler: async () => {
-            setIsDeleting(true)
-            await deleteProduct({productId: productId, restaurantId: restaurant!.id})
-              .finally(() => setIsDeleting(false));
+            // todo handle product delting
           },
         },
       ],

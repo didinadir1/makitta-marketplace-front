@@ -1,8 +1,7 @@
 import {IonCol, IonGrid, IonRow} from '@ionic/react';
 import React from 'react';
 import ProductCard from './ProductCard';
-import {useUser} from "../../lib/data";
-import useRestaurant from "../../lib/data/restaurants"; // Import the new ProductCard component
+import {useProducts} from "../../vendor/api"; // Import the new ProductCard component
 
 interface ProductListProps {
   onEditProduct: (productId: string) => void;
@@ -11,13 +10,12 @@ interface ProductListProps {
 
 const ProductList: React.FC<ProductListProps> = ({onEditProduct, onDeleteProduct}) => {
   // Use mock data for now
-  const {data: user} = useUser();
-  const {data: restaurant} = useRestaurant(user?.restaurant_id);
+  const {products} = useProducts()
 
   return (
     <IonGrid>
       <IonRow>
-        {restaurant?.products?.map(product => (
+        {products?.map(product => (
           <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3" key={product.id}>
             <ProductCard
               product={product}
