@@ -130,33 +130,49 @@ ion-item.ion-no-padding {
 /* Responsive adjustments */
 @media (max-width: 767px) {
     .product-card-content {
-        padding: 12px; /* Less padding on mobile */
-        gap: 10px;
+        flex-direction: column; /* Stack thumbnail and details vertically on mobile */
+        align-items: center; /* Center align for better use of space */
+        padding: 16px; /* Maintain padding */
+        gap: 12px; /* Consistent gap */
+        text-align: center; /* Center text for balanced look */
     }
 
     .product-thumbnail {
-        flex: 0 0 100px; /* Smaller thumbnail on mobile */
-        height: 100px;
+        flex: 0 0 140px; /* Slightly larger thumbnail on mobile for prominence */
+        height: 140px; /* Square aspect for better visual */
+        width: 140px; /* Ensure square */
+        border-radius: 12px; /* More rounded for modern feel */
+    }
+
+    .product-details {
+        width: 100%; /* Full width for details */
+        gap: 10px; /* Slightly tighter gap */
     }
 
     .product-title {
-        font-size: 1.1em;
+        font-size: 1.3em; /* Slightly larger for emphasis */
+        text-align: center; /* Center title */
     }
 
     .product-meta {
-        flex-direction: column;
-        align-items: flex-start;
+        justify-content: center; /* Center meta elements */
+        flex-direction: row; /* Keep row but center */
+        gap: 12px; /* More gap for breathing room */
     }
 
     .product-price {
-        font-size: 1em;
+        font-size: 1.2em; /* Larger price for visibility */
     }
 
     .product-description {
-        font-size: 0.9em;
+        font-size: 1em; /* Slightly larger description */
+        text-align: center; /* Center description */
+        max-width: 90%; /* Limit width for readability */
+        margin: 0 auto; /* Center it */
     }
 
     .product-categories {
-        font-size: 0.85em;
+        font-size: 0.95em; /* Slightly larger categories */
+        text-align: center; /* Center categories */
     }
 }
