@@ -43,7 +43,6 @@ const StoreCreationPage: React.FC = () => {
     control,
     handleSubmit,
     formState: {errors, isValid, isSubmitting},
-    watch,
     setValue,
   } = useForm<StoreDetailsFormData>({
     resolver: zodResolver(storeDetailsSchema),
@@ -70,7 +69,7 @@ const StoreCreationPage: React.FC = () => {
         .then(response => response.blob())
         .then(blob => {
           setDefaultImage(new File([blob], fileName, {type: blob.type}));
-          setValue("image", defaultImage); // Set the file in form state
+          setValue("image", new File([blob], fileName, {type: blob.type})); // Set the file in form state
         })
         .catch(error => console.error('Error fetching image:', error));
     }
@@ -109,7 +108,7 @@ const StoreCreationPage: React.FC = () => {
           name: values.name,
           address_line: values.address,
           description: values.description,
-          photo: uploadedMedia[0].url || seller?.photo || "",
+          photo: uploadedMedia[0]?.url || seller?.photo || "",
         },
         {
           onSuccess: () => {
@@ -138,7 +137,7 @@ const StoreCreationPage: React.FC = () => {
           phone: user?.phone || "",
           address_line: values.address,
           description: values.description,
-          photo: uploadedMedia[0].url || "",
+          photo: uploadedMedia[0]?.url || "",
           member: {name: user?.first_name + " " + user?.last_name, email: user?.email, phone: user?.phone}
         },
         {
@@ -185,7 +184,7 @@ const StoreCreationPage: React.FC = () => {
           {/* Wrap form content in <form> and use handleSubmit */}
           <form onSubmit={handleSubmit(onSubmit)}>
             <StoreDetailsForm control={control} errors={errors} setValue={setValue}
-                              defaultFile={watch("image")} // Pass existing image URL
+                              defaultFile={defaultImage} // Pass existing image URL
             />
 
             {/* Submit button */}

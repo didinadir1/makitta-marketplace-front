@@ -2,7 +2,9 @@ export default async function areFilesIdentical(file1?: File, file2?: File) {
   // Convert files to ArrayBuffers
   const buffer1 = await file1?.arrayBuffer();
   const buffer2 = await file2?.arrayBuffer();
+  console.log({buffer1, buffer2});
 
+  if (!buffer1 && !buffer2) return true;
   if (!buffer1 || !buffer2) return false;
 
   // Compare byte-by-byte
