@@ -130,49 +130,43 @@ ion-item.ion-no-padding {
 /* Responsive adjustments */
 @media (max-width: 767px) {
     .product-card-content {
-        flex-direction: column; /* Stack thumbnail and details vertically on mobile */
-        align-items: center; /* Center align for better use of space */
-        padding: 16px; /* Maintain padding */
-        gap: 12px; /* Consistent gap */
-        text-align: center; /* Center text for balanced look */
+        padding: 12px; /* Reduced padding for more space */
+        gap: 10px; /* Tighter gap */
     }
 
     .product-thumbnail {
-        flex: 0 0 140px; /* Slightly larger thumbnail on mobile for prominence */
-        height: 140px; /* Square aspect for better visual */
-        width: 140px; /* Ensure square */
-        border-radius: 12px; /* More rounded for modern feel */
+        flex: 0 0 80px; /* Smaller thumbnail for mobile to save space */
+        height: 80px; /* Match width for square */
+        border-radius: 6px; /* Slightly less rounded */
     }
 
     .product-details {
-        width: 100%; /* Full width for details */
-        gap: 10px; /* Slightly tighter gap */
+        gap: 6px; /* Tighter gap for compactness */
     }
 
     .product-title {
-        font-size: 1.3em; /* Slightly larger for emphasis */
-        text-align: center; /* Center title */
+        font-size: 1.1em; /* Slightly smaller title */
+        line-height: 1.2; /* Tighter line height */
     }
 
     .product-meta {
-        justify-content: center; /* Center meta elements */
-        flex-direction: row; /* Keep row but center */
-        gap: 12px; /* More gap for breathing room */
+        gap: 6px; /* Tighter gap */
     }
 
     .product-price {
-        font-size: 1.2em; /* Larger price for visibility */
+        font-size: 1em; /* Standard size */
     }
 
     .product-description {
-        font-size: 1em; /* Slightly larger description */
-        text-align: center; /* Center description */
-        max-width: 90%; /* Limit width for readability */
-        margin: 0 auto; /* Center it */
+        font-size: 0.9em; /* Smaller description */
+        line-height: 1.3; /* Tighter line height */
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Limit to 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .product-categories {
-        font-size: 0.95em; /* Slightly larger categories */
-        text-align: center; /* Center categories */
+        font-size: 0.85em; /* Smaller categories */
     }
 }
