@@ -10,6 +10,9 @@ ion-segment {
     display: flex;
     flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    width: 100vw; /* Ensure full width for scrolling */
+    scrollbar-width: thin; /* Firefox scrollbar */
+    scrollbar-color: var(--ion-color-medium) transparent; /* Firefox scrollbar colors */
 }
 
 .my-store-content {
@@ -53,6 +56,24 @@ ion-segment-button {
 ion-segment-button ion-icon {
     font-size: 20px;
     margin-bottom: 2px;
+}
+
+/* Custom scrollbar for WebKit browsers */
+ion-segment::-webkit-scrollbar {
+    height: 6px;
+}
+
+ion-segment::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+ion-segment::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 3px;
+}
+
+ion-segment::-webkit-scrollbar-thumb:hover {
+    background: var(--ion-color-dark);
 }
 
 /* Content Styling */
