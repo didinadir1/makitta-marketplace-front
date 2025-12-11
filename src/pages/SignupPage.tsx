@@ -29,6 +29,9 @@ const SignupPage: React.FC = () => {
   const history = useHistory();
   const [presentToast] = useIonToast();
   const {mutateAsync: signup} = useSignUpWithEmailPass();
+  const queryParams = new URLSearchParams(history.location.search);
+
+  const from = queryParams.get("from") || '/';
 
   const {
     control,
@@ -49,19 +52,16 @@ const SignupPage: React.FC = () => {
   const onSubmit = async (data: PersonalInfoFormData) => {
     await signup(data, {
       onSuccess: () => {
-        history.push('/signup/restaurant-info');
+        history.replace(from);
       },
       onError: async (error: any) => {
         console.error('Signup failed:', error);
-        if (error.message === "Identity with email already exists") {
-          history.replace('/');
-        }
+        history.replace('/login');
         await presentToast({
           message: `Signup failed: ${error.message || 'Unknown error'}`,
-          duration: 3000,
+          duration: 5000,
           color: 'danger',
         });
-
       }
     })
   };

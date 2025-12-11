@@ -12,22 +12,33 @@ import {
   useIonToast,
 } from '@ionic/react';
 import {logoGoogle} from 'ionicons/icons'; // Google icon
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useLinkGoogleAccount, useLogInWithEmailPass, useLogInWithGoogle} from '../lib/actions'; // Import useAuth hook
 import './LoginPage.css';
 import {GoogleLoginResponseOnline, SocialLogin} from "@capgo/capacitor-social-login";
-import {CUSTOMER_JWT_KEY, medusaStorage, SELLER_JWT_KEY} from "../lib/config";
+import {LocationState} from "../App";
+import {useMe} from "../lib/data";
 
 
 const LoginPage: React.FC = () => {
   const {mutateAsync: loginMutation} = useLogInWithEmailPass()
   const {mutateAsync: googleLoginMutation} = useLogInWithGoogle()
   const {mutateAsync: linkGoogleAccountMutation} = useLinkGoogleAccount()
+  const {user} = useMe();
+
   const history = useHistory();
   const [present, dismiss] = useIonLoading();
   const [presentToast] = useIonToast();
-  const location = useLocation();
+  const location = useLocation<LocationState>();
+
+  const from = location.state?.from || '/';
+
+  useEffect(() => {
+    if (user?.id) {
+      history.replace(from);
+    }
+  }, [user, from, history]);
 
   // Parse query parameters manually
   const queryParams = new URLSearchParams(location.search);
@@ -45,28 +56,15 @@ const LoginPage: React.FC = () => {
     });
 
     if (!isLinkingGoogle) {
-      await loginMutation({email, password, actor_type: "customer"}, {
-        onSuccess: async (response) => {
-          console.log("successful login", {response});
-          await loginMutation({email, password, actor_type: "seller"}, {
-            onSuccess: async () => {
-              await dismiss();
-            },
-            onError: async () => {
-              await dismiss();
-              await presentToast({
-                message: 'create a seller account !',
-                duration: 2000,
-                color: 'danger',
-              })
-            }
-          })
+      await loginMutation({email, password}, {
+        onSuccess: async () => {
+          await dismiss();
           await presentToast({
             message: 'Login successful!',
             duration: 2000,
             color: 'success',
           })
-          history.replace("/home")
+          history.replace(from);
         },
         onError: async (error: any) => {
           await dismiss();
@@ -80,21 +78,14 @@ const LoginPage: React.FC = () => {
       })
     } else {
       await linkGoogleAccountMutation({email, password, idToken: googleIdToken}, {
-        onSuccess: async (response) => {
+        onSuccess: async () => {
           await dismiss();
-          if (response.customerToken) {
-            await medusaStorage.set(CUSTOMER_JWT_KEY, response.customerToken);
-          }
-          if (response.sellerToken) {
-            await medusaStorage.set(SELLER_JWT_KEY, response.sellerToken);
-          }
           await presentToast({
             message: 'Accounts linked successfully!',
             duration: 2000,
             color: 'success',
           })
-          console.log("successful account linking", {response});
-          history.replace('/'); // Clear query params after linking
+          history.replace(from);
         },
         onError: async (error: any) => {
           await dismiss();
@@ -128,20 +119,8 @@ const LoginPage: React.FC = () => {
         if (response.originalProvider && response.profile) {
           setEmail(response.profile?.email ?? '');
           history.push(`login?link-google=${true}&email=${btoa(response?.profile?.email ?? "")}&google-id-token=${result.idToken}`);
-        } else {
-          if (response.customerToken) {
-            await medusaStorage.set(CUSTOMER_JWT_KEY, response.customerToken);
-          }
-          if (response.sellerToken) {
-            await medusaStorage.set(SELLER_JWT_KEY, response.sellerToken);
-          }
         }
-        await presentToast({
-          message: 'Login successful!',
-          duration: 2000,
-          color: 'success',
-        })
-        history.replace('/');
+        history.replace(from);
       },
       onError: async (error: any) => {
         await dismiss();
@@ -157,9 +136,7 @@ const LoginPage: React.FC = () => {
 
 
   const handleSignupClick = () => {
-    console.log('Signup clicked');
-    // Navigate to the signup page
-    history.push('/signup');
+    history.push(`/signup?from=${encodeURIComponent(from)}`);
   };
 
   return (

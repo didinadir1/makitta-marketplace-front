@@ -83,7 +83,6 @@ const StoreCreationPage: React.FC = () => {
     })[] = [];
     try {
       const haveImageChanged = !await areFilesIdentical(defaultImage, values.image)
-      console.log({haveImageChanged, defaultImage, newFile: values.image})
       if (haveImageChanged) {
         uploadedMedia = await uploadFilesQuery([values.image]).then((r: any) =>
           r.files.map((f: any) => ({

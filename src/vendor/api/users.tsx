@@ -6,10 +6,10 @@ import {queryClient} from "../../lib/utils/query-client"
 import {queryKeysFactory} from "../../lib/utils/query-key-factory"
 import {StoreVendor, TeamMemberCreateProps, TeamMemberProps} from "../types/user";
 
-const USERS_QUERY_KEY = "seller-users" as const
-const usersQueryKeys = {
-  ...queryKeysFactory(USERS_QUERY_KEY),
-  me: () => [USERS_QUERY_KEY, "me"],
+export const SELLER_USERS_QUERY_KEY = "seller-users" as const
+export const sellerUsersQueryKeys = {
+  ...queryKeysFactory(SELLER_USERS_QUERY_KEY),
+  me: () => [SELLER_USERS_QUERY_KEY, "me"],
 }
 
 export const useSellerMe = (
@@ -31,7 +31,7 @@ export const useSellerMe = (
             "id,name,description,phone,email,media,address_line,postal_code,country_code,city,region,metadata,tax_id,photo,store_status",
         },
       }),
-    queryKey: usersQueryKeys.me(),
+    queryKey: sellerUsersQueryKeys.me(),
     ...options,
   })
 
@@ -58,11 +58,11 @@ export const useSellerCreate = (
       await medusaStorage.set(SELLER_JWT_KEY, data.sellerToken);
 
       await queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.lists(),
+        queryKey: sellerUsersQueryKeys.lists(),
       });
 
       await queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.me(),
+        queryKey: sellerUsersQueryKeys.me(),
       })
 
       options?.onSuccess?.(data, variables, context);
@@ -87,11 +87,11 @@ export const useSellerUpdateMe = (
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.lists(),
+        queryKey: sellerUsersQueryKeys.lists(),
       })
 
       queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.me(),
+        queryKey: sellerUsersQueryKeys.me(),
       })
 
       options?.onSuccess?.(data, variables, context)
@@ -151,7 +151,7 @@ export const useSellerUserMe = (
         method: "GET",
         query: query as { [key: string]: string | number },
       }),
-    queryKey: [USERS_QUERY_KEY, "user", "me"],
+    queryKey: [SELLER_USERS_QUERY_KEY, "user", "me"],
     ...options,
   })
 
@@ -167,7 +167,7 @@ export const useSellerStatistics = ({from, to}: { from: string; to: string }) =>
           method: "GET",
         }
       ),
-    queryKey: [USERS_QUERY_KEY, "statistics"],
+    queryKey: [SELLER_USERS_QUERY_KEY, "statistics"],
   })
 
   return {...data, ...rest}
@@ -194,7 +194,7 @@ export const useSellerUser = (
         method: "GET",
         query: query as { [key: string]: string | number },
       }),
-    queryKey: usersQueryKeys.detail(id),
+    queryKey: sellerUsersQueryKeys.detail(id),
     ...options,
   })
 
@@ -219,7 +219,7 @@ export const useSellerUsers = (
         method: "GET",
         query: query as { [key: string]: string | number },
       }),
-    queryKey: usersQueryKeys.list(query),
+    queryKey: sellerUsersQueryKeys.list(query),
     ...options,
   })
 
@@ -249,15 +249,15 @@ export const useSellerUpdateUser = (
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.detail(id),
+        queryKey: sellerUsersQueryKeys.detail(id),
       })
       queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.lists(),
+        queryKey: sellerUsersQueryKeys.lists(),
       })
 
       // We invalidate the me query in case the user updates their own profile
       queryClient.invalidateQueries({
-        queryKey: [USERS_QUERY_KEY, "user", "me"],
+        queryKey: [SELLER_USERS_QUERY_KEY, "user", "me"],
       })
 
       options?.onSuccess?.(data, variables, context)
@@ -281,15 +281,15 @@ export const useSellerDeleteUser = (
       }),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.detail(id),
+        queryKey: sellerUsersQueryKeys.detail(id),
       })
       queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.lists(),
+        queryKey: sellerUsersQueryKeys.lists(),
       })
 
       // We invalidate the me query in case the user updates their own profile
       queryClient.invalidateQueries({
-        queryKey: usersQueryKeys.me(),
+        queryKey: sellerUsersQueryKeys.me(),
       })
 
       options?.onSuccess?.(data, variables, context)

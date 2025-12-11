@@ -1,9 +1,11 @@
 import {Redirect, Route} from 'react-router-dom';
 import {
-  IonApp, IonContent,
+  IonApp,
+  IonContent,
   IonIcon,
   IonLabel,
-  IonRouterOutlet, IonSpinner,
+  IonRouterOutlet,
+  IonSpinner,
   IonTabBar,
   IonTabButton,
   IonTabs,
@@ -60,16 +62,21 @@ import MessagesPage from "./pages/MessagesPage";
 
 setupIonicReact();
 
+export interface LocationState {
+  from?: string;
+}
+
 const ProtectedRoute: React.FC<{
   path: string;
   component: React.ComponentType<any>;
   exact?: boolean;
-}> = ({ component: Component, ...rest }) => {
-  const { user, isLoading, isError } = useMe();
+}> = ({component: Component, path: path, ...rest}) => {
+  const {user, isLoading, isError} = useMe();
 
   return (
     <Route
       {...rest}
+      path={path}
       render={(props) => {
         // Show loading spinner while checking authentication
         if (isLoading) {
@@ -81,7 +88,7 @@ const ProtectedRoute: React.FC<{
                 alignItems: 'center',
                 height: '100%'
               }}>
-                <IonSpinner name="crescent" />
+                <IonSpinner name="crescent"/>
               </div>
             </IonContent>
           );
@@ -89,7 +96,14 @@ const ProtectedRoute: React.FC<{
 
         // If there's an error or no user, redirect to login
         if (isError || !user?.id) {
-          return <Redirect to="/login" />;
+          return (
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: {from: path}
+              }}
+            />
+          );
         }
 
         // User is authenticated, render the component

@@ -2,6 +2,8 @@ import {FetchError} from "@medusajs/js-sdk"
 import {HttpTypes} from "@medusajs/types"
 import {useMutation, UseMutationOptions} from "@tanstack/react-query"
 import {fetchQuery, sellerSdk} from "../../lib/config";
+import {queryClient} from "../../lib/utils/query-client";
+import {sellerUsersQueryKeys} from "./users";
 
 export const useSignInWithEmailPass = (
   options?: UseMutationOptions<
@@ -16,6 +18,9 @@ export const useSignInWithEmailPass = (
   return useMutation({
     mutationFn: (payload) => sellerSdk.auth.login("seller", "emailpass", payload),
     onSuccess: async (data, variables, context) => {
+      await queryClient.refetchQueries({
+        queryKey: sellerUsersQueryKeys.me(),
+      })
       options?.onSuccess?.(data, variables, context)
     },
     ...options,

@@ -1,6 +1,5 @@
-import {customerSdk, fetchQuery, sellerSdk} from "../config";
+import {CUSTOMER_JWT_KEY, customerSdk, fetchQuery, medusaStorage, SELLER_JWT_KEY, sellerSdk} from "../config";
 import {useMutation, UseMutationOptions} from "@tanstack/react-query";
-import {UserRole} from "../../types/user";
 import {FetchError} from "@medusajs/js-sdk";
 import {
   HttpTypes,
@@ -8,7 +7,9 @@ import {
   StoreCustomerAddressDeleteResponse,
   StoreCustomerResponse
 } from "@medusajs/types";
-import {useSignInWithEmailPass} from "../../vendor/api";
+import {sellerUsersQueryKeys} from "../../vendor/api";
+import {queryClient} from "../utils/query-client";
+import {usersQueryKeys} from "../data";
 
 export const useSignUpWithEmailPass = (
   options?: UseMutationOptions<
@@ -22,12 +23,30 @@ export const useSignUpWithEmailPass = (
   }
   >
 ) => {
-
   const {mutateAsync: createCustomerMutation} = useCreateCustomer()
-  const {mutateAsync: loginMutation} = useSignInWithEmailPass()
+  const {mutateAsync: loginMutation} = useLogInWithEmailPass()
 
   return useMutation({
-    mutationFn: (payload) => customerSdk.auth.register("customer", "emailpass", payload),
+    mutationFn: async (payload) => {
+      // Check if identity exists BEFORE attempting registration
+      const identityCheck = await checkIdentity(payload.email)
+
+      if (identityCheck.exists) {
+        if (identityCheck.hasEmailPass) {
+          throw new FetchError("Account already exists. Please login.", "Conflict", 409)
+        }
+        if (identityCheck.hasGoogle) {
+          // Only Google exists - need to link accounts
+          //todo implement reset password
+          throw new Error(
+            "This email is registered with Google. Please login with Google or reset your password to add email/password login.",
+          )
+        }
+      }
+
+      // No existing identity - proceed with registration
+      return customerSdk.auth.register("customer", "emailpass", payload)
+    },
     onSuccess: async (data, variables, context) => {
       const customer = {
         first_name: variables.first_name,
@@ -35,45 +54,61 @@ export const useSignUpWithEmailPass = (
         phone: variables.phone,
         email: variables.email,
       }
-      await createCustomerMutation({...customer}, {
-          onSuccess: async () => {
-            options?.onSuccess?.(data, variables, context)
+
+      await createCustomerMutation(customer, {
+        onSuccess: async () => {
+          const email = variables.email;
+          const password = variables.password;
+
+          const loginResponse = await loginMutation({email, password}, {
+            onSuccess: async (data) => {
+              if (typeof data === "string") options?.onSuccess?.(data, variables, context)
+            },
+            onError: async (error) => {
+              throw new Error("Login after signup failed: " + error.message)
+            }
+          })
+
+          if (typeof loginResponse !== "string") {
+            throw new Error(
+              "Authentication requires more actions, which isn't supported by this flow."
+            );
+          }
+        },
+        onError: async (error) => {
+          throw new Error("Customer creation after signup failed: " + error.message)
+        },
+      })
+    },
+    onError: async (error, variables, context) => {
+      // Handle the case where user should log in instead
+      if (error.statusText === "Conflict") {
+        // Handle existing identity case - attempt to log in
+        // todo send verification email link in this case (email already exists)
+        const email = variables.email;
+        const password = variables.password;
+
+        const loginResponse = await loginMutation({email, password}, {
+          onSuccess: async (data) => {
+            if (typeof data === "string") options?.onSuccess?.(data, variables, context)
           },
           onError: async (error) => {
             options?.onError?.(error, variables, context)
           }
-        }
-      )
-    },
-    onError: async (error, variables, context) => {
+        })
 
-      if (
-        error.statusText !== "Unauthorized" ||
-        error.message !== "Identity with email already exists"
-      ) {
+        if (typeof loginResponse !== "string") {
+          throw new Error(
+            "Authentication requires more actions, which isn't supported by this flow."
+          );
+        }
+        // await transferCart(); // Transfer cart after successful login
+      } else {
         throw new Error("An error occurred during signup.");
       }
 
-      // Handle existing identity case - attempt to log in
-      // todo send verification email link in this case (email already exists)
-      const email = variables.email;
-      const password = variables.password;
-
-      const loginResponse = await loginMutation({email, password}, {
-        onSuccess: async (data) => {
-          if (typeof data === "string") options?.onSuccess?.(data, variables, context)
-        },
-        onError: async (error) => {
-          options?.onError?.(error, variables, context)
-        }
-      })
-
-      if (typeof loginResponse !== "string") {
-        throw new Error(
-          "Authentication requires more actions, which isn't supported by this flow."
-        );
-      }
-      // await transferCart(); // Transfer cart after successful login
+      // Handle other errors
+      options?.onError?.(error, variables, context)
     },
     ...options,
   })
@@ -81,21 +116,24 @@ export const useSignUpWithEmailPass = (
 
 export const useLogInWithEmailPass = (
   options?: UseMutationOptions<
-    | string
-    | {
-    location: string
-  },
+    [string | { location: string; }, string | { location: string; }],
     FetchError,
-    HttpTypes.AdminSignInWithEmailPassword & { actor_type: UserRole }
+    HttpTypes.AdminSignInWithEmailPassword
   >
 ) => {
   return useMutation({
     mutationFn: (payload) => {
-      if (payload.actor_type === "seller")
-        return sellerSdk.auth.login("seller", "emailpass", payload)
-      return customerSdk.auth.login("customer", "emailpass", payload)
+      const customerLoginPromise = customerSdk.auth.login("customer", "emailpass", payload)
+      const sellerLoginPromise = sellerSdk.auth.login("seller", "emailpass", payload)
+      return Promise.all([customerLoginPromise, sellerLoginPromise])
     },
     onSuccess: async (data, variables, context) => {
+      await queryClient.refetchQueries({
+        queryKey: usersQueryKeys.me(),
+      })
+      await queryClient.refetchQueries({
+        queryKey: sellerUsersQueryKeys.me(),
+      })
       options?.onSuccess?.(data, variables, context)
     },
     ...options,
@@ -129,6 +167,20 @@ export const useLogInWithGoogle = (
         },
       }),
     onSuccess: async (data, variables, context) => {
+
+      if (data.customerToken) {
+        await medusaStorage.set(CUSTOMER_JWT_KEY, data.customerToken);
+        await queryClient.refetchQueries({
+          queryKey: usersQueryKeys.me(),
+        })
+      }
+      if (data.sellerToken) {
+        await medusaStorage.set(SELLER_JWT_KEY, data.sellerToken);
+        await queryClient.refetchQueries({
+          queryKey: sellerUsersQueryKeys.me(),
+        })
+      }
+
       options?.onSuccess?.(data, variables, context)
     },
     ...options,
@@ -156,6 +208,18 @@ export const useLinkGoogleAccount = (
         },
       }),
     onSuccess: async (data, variables, context) => {
+      if (data.customerToken) {
+        await medusaStorage.set(CUSTOMER_JWT_KEY, data.customerToken);
+        await queryClient.refetchQueries({
+          queryKey: usersQueryKeys.me(),
+        })
+      }
+      if (data.sellerToken) {
+        await medusaStorage.set(SELLER_JWT_KEY, data.sellerToken);
+        await queryClient.refetchQueries({
+          queryKey: sellerUsersQueryKeys.me(),
+        })
+      }
       options?.onSuccess?.(data, variables, context)
     },
     ...options,
@@ -185,6 +249,7 @@ export const useCreateCustomer = (
     mutationFn: (payload) =>
       customerSdk.store.customer.create(payload),
     onSuccess: async (data, variables, context) => {
+      console.log("Customer created:", {data});
       options?.onSuccess?.(data, variables, context)
     },
     ...options,
@@ -273,5 +338,16 @@ export const useUpdateProviderForEmailPass = (
       options?.onSuccess?.(data, variables, context)
     },
     ...options,
+  })
+}
+
+// Check identity before signup
+const checkIdentity = async (email: string) => {
+  return await fetchQuery("/auth/check-identity", {
+    method: "POST",
+    body: {email},
+    headers: {
+      "Content-Type": "application/json",
+    },
   })
 }

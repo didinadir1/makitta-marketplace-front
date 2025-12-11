@@ -32,8 +32,8 @@ export function useUser() {
   })
 }
 
-const USERS_QUERY_KEY = "users" as const
-const usersQueryKeys = {
+export const USERS_QUERY_KEY = "users" as const
+export const usersQueryKeys = {
   ...queryKeysFactory(USERS_QUERY_KEY),
   me: () => [USERS_QUERY_KEY, "me"],
 }
