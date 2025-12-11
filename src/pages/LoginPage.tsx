@@ -120,7 +120,7 @@ const LoginPage: React.FC = () => {
           setEmail(response.profile?.email ?? '');
           history.push(`login?link-google=${true}&email=${btoa(response?.profile?.email ?? "")}&google-id-token=${result.idToken}`);
         }
-        history.replace(from);
+       else history.replace(from);
       },
       onError: async (error: any) => {
         await dismiss();
