@@ -1,5 +1,5 @@
 import {IonIcon, IonLabel, IonSegment, IonSegmentButton,} from '@ionic/react';
-import {fastFood, grid, receipt} from 'ionicons/icons';
+import {fastFood, grid, receipt, archive, people, star, megaphone, list, helpCircle} from 'ionicons/icons';
 import React, {useState} from 'react';
 import ProductsTab from '../products/ProductsTab';
 import './MyStoreSection.css';
@@ -20,6 +20,18 @@ const MyStoreSection: React.FC = () => {
         return <OrdersTab/>;
       case 'products':
         return <ProductsTab/>;
+      case 'inventory':
+        return <div></div>;
+      case 'customers':
+        return <div></div>;
+      case 'reviews':
+        return <div></div>;
+      case 'promotions':
+        return <div></div>;
+      case 'price lists':
+        return <div></div>;
+      case 'request':
+        return <div></div>;
       default:
         return <ProductsTab/>;
     }
@@ -40,6 +52,30 @@ const MyStoreSection: React.FC = () => {
         <IonSegmentButton value="products">
           <IonIcon icon={fastFood}/>
           <IonLabel>Products</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="inventory">
+          <IonIcon icon={archive}/>
+          <IonLabel>Inventory</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="customers">
+          <IonIcon icon={people}/>
+          <IonLabel>Customers</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="reviews">
+          <IonIcon icon={star}/>
+          <IonLabel>Reviews</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="promotions">
+          <IonIcon icon={megaphone}/>
+          <IonLabel>Promotions</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="price lists">
+          <IonIcon icon={list}/>
+          <IonLabel>Price Lists</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="request">
+          <IonIcon icon={helpCircle}/>
+          <IonLabel>Request</IonLabel>
         </IonSegmentButton>
 
       </IonSegment>

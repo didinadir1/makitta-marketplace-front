@@ -5,7 +5,10 @@ ion-segment {
     /*border-top-left-radius: 20px; !* Rounded top corners *!*/
     /*border-top-right-radius: 20px;*/
     box-shadow: 0 1px rgba(var(--ion-color-text-rgb), 0.2); /* Subtle shadow */
-
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 .my-store-content {
@@ -24,6 +27,7 @@ ion-segment-button {
     text-transform: none;
     min-height: 40px;
     padding: 8px 0;
+    flex-shrink: 0;
 }
 
 ion-segment-button ion-icon {
