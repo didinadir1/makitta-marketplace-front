@@ -50,7 +50,7 @@ export const useSellerCreate = (
 ) => {
   return useMutation({
     mutationFn: (body) =>
-      fetchQuery("/store", {
+      fetchQuery("/seller", {
         method: "POST",
         body,
       }),

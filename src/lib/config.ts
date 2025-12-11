@@ -52,7 +52,7 @@ export const uploadFilesQuery = async (files: any[]) => {
     formData.append("files", file)
   }
 
-  return await fetch(`${backendUrl}/vendor/uploads`, {
+  return await fetch(`${backendUrl}/seller/uploads`, {
     method: "POST",
     body: formData,
     headers: {
