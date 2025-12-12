@@ -19,6 +19,7 @@ ion-segment {
     padding-top: 70px; /* Adjust padding to account for the fixed segment */
     border-top-left-radius: 20px; /* Rounded top corners */
     border-top-right-radius: 20px;
+    background: var(--ion-background-color); /* Set background to --ion-background-color */
 }
 
 /* Segment (Tab) Styling */
