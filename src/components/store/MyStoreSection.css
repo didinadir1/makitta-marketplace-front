@@ -79,7 +79,7 @@ ion-segment::-webkit-scrollbar-thumb:hover {
 
 /* Content Styling */
 ion-content {
-    --background: var(--ion-color-light, #f4f5f8); /* Use a light background for the page */
+    --background: var(--ion-background-color) !important; /* Set to --ion-background-color for consistency */
 }
 
 /* Make IonList background transparent */
