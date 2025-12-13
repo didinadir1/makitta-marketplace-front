@@ -1,39 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {
-  IonButton,
-  IonButtons,
-  IonChip,
-  IonCol,
-  IonContent,
-  IonDatetime,
-  IonFooter,
-  IonGrid,
-  IonHeader,
-  IonIcon,
-  IonInput,
-  IonLabel,
-  IonLoading,
-  IonModal,
-  IonNote,
-  IonSelect,
-  IonSelectOption,
-  IonTextarea,
-  IonTitle,
-  IonToggle,
-  IonToolbar,
-} from '@ionic/react';
-import {addOutline, closeOutline, removeOutline} from 'ionicons/icons';
+import React, {useEffect, useMemo, useState} from 'react';
+import {IonModal, useIonToast,} from '@ionic/react';
 import './ProductFormModal.css';
-import {Size} from "../../data/mockDishes";
-import ImageUploadField from "../store-creation/ImageUploadField";
-import {Controller, SubmitHandler, useFieldArray, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {SaveProductFormData, saveProductSchema} from "../../validation/productCreationValidation";
-import {useCategories, useUser} from "../../lib/data";
-import {useProductActions} from "../../lib/actions/products";
+import {useWatch} from "react-hook-form";
 import {Product} from "../../types/product";
-import {compareImageArrays} from "../../lib/util/files";
+import {useCreateProduct, useProductCategories, useRegions, useSalesChannels, useStore} from "../../vendor/api";
+import {usePricePreferences} from "../../vendor/api/price-preferences";
+import {useExtendableForm} from '../../lib/utils/forms/hooks';
+import {PRODUCT_CREATE_FORM_DEFAULTS, ProductCreateSchema} from '../../validation/productCreationValidation';
+import {uploadFilesQuery} from "../../lib/config";
+import {HttpTypes} from "@medusajs/types";
 
+enum Tab {
+  DETAILS = "details",
+  ORGANIZE = "organize",
+  VARIANTS = "variants",
+  INVENTORY = "inventory",
+}
+
+type ProgressStatus = "not-started" | "in-progress" | "completed"
+
+type TabState = Record<Tab, ProgressStatus>
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -47,435 +33,224 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                                                              product,
                                                            }) => {
 
-  const {data: fetchedCategories} = useCategories()
-  const {saveProduct} = useProductActions()
-  const {data: user} = useUser();
+  const {store, isPending: isStorePending} = useStore()
 
+  const {sales_channels, isPending: isSalesChannelPending} =
+    useSalesChannels()
+
+  const {product_categories, isPending, isError, error} =
+    useProductCategories()
+
+  const ready =
+    !!store && !isStorePending && !!sales_channels && !isSalesChannelPending
+
+  const defaultChannel = sales_channels?.[0]
+
+  const [tab, setTab] = useState<Tab>(Tab.DETAILS)
+  const [tabState, setTabState] = useState<TabState>({
+    [Tab.DETAILS]: "in-progress",
+    [Tab.ORGANIZE]: "not-started",
+    [Tab.VARIANTS]: "not-started",
+    [Tab.INVENTORY]: "not-started",
+  })
   const [defaultImages, setDefaultImages] = useState<{ url: string; file: File }[]>([]);
+  const [presentToast] = useIonToast();
 
+  const configs = []
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: {errors, isSubmitting},
-    watch,
-    setValue,
-    reset
-  } = useForm<SaveProductFormData>({
-    resolver: zodResolver(saveProductSchema),
+  // use regions and pricePreferences for handling the price of the variant
+  const {regions} = useRegions({limit: 9999})
+  const {price_preferences: pricePreferences} = usePricePreferences({
+    limit: 9999,
+  })
+
+  const form = useExtendableForm({
     defaultValues: {
-      id: product?.id,
-      title: '',
-      sizes: [{id: 'standard', title: Size.STANDARD, price: 0}], // Default to Standard size
-      description: '',
-      categories: [],
-      isAlwaysAvailable: true,
-      scheduledDates: [],
-      images: [],
-      addOns: [],
-      newAddOnName: '',
-      newAddOnPrice: '',
+      ...PRODUCT_CREATE_FORM_DEFAULTS,
+      sales_channels: defaultChannel
+        ? [
+          {
+            id: defaultChannel.id,
+            name: defaultChannel.name,
+          },
+        ]
+        : [],
     },
-  });
+    schema: ProductCreateSchema,
+    configs,
+  })
 
-  // Initialize form with product data if editing
-  const initializeWithProduct = () => {
-    if (product) {
-      setValue('id', product.id);
-      setValue('title', product.title);
-      setValue('sizes', Array.isArray(product.metadata?.sizes) && product.metadata.sizes.length > 0 ? product.metadata.sizes : [{
-        id: 'standard',
-        title: Size.STANDARD,
-        price: 0
-      }]);
-      setValue('description', product.description || '');
-      setValue('categories', product.categories || []);
-      setValue('addOns', Array.isArray(product.metadata?.addOns) ? product.metadata.addOns : []);
-      setValue('isAlwaysAvailable', !!product.metadata?.isAlwaysAvailable);
-      setValue('scheduledDates', Array.isArray(product.metadata?.scheduledDates) ? product.metadata.scheduledDates : []);
-      setValue('newAddOnName', '');
-      setValue('newAddOnPrice', '');
-      if (product?.images) {
-        const fetchImagePromises = product.images.map(async (image) => {
-          const url = new URL(image.url);
-          const fileName = url.pathname.replace(/^.*[\\/]/, "");
+  const {mutateAsync, isPending} = useCreateProduct()
 
-          try {
-            const response = await fetch(image.url);
-            const blob = await response.blob();
-            const file = new File([blob], fileName, {type: blob.type});
-            return {file, url: image.url}; // Include the URL with the file
-          } catch (error) {
-            console.error('Error fetching image:', error);
-            return null;
-          }
-        });
+  /**
+   * TODO: Important to revisit this - use variants watch so high in the tree can cause needless rerenders of the entire page
+   * which is suboptimal when rerenders are caused by bulk editor changes
+   */
 
-        Promise.all(fetchImagePromises).then((images) => {
-          const validImages = images.filter((img): img is { file: File, url: string } => img !== null);
-          const validFiles = validImages.map(img => img.file);
-          setDefaultImages(validImages);
-          setValue("images", validFiles);
-        });
+  const watchedVariants = useWatch({
+    control: form.control,
+    name: "variants",
+  })
+
+  const showInventoryTab = useMemo(
+    () => watchedVariants.some((v) => v.manage_inventory && v.inventory_kit),
+    [watchedVariants]
+  )
+
+  const handleSubmit = form.handleSubmit(async (values) => {
+    const isDraftSubmission = false
+
+
+    const media = values.media || []
+    const payload = {...values, media: undefined}
+
+    let uploadedMedia: (HttpTypes.AdminFile & {
+      isThumbnail: boolean
+    })[] = []
+    try {
+      if (media.length) {
+        const thumbnailReq = media.filter((m) => m.isThumbnail)
+        const otherMediaReq = media.filter((m) => !m.isThumbnail)
+
+        const fileReqs: any = []
+        if (thumbnailReq?.length) {
+          fileReqs.push(
+            uploadFilesQuery(thumbnailReq).then((r: any) =>
+              r.files.map((f: any) => ({
+                ...f,
+                isThumbnail: true,
+              }))
+            )
+          )
+        }
+        if (otherMediaReq?.length) {
+          fileReqs.push(
+            uploadFilesQuery(otherMediaReq).then((r: any) =>
+              r.files.map((f: any) => ({
+                ...f,
+                isThumbnail: false,
+              }))
+            )
+          )
+        }
+
+        uploadedMedia = (await Promise.all(fileReqs)).flat()
       }
-    } else reset()
-  };
-
-  useEffect(initializeWithProduct, [product]);
-
-  const {fields: addOnFields, append: appendAddOn, remove: removeAddOn} = useFieldArray({
-    control,
-    name: 'addOns',
-  });
-
-  const {fields: sizeFields, append: appendSize, remove: removeSize} = useFieldArray({
-    control,
-    name: 'sizes',
-  });
-
-  const handleAddAddOn = () => {
-    const newAddOnName = watch('newAddOnName');
-    const newAddOnPrice = watch('newAddOnPrice');
-    if (newAddOnName?.trim() && newAddOnPrice?.trim()) {
-      const price = parseFloat(newAddOnPrice);
-      if (!isNaN(price) && price >= 0) {
-        const newAddOn = {
-          id: Date.now().toString(),
-          title: newAddOnName.trim(),
-          price: price,
-        };
-        appendAddOn(newAddOn);
-        setValue('newAddOnName', '');
-        setValue('newAddOnPrice', '');
+    } catch (error) {
+      if (error instanceof Error) {
+        await presentToast({
+          message: error.message,
+          duration: 3000,
+          color: "danger",
+        })
       }
     }
-  };
 
-  const handleAddSize = () => {
-    appendSize({
-      id: Date.now().toString(),
-      title: allSizes.filter(size => !selectedSizeNames.includes(size))[0],
-      price: 0
-    });
-  };
+    await mutateAsync(
+      {
+        ...payload,
+        status: isDraftSubmission ? "draft" : "proposed",
+        images: uploadedMedia,
+        weight: parseInt(payload.weight || "") || undefined,
+        length: parseInt(payload.length || "") || undefined,
+        height: parseInt(payload.height || "") || undefined,
+        width: parseInt(payload.width || "") || undefined,
+        type_id: payload.type_id || undefined,
+        tags:
+          payload.tags?.map((tag) => ({
+            id: tag,
+          })) || [],
+        collection_id: payload.collection_id || undefined,
+        shipping_profile_id: undefined,
+        enable_variants: undefined,
+        additional_data: undefined,
+        categories: payload.categories.map((cat) => ({
+          id: cat,
+        })),
+        variants: payload.variants.map((variant) => ({
+          ...variant,
+          sku: variant.sku === "" ? undefined : variant.sku,
+          manage_inventory: true,
+          allow_backorder: false,
+          should_create: undefined,
+          is_default: undefined,
+          inventory_kit: undefined,
+          inventory: undefined,
+          prices: Object.keys(variant.prices || {}).map((key) => ({
+            currency_code: key,
+            amount: parseFloat(variant.prices?.[key] as string),
+          })),
+        })),
+      },
+      {
+        onSuccess: async () => {
+          await presentToast({
+            message: "Product created successfully",
+            duration: 2000,
+            color: "success",
+          })
+          setIsOpen(false)
+        },
+        onError: async (error) => {
+          await presentToast({
+            message: error.message,
+            duration: 3000,
+            color: "danger",
+          })
+        },
+      }
+    )
+  })
 
-  const onSubmit: SubmitHandler<SaveProductFormData> = async (data) => {
-    let dataToSave: Partial<SaveProductFormData> = data
-    if (product) {
-      dataToSave = Object.fromEntries(
-        Object.entries(data).filter(([key, value]) => key !== "images" && value !== product[key as keyof typeof product])
-      )
-      const {keptImagesUrls, newFiles} = await compareImageArrays(defaultImages, watch("images"))
+  const onNext = async (currentTab: Tab) => {
+    const valid = await form.trigger()
 
-      dataToSave = {...dataToSave, id: product.id, keptImagesUrls, images: newFiles}
-
+    if (!valid) {
+      return
     }
-    await saveProduct({restaurantId: user!.restaurant_id, productData: dataToSave})
-    setIsOpen(false);
-  };
 
-  const handleCancel = () => {
-    if (product) {
-      initializeWithProduct()
-    } else reset();
-    setIsOpen(false)
-  };
+    if (currentTab === Tab.DETAILS) {
+      setTab(Tab.ORGANIZE)
+    }
 
-  // Get available sizes for selection (excluding already selected ones)
-  const allSizes = Object.values(Size);
-  const selectedSizeNames = watch('sizes')?.map(s => s.title) || [];
+    if (currentTab === Tab.ORGANIZE) {
+      setTab(Tab.VARIANTS)
+    }
+
+    if (currentTab === Tab.VARIANTS) {
+      setTab(Tab.INVENTORY)
+    }
+  }
+
+  useEffect(() => {
+    const currentState = {...tabState}
+    if (tab === Tab.DETAILS) {
+      currentState[Tab.DETAILS] = "in-progress"
+    }
+    if (tab === Tab.ORGANIZE) {
+      currentState[Tab.DETAILS] = "completed"
+      currentState[Tab.ORGANIZE] = "in-progress"
+    }
+    if (tab === Tab.VARIANTS) {
+      currentState[Tab.DETAILS] = "completed"
+      currentState[Tab.ORGANIZE] = "completed"
+      currentState[Tab.VARIANTS] = "in-progress"
+    }
+    if (tab === Tab.INVENTORY) {
+      currentState[Tab.DETAILS] = "completed"
+      currentState[Tab.ORGANIZE] = "completed"
+      currentState[Tab.VARIANTS] = "completed"
+      currentState[Tab.INVENTORY] = "in-progress"
+    }
+
+    setTabState({...currentState})
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we only want this effect to run when the tab changes
+  }, [tab])
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={handleCancel} className="product-form-modal" initialBreakpoint={1}
-              breakpoints={[0, 0.25, 0.5, 0.8, 1]}>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{product ? 'Edit Product' : 'Add Product'}</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={handleCancel}>
-              <IonIcon icon={closeOutline}/>
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+    <IonModal isOpen={isOpen} initialBreakpoint={1} breakpoints={[0, 0.25, 0.5, 0.8, 1]}>
 
-      <IonContent className="ion-padding">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-fields">
-            <ImageUploadField
-              name="images"
-              label="Product images"
-              control={control}
-              errors={errors}
-              defaultFile={watch("images")}
-              multiple
-            />
-            <div className="form-item">
-
-              <IonLabel className="form-label">title</IonLabel>
-              <Controller
-                name="title"
-                control={control}
-                render={({field}) => (
-                  <>
-                    <IonInput
-                      type="text"
-                      {...field}
-                      placeholder="Enter product title"
-                      className="form-input"
-                    ></IonInput>
-                    {errors.title && <IonNote color="danger">{errors.title.message}</IonNote>}
-                  </>
-                )}
-              /></div>
-            <div className="form-item">
-
-              <IonLabel className="form-label">Description</IonLabel>
-              <Controller
-                name="description"
-                control={control}
-                render={({field}) => (
-                  <>
-                    <IonTextarea
-                      {...field}
-                      placeholder="Enter product description"
-                      rows={2}
-                      className="form-input"
-                    ></IonTextarea>
-                    {errors.description && <IonNote color="danger">{errors.description.message}</IonNote>}
-                  </>
-                )}
-              />
-            </div>
-            <div className="form-item">
-
-              <IonLabel className="form-label">Categories</IonLabel>
-              <Controller
-                name="categories"
-                control={control}
-                render={({field}) => (
-                  <>
-                    <IonSelect
-                      {...field}
-                      value={field.value?.map((category) => category.id) || []}
-                      placeholder={
-                        field.value && field.value.length > 0
-                          ? field.value.map((category) => category.name).join(', ')
-                          : 'Select categories'
-                      }
-                      className="form-select"
-                      interface="action-sheet"
-                      interfaceOptions={{cssClass: "form-action-sheet"}}
-                      multiple
-                      onIonChange={(e) =>
-                        field.onChange(
-                          e.detail.value.map((id: string) =>
-                            fetchedCategories?.find((category) => category.id === id)
-                          )
-                        )
-                      }
-                    >
-                      {fetchedCategories
-                        ?.filter((category) => category.category_children && category.category_children.length > 0)
-                        .map((category) => (
-                          <React.Fragment key={category.id}>
-                            <IonSelectOption key={category.id} value={category.id} disabled
-                                             className="select-group-label-option">
-                              {category.name}
-                            </IonSelectOption>
-                            {category.category_children.map((child) => (
-                              <IonSelectOption key={child.id} value={child.id}>
-                                {child.name}
-                              </IonSelectOption>
-                            ))}
-                          </React.Fragment>
-                        ))}
-                    </IonSelect>
-                    {errors.categories && <IonNote color="danger">{errors.categories.message}</IonNote>}
-                  </>
-                )}
-              />
-            </div>
-
-            {/* Sizes and Prices Section */}
-            <div className="form-item">
-              <IonLabel className="form-label">Size & Price</IonLabel>
-              {sizeFields.map((item, index) => (
-                <div key={item.id}>
-                  <div className="size-item">
-                    <Controller
-                      name={`sizes.${index}.title`}
-                      control={control}
-                      render={({field}) => (
-                        <IonSelect
-                          {...field}
-                          placeholder="Select Size"
-                          className="form-select"
-                          onIonChange={(e) => field.onChange(e.detail.value)}
-                          disabled={index === 0 && product === undefined} // Disable size selection for the first (default) size if not editing
-                        >
-                          {allSizes.map((size) => (
-                            <IonSelectOption
-                              key={size}
-                              value={size}
-                              disabled={selectedSizeNames.includes(size) && size !== watch(`sizes.${index}.title`)}
-                            >
-                              {size}
-                            </IonSelectOption>
-                          ))}
-                        </IonSelect>
-                      )}
-                    />
-                    <Controller
-                      name={`sizes.${index}.price`}
-                      control={control}
-                      render={({field}) => (
-                        <IonInput
-                          {...field}
-                          min="0"
-                          type="number"
-                          placeholder="Price"
-                          className="form-input"
-                          {...register(`sizes.${index}.price`, {valueAsNumber: true})}
-                          onIonChange={(e) => field.onChange(e.detail.value)}
-                        />
-                      )}
-                    />
-                    {sizeFields.length > 1 && index !== 0 && ( // Allow removing if more than one size
-                      <IonButton fill="clear" onClick={() => removeSize(index)} className="remove-size-button">
-                        <IonIcon icon={removeOutline}/>
-                      </IonButton>
-                    )}
-                  </div>
-                  {errors.sizes?.[index]?.price?.message &&
-                      <IonNote color="danger">{errors.sizes?.[index]?.price?.message}</IonNote>}
-                </div>
-              ))}
-              {selectedSizeNames.length < allSizes.length && ( // Only show if there are unselected sizes
-                <IonButton expand="block" fill="outline" onClick={handleAddSize} className="add-size-button">
-                  <IonIcon icon={addOutline} slot="start"/>
-                  Add a Size
-                </IonButton>
-              )}
-            </div>
-
-
-            {/* Add-ons Section */}
-            <div className="form-item">
-              <IonLabel className="form-label">Add-ons</IonLabel>
-
-              <div className="add-ons-list">
-                {addOnFields.map((field, index) => (
-                  <IonChip key={field.id} className="add-on-chip">
-                    <span className="add-on-name">{field.title}</span>
-                    <span className="add-on-price">{field.price.toFixed(2)}$</span>
-                    <IonIcon
-                      icon={removeOutline}
-                      onClick={() => removeAddOn(index)}
-                      className="remove-add-on"
-                    />
-                  </IonChip>
-                ))}
-              </div>
-
-              <IonGrid className="add-on-form">
-                <IonCol size="5">
-                  <Controller
-                    name="newAddOnName"
-                    control={control}
-                    render={({field}) => (
-                      <IonInput
-                        {...field}
-                        placeholder="Name"
-                        className="form-input"
-                        onIonInput={(e) => field.onChange(e.detail.value!)}
-                      />
-                    )}
-                  />
-                </IonCol>
-                <IonCol size="3">
-                  <Controller
-                    name="newAddOnPrice"
-                    control={control}
-                    render={({field}) => (
-                      <IonInput
-                        {...field}
-                        placeholder="Price"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        className="form-input"
-                        onIonInput={(e) => field.onChange(e.detail.value!)}
-                      />
-                    )}
-                  />
-                </IonCol>
-                <IonCol size="2">
-                  <IonButton
-                    expand="block"
-                    type="button"
-                    onClick={handleAddAddOn}
-                    disabled={!watch('newAddOnName')?.trim() || !watch('newAddOnPrice')?.trim()}
-                    className="add-add-on-button"
-                  >
-                    <IonIcon icon={addOutline}/>
-                  </IonButton>
-                </IonCol>
-              </IonGrid>
-            </div>
-
-            {/* Availability Toggle */}
-            <div className="form-item">
-              <IonLabel className="form-label">Always Available</IonLabel>
-              <Controller
-                name="isAlwaysAvailable"
-                control={control}
-                render={({field}) => (
-                  <div className="availability-item">
-                    <IonToggle
-                      checked={field.value}
-                      onIonChange={(e) => field.onChange(e.detail.checked)}
-                      slot="end"
-                      className="availability-toggle"
-                    />
-                  </div>
-                )}
-              />
-            </div>
-            <div className="form-item">
-
-              <IonLabel className="form-label">Schedules</IonLabel>
-              <Controller name={"scheduledDates"} control={control} render={({field}) => (
-                <IonDatetime
-                  disabled={watch("isAlwaysAvailable")}
-                  min={new Date().toISOString().split('T')[0]}
-                  max={new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]}
-                  presentation="date"
-                  multiple={true} // Allow multiple date selection
-                  value={field.value} // Bind selected dates
-                  onIonChange={(e) => field.onChange(e.detail.value)}
-                  className="schedule-calendar"
-                />
-              )}
-              />
-            </div>
-          </div>
-        </form>
-      </IonContent>
-      <IonFooter>
-        <IonButton
-          expand="block"
-          disabled={isSubmitting}
-          className="save-button"
-          type="submit"
-          onClick={(handleSubmit(onSubmit))}
-        >
-          Save
-        </IonButton>
-        <IonLoading message="Loading..." isOpen={isSubmitting} spinner="circles"/>
-      </IonFooter>
-
+      {/*  todo insert modal form code here */}
     </IonModal>
   );
 };
