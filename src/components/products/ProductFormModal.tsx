@@ -1,7 +1,32 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {IonModal, useIonToast,} from '@ionic/react';
+import {
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonFooter,
+  IonGrid,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonLabel,
+  IonLoading,
+  IonModal,
+  IonNote,
+  IonProgressBar,
+  IonRow,
+  IonSelect,
+  IonSelectOption,
+  IonTextarea,
+  IonTitle,
+  IonToggle,
+  IonToolbar,
+  useIonToast,
+} from '@ionic/react';
+import {addOutline, chevronBackOutline, chevronForwardOutline, closeOutline, removeOutline} from 'ionicons/icons';
 import './ProductFormModal.css';
-import {useWatch} from "react-hook-form";
+import ImageUploadField from "../store-creation/ImageUploadField";
+import {Controller, useFieldArray, useWatch} from "react-hook-form";
 import {Product} from "../../types/product";
 import {useCreateProduct, useProductCategories, useRegions, useSalesChannels, useStore} from "../../vendor/api";
 import {usePricePreferences} from "../../vendor/api/price-preferences";
@@ -38,7 +63,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const {sales_channels, isPending: isSalesChannelPending} =
     useSalesChannels()
 
-  const {product_categories, isPending, isError, error} =
+  const {product_categories:fetchedCategories, isPending, isError, error} =
     useProductCategories()
 
   const ready =
@@ -58,7 +83,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
   const configs = []
 
-  // use regions and pricePreferences for handling the price of the variant
   const {regions} = useRegions({limit: 9999})
   const {price_preferences: pricePreferences} = usePricePreferences({
     limit: 9999,
@@ -80,12 +104,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     configs,
   })
 
-  const {mutateAsync, isPending} = useCreateProduct()
-
-  /**
-   * TODO: Important to revisit this - use variants watch so high in the tree can cause needless rerenders of the entire page
-   * which is suboptimal when rerenders are caused by bulk editor changes
-   */
+  const {control, handleSubmit, watch, formState: {errors, isSubmitting}, trigger, setValue} = form;
+  const {mutateAsync, isPending: isCreatePending} = useCreateProduct()
 
   const watchedVariants = useWatch({
     control: form.control,
@@ -97,9 +117,43 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     [watchedVariants]
   )
 
-  const handleSubmit = form.handleSubmit(async (values) => {
-    const isDraftSubmission = false
+  const {fields: optionFields, append: appendOption, remove: removeOption} = useFieldArray({
+    control,
+    name: "options",
+  });
+  const {fields: variantFields, append: appendVariant, remove: removeVariant} = useFieldArray({
+    control,
+    name: "variants",
+  });
 
+
+  const handleAddOption = () => {
+    appendOption({title: "", values: [""]});
+  };
+
+  const handleAddVariant = () => {
+    appendVariant({
+      title: "",
+      sku: "",
+      prices: {},
+      should_create: true,
+      manage_inventory: true,
+      allow_backorder: false,
+      inventory_kit: false,
+      options: {},
+      variant_rank: variantFields.length,
+      inventory: [{inventory_item_id: "", required_quantity: 0}],
+    });
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+    form.reset();
+    setTab(Tab.DETAILS);
+  };
+
+  const onSubmit = async (values: any) => {
+    const isDraftSubmission = false
 
     const media = values.media || []
     const payload = {...values, media: undefined}
@@ -200,27 +254,39 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
         },
       }
     )
-  })
+  }
 
   const onNext = async (currentTab: Tab) => {
-    const valid = await form.trigger()
+
+    const valid = await trigger();
 
     if (!valid) {
-      return
+      return;
     }
 
     if (currentTab === Tab.DETAILS) {
-      setTab(Tab.ORGANIZE)
+      setTab(Tab.ORGANIZE);
+    } else if (currentTab === Tab.ORGANIZE) {
+      setTab(Tab.VARIANTS);
+    } else if (currentTab === Tab.VARIANTS) {
+      if (showInventoryTab) {
+        setTab(Tab.INVENTORY);
+      } else {
+        // Submit if no inventory tab
+        handleSubmit(onSubmit)();
+      }
     }
+  };
 
-    if (currentTab === Tab.ORGANIZE) {
-      setTab(Tab.VARIANTS)
+  const onPrevious = () => {
+    if (tab === Tab.ORGANIZE) {
+      setTab(Tab.DETAILS);
+    } else if (tab === Tab.VARIANTS) {
+      setTab(Tab.ORGANIZE);
+    } else if (tab === Tab.INVENTORY) {
+      setTab(Tab.VARIANTS);
     }
-
-    if (currentTab === Tab.VARIANTS) {
-      setTab(Tab.INVENTORY)
-    }
-  }
+  };
 
   useEffect(() => {
     const currentState = {...tabState}
@@ -247,10 +313,663 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- we only want this effect to run when the tab changes
   }, [tab])
 
-  return (
-    <IonModal isOpen={isOpen} initialBreakpoint={1} breakpoints={[0, 0.25, 0.5, 0.8, 1]}>
+  const renderStepIndicator = () => {
+    const steps = [
+      {key: Tab.DETAILS, label: "Details"},
+      {key: Tab.ORGANIZE, label: "Organize"},
+      {key: Tab.VARIANTS, label: "Variants"},
+      ...(showInventoryTab ? [{key: Tab.INVENTORY, label: "Inventory"}] : []),
+    ];
+    const currentIndex = steps.findIndex(s => s.key === tab);
+    return (
+      <div className="step-indicator">
+        {steps.map((step, index) => (
+          <div key={step.key} className={`step ${tabState[step.key]} ${index === currentIndex ? 'active' : ''}`}>
+            <span className="step-number">{index + 1}</span>
+            <span className="step-label">{step.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
-      {/*  todo insert modal form code here */}
+  console.log({fetchedCategories})
+
+  const renderDetailsStep = () => (
+    <div className="form-fields">
+      <ImageUploadField
+        name="media"
+        label="Product Images"
+        control={control}
+        errors={errors}
+        defaultFile={watch("media")?.map((media: any) => media.file)}
+        multiple
+      />
+      <div className="form-item">
+        <IonLabel className="form-label">Title *</IonLabel>
+        <Controller
+          name="title"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter product title"
+                className="form-input"
+              />
+              {errors.title && <IonNote color="danger">{errors.title.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Subtitle</IonLabel>
+        <Controller
+          name="subtitle"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter product subtitle"
+                className="form-input"
+              />
+              {errors.subtitle && <IonNote color="danger">{errors.subtitle.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Handle</IonLabel>
+        <Controller
+          name="handle"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter product handle"
+                className="form-input"
+              />
+              {errors.handle && <IonNote color="danger">{errors.handle.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Description *</IonLabel>
+        <Controller
+          name="description"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonTextarea
+                {...field}
+                placeholder="Enter product description"
+                rows={3}
+                className="form-input"
+              />
+              {errors.description && <IonNote color="danger">{errors.description.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Discountable</IonLabel>
+        <Controller
+          name="discountable"
+          control={control}
+          render={({field}) => (
+            <IonToggle
+              {...field}
+              checked={field.value}
+              onIonChange={(e) => field.onChange(e.detail.checked)}
+              className="availability-toggle"
+            />
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Categories *</IonLabel>
+        <Controller
+          name="categories"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonSelect
+                {...field}
+                value={field.value || []}
+                placeholder="Select categories"
+                className="form-select"
+                interface="action-sheet"
+                interfaceOptions={{ cssClass: "form-action-sheet" }}
+                multiple
+                onIonChange={(e) => field.onChange(e.detail.value)}
+              >
+                {fetchedCategories
+                  ?.filter((category) => category.category_children && category.category_children.length > 0)
+                  .map((category) => (
+                    <React.Fragment key={category.id}>
+                      <IonSelectOption
+                        key={category.id}
+                        value={category.id}
+                        disabled
+                        className="select-group-label-option"
+                      >
+                        {category.name}
+                      </IonSelectOption>
+                      {category.category_children.map((child) => (
+                        <IonSelectOption key={child.id} value={child.id}>
+                          {child.name}
+                        </IonSelectOption>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                <IonSelectOption disabled className="select-group-label-option">
+                  Other
+                </IonSelectOption>
+                {fetchedCategories
+                  ?.filter((category) => (!category.category_children || category.category_children.length === 0) && !category.parent_category_id)
+                  .map((category) => (
+                    <IonSelectOption key={category.id} value={category.id}>
+                      {category.name}
+                    </IonSelectOption>
+                  ))}
+              </IonSelect>
+              {errors.categories && <IonNote color="danger">{errors.categories.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Tags</IonLabel>
+        <Controller
+          name="tags"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonSelect
+                {...field}
+                value={field.value || []}
+                placeholder="Select tags"
+                className="form-select"
+                interface="action-sheet"
+                multiple
+                onIonChange={(e) => field.onChange(e.detail.value)}
+              >
+                {/* Assume tags are available, or add logic */}
+              </IonSelect>
+              {errors.tags && <IonNote color="danger">{errors.tags.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Sales Channels</IonLabel>
+        <Controller
+          name="sales_channels"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonSelect
+                {...field}
+                value={field.value?.map((sc) => sc.id) || []}
+                placeholder="Select sales channels"
+                className="form-select"
+                interface="action-sheet"
+                multiple
+                onIonChange={(e) =>
+                  field.onChange(
+                    e.detail.value.map((id: string) =>
+                      sales_channels?.find((sc) => sc.id === id)
+                    )
+                  )
+                }
+              >
+                {sales_channels?.map((sc) => (
+                  <IonSelectOption key={sc.id} value={sc.id}>
+                    {sc.name}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+              {errors.sales_channels && <IonNote color="danger">{errors.sales_channels.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+    </div>
+  );
+
+  const renderOrganizeStep = () => (
+    <div className="form-fields">
+      <div className="form-item">
+        <IonLabel className="form-label">Type ID</IonLabel>
+        <Controller
+          name="type_id"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter type ID"
+                className="form-input"
+              />
+              {errors.type_id && <IonNote color="danger">{errors.type_id.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Collection ID</IonLabel>
+        <Controller
+          name="collection_id"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter collection ID"
+                className="form-input"
+              />
+              {errors.collection_id && <IonNote color="danger">{errors.collection_id.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Shipping Profile ID</IonLabel>
+        <Controller
+          name="shipping_profile_id"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter shipping profile ID"
+                className="form-input"
+              />
+              {errors.shipping_profile_id && <IonNote color="danger">{errors.shipping_profile_id.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Origin Country</IonLabel>
+        <Controller
+          name="origin_country"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter origin country"
+                className="form-input"
+              />
+              {errors.origin_country && <IonNote color="danger">{errors.origin_country.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Material</IonLabel>
+        <Controller
+          name="material"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter material"
+                className="form-input"
+              />
+              {errors.material && <IonNote color="danger">{errors.material.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Width</IonLabel>
+        <Controller
+          name="width"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter width"
+                className="form-input"
+              />
+              {errors.width && <IonNote color="danger">{errors.width.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Length</IonLabel>
+        <Controller
+          name="length"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter length"
+                className="form-input"
+              />
+              {errors.length && <IonNote color="danger">{errors.length.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Height</IonLabel>
+        <Controller
+          name="height"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter height"
+                className="form-input"
+              />
+              {errors.height && <IonNote color="danger">{errors.height.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Weight</IonLabel>
+        <Controller
+          name="weight"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter weight"
+                className="form-input"
+              />
+              {errors.weight && <IonNote color="danger">{errors.weight.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">MID Code</IonLabel>
+        <Controller
+          name="mid_code"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter MID code"
+                className="form-input"
+              />
+              {errors.mid_code && <IonNote color="danger">{errors.mid_code.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">HS Code</IonLabel>
+        <Controller
+          name="hs_code"
+          control={control}
+          render={({field}) => (
+            <>
+              <IonInput
+                type="text"
+                {...field}
+                placeholder="Enter HS code"
+                className="form-input"
+              />
+              {errors.hs_code && <IonNote color="danger">{errors.hs_code.message}</IonNote>}
+            </>
+          )}
+        />
+      </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Options *</IonLabel>
+        {optionFields.map((field, index) => (
+          <div key={field.id} className="option-item">
+            <Controller
+              name={`options.${index}.title`}
+              control={control}
+              render={({field}) => (
+                <IonInput
+                  {...field}
+                  placeholder="Option title"
+                  className="form-input"
+                />
+              )}
+            />
+            <Controller
+              name={`options.${index}.values`}
+              control={control}
+              render={({field}) => (
+                <IonInput
+                  {...field}
+                  value={field.value.join(', ')}
+                  placeholder="Option values (comma separated)"
+                  className="form-input"
+                  onIonChange={(e) => field.onChange(e.detail.value!.split(',').map(v => v.trim()))}
+                />
+              )}
+            />
+            <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
+              <IonIcon icon={removeOutline}/>
+            </IonButton>
+          </div>
+        ))}
+        <IonButton expand="block" fill="outline" onClick={handleAddOption} className="add-option-button">
+          <IonIcon icon={addOutline} slot="start"/>
+          Add Option
+        </IonButton>
+        {errors.options && <IonNote color="danger">{errors.options.message}</IonNote>}
+      </div>
+    </div>
+  );
+
+  const renderVariantsStep = () => (
+    <div className="form-fields">
+      <div className="form-item">
+        <IonLabel className="form-label">Variants *</IonLabel>
+        {variantFields.map((field, index) => (
+          <div key={field.id} className="variant-item">
+            <Controller
+              name={`variants.${index}.title`}
+              control={control}
+              render={({field}) => (
+                <IonInput
+                  {...field}
+                  placeholder="Variant title"
+                  className="form-input"
+                />
+              )}
+            />
+            <Controller
+              name={`variants.${index}.sku`}
+              control={control}
+              render={({field}) => (
+                <IonInput
+                  {...field}
+                  placeholder="SKU"
+                  className="form-input"
+                />
+              )}
+            />
+            {regions?.map((region) => (
+              <Controller
+                key={region.id}
+                name={`variants.${index}.prices.${region.currency_code}`}
+                control={control}
+                render={({field}) => (
+                  <IonInput
+                    {...field}
+                    type="number"
+                    placeholder={`Price in ${region.currency_code}`}
+                    className="form-input"
+                  />
+                )}
+              />
+            ))}
+            <Controller
+              name={`variants.${index}.manage_inventory`}
+              control={control}
+              render={({field}) => (
+                <IonToggle
+                  {...field}
+                  checked={field.value}
+                  onIonChange={(e) => field.onChange(e.detail.checked)}
+                  className="availability-toggle"
+                >
+                  Manage Inventory
+                </IonToggle>
+              )}
+            />
+            {watch(`variants.${index}.manage_inventory`) && (
+              <>
+                <Controller
+                  name={`variants.${index}.inventory_kit`}
+                  control={control}
+                  render={({field}) => (
+                    <IonToggle
+                      {...field}
+                      checked={field.value}
+                      onIonChange={(e) => field.onChange(e.detail.checked)}
+                      className="availability-toggle"
+                    >
+                      Inventory Kit
+                    </IonToggle>
+                  )}
+                />
+                {watch(`variants.${index}.inventory_kit`) && (
+                  <Controller
+                    name={`variants.${index}.inventory.0.required_quantity`}
+                    control={control}
+                    render={({field}) => (
+                      <IonInput
+                        {...field}
+                        type="number"
+                        placeholder="Required Quantity"
+                        className="form-input"
+                      />
+                    )}
+                  />
+                )}
+              </>
+            )}
+            <IonButton fill="clear" onClick={() => removeVariant(index)} className="remove-variant-button">
+              <IonIcon icon={removeOutline}/>
+            </IonButton>
+          </div>
+        ))}
+        <IonButton expand="block" fill="outline" onClick={handleAddVariant} className="add-variant-button">
+          <IonIcon icon={addOutline} slot="start"/>
+          Add Variant
+        </IonButton>
+        {errors.variants && <IonNote color="danger">{errors.variants.message}</IonNote>}
+      </div>
+    </div>
+  );
+
+  const renderInventoryStep = () => (
+    <div className="form-fields">
+      <div className="form-item">
+        <IonLabel className="form-label">Inventory Settings</IonLabel>
+        {/* Additional inventory fields if needed */}
+        <IonNote>Additional inventory management settings.</IonNote>
+      </div>
+    </div>
+  );
+
+  const renderCurrentStep = () => {
+    switch (tab) {
+      case Tab.DETAILS:
+        return renderDetailsStep();
+      case Tab.ORGANIZE:
+        return renderOrganizeStep();
+      case Tab.VARIANTS:
+        return renderVariantsStep();
+      case Tab.INVENTORY:
+        return renderInventoryStep();
+      default:
+        return null;
+    }
+  };
+
+  const isLastStep = tab === Tab.VARIANTS && !showInventoryTab || tab === Tab.INVENTORY;
+
+  return (
+    <IonModal isOpen={isOpen} onDidDismiss={handleCancel} className="product-form-modal" initialBreakpoint={1}
+              breakpoints={[0, 0.25, 0.5, 0.8, 1]}>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>{product ? 'Edit Product' : 'Add Product'}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={handleCancel}>
+              <IonIcon icon={closeOutline}/>
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+        {renderStepIndicator()}
+        <IonProgressBar
+          value={(Object.values(tabState).filter(s => s === 'completed').length + 1) / Object.keys(tabState).length}/>
+      </IonHeader>
+
+      <IonContent className="ion-padding">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {renderCurrentStep()}
+        </form>
+      </IonContent>
+      <IonFooter>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="6">
+              {tab !== Tab.DETAILS && (
+                <IonButton expand="block" fill="outline" onClick={onPrevious} className="nav-button">
+                  <IonIcon icon={chevronBackOutline} slot="start"/>
+                  Previous
+                </IonButton>
+              )}
+            </IonCol>
+            <IonCol size="6">
+              {!isLastStep ? (
+                <IonButton expand="block" onClick={() => onNext(tab)} className="nav-button">
+                  Next
+                  <IonIcon icon={chevronForwardOutline} slot="end"/>
+                </IonButton>
+              ) : (
+                <IonButton
+                  expand="block"
+                  disabled={isSubmitting || isCreatePending}
+                  className="save-button"
+                  type="submit"
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  Save Product
+                </IonButton>
+              )}
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+        <IonLoading message="Saving product..." isOpen={isSubmitting || isCreatePending} spinner="circles"/>
+      </IonFooter>
     </IonModal>
   );
 };
