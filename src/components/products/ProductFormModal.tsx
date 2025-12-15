@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {
   IonButton,
   IonButtons,
-  IonCheckbox,
+  IonChip,
   IonCol,
   IonContent,
   IonFooter,
@@ -18,7 +18,8 @@ import {
   IonNote,
   IonProgressBar,
   IonRow,
-  IonSearchbar, IonSelect, IonSelectOption,
+  IonSelect,
+  IonSelectOption,
   IonTextarea,
   IonTitle,
   IonToggle,
@@ -128,9 +129,9 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     name: "variants",
   });
 
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [categorySearch, setCategorySearch] = useState('');
+  const [categoryInput, setCategoryInput] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
     const currentCategories = watch("categories") || [];
@@ -449,17 +450,59 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           control={control}
           render={({field}) => (
             <>
-              <IonButton
-                expand="block"
-                fill="outline"
-                onClick={() => setIsCategoryModalOpen(true)}
-                className="category-select-button"
-              >
-                {selectedCategories.length > 0
-                  ? `${selectedCategories.length} selected`
-                  : 'Select categories'
-                }
-              </IonButton>
+              <div className="category-tag-input">
+                <div className="selected-tags">
+                  {selectedCategories.map((catId) => {
+                    const cat = fetchedCategories?.find(c => c.id === catId);
+                    return (
+                      <IonChip key={catId} className="category-chip">
+                        <IonLabel>{cat?.name || catId}</IonLabel>
+                        <IonIcon
+                          icon={closeOutline}
+                          onClick={() => {
+                            const newSelected = selectedCategories.filter(id => id !== catId);
+                            setSelectedCategories(newSelected);
+                            field.onChange(newSelected);
+                          }}
+                        />
+                      </IonChip>
+                    );
+                  })}
+                </div>
+                <IonInput
+                  value={categoryInput}
+                  placeholder="Type to search categories..."
+                  className="form-input category-input"
+                  onIonChange={(e) => {
+                    setCategoryInput(e.detail.value!);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                />
+                {showSuggestions && categoryInput && (
+                  <div className="suggestions-list">
+                    {filteredCategories?.slice(0, 5).map((cat) => (
+                      <IonItem
+                        key={cat.id}
+                        button
+                        onClick={() => {
+                          if (!selectedCategories.includes(cat.id)) {
+                            const newSelected = [...selectedCategories, cat.id];
+                            setSelectedCategories(newSelected);
+                            field.onChange(newSelected);
+                          }
+                          setCategoryInput('');
+                          setShowSuggestions(false);
+                        }}
+                        className="suggestion-item"
+                      >
+                        <IonLabel>{cat.name}</IonLabel>
+                      </IonItem>
+                    ))}
+                  </div>
+                )}
+              </div>
               {errors.categories && <IonNote color="danger">{errors.categories.message}</IonNote>}
             </>
           )}
@@ -897,10 +940,11 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const isLastStep = tab === Tab.VARIANTS && !showInventoryTab || tab === Tab.INVENTORY;
 
   const filteredCategories = fetchedCategories?.filter((category) => {
-    const searchLower = categorySearch.toLowerCase();
-    const parentMatches = category.name.toLowerCase().includes(searchLower);
-    const childrenMatch = category.category_children?.some(child => child.name.toLowerCase().includes(searchLower));
-    return parentMatches || childrenMatch;
+    const searchLower = categoryInput.toLowerCase();
+    const nameMatches = category.name.toLowerCase().includes(searchLower);
+    const hasChildren = category.category_children && category.category_children.length > 0;
+    const isStandalone = !category.category_children || category.category_children.length === 0;
+    return nameMatches && (hasChildren || isStandalone);
   });
 
   return (
@@ -958,76 +1002,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
         </IonGrid>
         <IonLoading message="Saving product..." isOpen={isSubmitting || isCreatePending} spinner="circles"/>
       </IonFooter>
-
-      {/* Category Selection Modal */}
-      <IonModal isOpen={isCategoryModalOpen} onDidDismiss={() => setIsCategoryModalOpen(false)} className="category-modal">
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Select Categories</IonTitle>
-            <IonButtons slot="end">
-              <IonButton onClick={() => {
-                setValue("categories", selectedCategories);
-                setIsCategoryModalOpen(false);
-              }}>
-                Done
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-          <IonToolbar>
-            <IonSearchbar
-              value={categorySearch}
-              onIonChange={(e) => setCategorySearch(e.detail.value!)}
-              placeholder="Search categories..."
-              className="category-search"
-            />
-          </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          <IonList lines="none">
-            {filteredCategories?.map((category) => (
-              <div key={category.id}>
-                <IonItem className="category-group-header">
-                  <IonLabel>
-                    <h3>{category.name}</h3>
-                  </IonLabel>
-                </IonItem>
-                {category.category_children?.map((child) => (
-                  <IonItem key={child.id} className="category-child-item">
-                    <IonLabel>{child.name}</IonLabel>
-                    <IonCheckbox
-                      slot="end"
-                      checked={selectedCategories.includes(child.id)}
-                      onIonChange={(e) => {
-                        if (e.detail.checked) {
-                          setSelectedCategories([...selectedCategories, child.id]);
-                        } else {
-                          setSelectedCategories(selectedCategories.filter(id => id !== child.id));
-                        }
-                      }}
-                    />
-                  </IonItem>
-                ))}
-              </div>
-            ))}
-            {filteredCategories?.filter(cat => !cat.category_children || cat.category_children.length === 0).map((category) => (
-              <IonItem key={category.id} className="category-standalone-item">
-                <IonLabel>{category.name}</IonLabel>
-                <IonCheckbox
-                  slot="end"
-                  checked={selectedCategories.includes(category.id)}
-                  onIonChange={(e) => {
-                    if (e.detail.checked) {
-                      setSelectedCategories([...selectedCategories, category.id]);
-                    } else {
-                      setSelectedCategories(selectedCategories.filter(id => id !== category.id));
-                    }
-                  }}
-                />
-              </IonItem>
-            ))}
-          </IonList>
-        </IonContent>
-      </IonModal>
     </IonModal>
   );
 };
