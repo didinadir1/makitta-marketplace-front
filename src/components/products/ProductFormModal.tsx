@@ -36,7 +36,6 @@ import {useExtendableForm} from '../../lib/utils/forms/hooks';
 import {PRODUCT_CREATE_FORM_DEFAULTS, ProductCreateSchema} from '../../validation/productCreationValidation';
 import {uploadFilesQuery} from "../../lib/config";
 import {HttpTypes} from "@medusajs/types";
-import {useDebouncedSearch} from '../../lib/utils/use-debounced-search';
 
 enum Tab {
   DETAILS = "details",
@@ -130,7 +129,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   });
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const {searchValue, onSearchValueChange, query} = useDebouncedSearch();
+  const [categorySearch, setCategorySearch] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
@@ -344,7 +343,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     );
   };
 
-  console.log({fetchedCategories})
 
   const renderDetailsStep = () => (
     <div className="form-fields">
@@ -470,17 +468,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   })}
                 </div>
                 <IonInput
-                  value={searchValue}
+                  value={categorySearch}
                   placeholder="Type to search categories..."
                   className="form-input category-input"
-                  onIonChange={(e) => {
-                    onSearchValueChange(e.detail.value!);
+                  onIonInput={(e) => {
+                    setCategorySearch(e.detail.value!);
                     setShowSuggestions(true);
                   }}
                   onFocus={() => setShowSuggestions(true)}
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 />
-                {showSuggestions && searchValue && (
+                {showSuggestions && categorySearch && (
                   <div className="suggestions-list">
                     {filteredCategories?.slice(0, 5).map((cat) => (
                       <IonItem
@@ -492,7 +490,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                             setSelectedCategories(newSelected);
                             field.onChange(newSelected);
                           }
-                          onSearchValueChange('');
+                          setCategorySearch('');
                           setShowSuggestions(false);
                         }}
                         className="suggestion-item"
@@ -940,7 +938,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const isLastStep = tab === Tab.VARIANTS && !showInventoryTab || tab === Tab.INVENTORY;
 
   const filteredCategories = fetchedCategories?.filter((category) => {
-    const searchLower = query?.toLowerCase() || '';
+    const searchLower = categorySearch.toLowerCase();
     const nameMatches = category.name.toLowerCase().includes(searchLower);
     const hasChildren = category.category_children && category.category_children.length > 0;
     const isStandalone = !category.category_children || category.category_children.length === 0;
