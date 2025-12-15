@@ -18,7 +18,7 @@ import {
   IonNote,
   IonProgressBar,
   IonRow,
-  IonSearchbar,
+  IonSearchbar, IonSelect, IonSelectOption,
   IonTextarea,
   IonTitle,
   IonToggle,
