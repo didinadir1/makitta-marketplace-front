@@ -12,7 +12,6 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList,
   IonLoading,
   IonModal,
   IonNote,
@@ -67,7 +66,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const {sales_channels, isPending: isSalesChannelPending} =
     useSalesChannels()
 
-  const {product_categories:fetchedCategories, isPending, isError, error} =
+  const {product_categories: fetchedCategories, isPending, isError, error} =
     useProductCategories()
 
   const ready =
@@ -131,7 +130,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   });
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const { searchValue, onSearchValueChange, query } = useDebouncedSearch();
+  const {searchValue, onSearchValueChange, query} = useDebouncedSearch();
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
