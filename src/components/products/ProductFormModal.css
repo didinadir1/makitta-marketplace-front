@@ -77,7 +77,6 @@ ion-toolbar {
     flex-direction: column;
     gap: 8px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
 }
 
 .form-label {
@@ -102,6 +101,11 @@ ion-toolbar {
     background: var(--ion-color-light);
     border-radius: 8px;
     border: 1px solid var(--ion-color-medium);
+}
+.toggle-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* Category Tag Input */
@@ -157,17 +161,20 @@ ion-toolbar {
 }
 
 /* Options */
-.option-item {
+.option-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
     margin-bottom: 10px;
-    padding: 12px;
+    padding: 64px 16px 16px;
     background: var(--ion-color-light);
-    border-radius: 8px;
+    border: 2px solid var(--ion-color-medium);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.option-item ion-input {
+.option-card ion-input {
     flex: 1;
     --padding: 12px;
     background: transparent;
@@ -210,15 +217,23 @@ ion-toolbar {
 }
 
 .remove-option-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
     --padding-start: 0;
     --padding-end: 0;
     --padding-top: 0;
     --padding-bottom: 0;
     height: auto;
     width: auto;
-    font-size: 24px;
+    font-size: 20px;
     color: var(--ion-color-danger);
-    align-self: flex-end;
+    --background: transparent;
+    --background-hover: rgba(var(--ion-color-danger-rgb), 0.1);
+    --border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .add-option-button {
@@ -300,12 +315,14 @@ ion-footer {
     .form-fields {
         gap: 16px;
     }
-    .option-item {
-        flex-direction: column;
+    .option-card {
+        padding: 50px 12px 12px;
         gap: 8px;
     }
-    .variant-item {
-        gap: 8px;
+    .remove-option-button {
+        top: -4px;
+        right: 6px;
+        font-size: 18px;
     }
     .selected-tags {
         gap: 4px;

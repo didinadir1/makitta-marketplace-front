@@ -403,41 +403,48 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
         />
       </div>
       <div className="form-item">
-        <IonLabel className="form-label">Discountable</IonLabel>
-        <Controller
-          name="discountable"
-          control={control}
-          render={({field}) => (
-            <IonToggle
-              {...field}
-              checked={field.value}
-              onIonChange={(e) => field.onChange(e.detail.checked)}
-              className="availability-toggle"
-            />
-          )}
-        />
+        <div className="toggle-item">
+          <IonLabel className="form-label">Discountable</IonLabel>
+          <Controller
+            name="discountable"
+            control={control}
+            render={({field}) => (
+              <IonToggle
+                {...field}
+                checked={field.value}
+                onIonChange={(e) => field.onChange(e.detail.checked)}
+                className="availability-toggle"
+              />
+            )}
+          />
+        </div>
       </div>
       <div className="form-item">
-        <IonLabel className="form-label">Product with Variants</IonLabel>
-        <Controller
-          name="enable_variants"
-          control={control}
-          render={({field}) => (
-            <IonToggle
-              {...field}
-              checked={field.value}
-              onIonChange={(e) => field.onChange(e.detail.checked)}
-              className="availability-toggle"
-            />
-          )}
-        />
-        <IonNote>If unchecked, the product will have one default variant.</IonNote>
+        <div className="toggle-item">
+          <IonLabel className="form-label">This product has variants</IonLabel>
+          <Controller
+            name="enable_variants"
+            control={control}
+            render={({field}) => (
+              <IonToggle
+                {...field}
+                checked={field.value}
+                onIonChange={(e) => field.onChange(e.detail.checked)}
+                className="availability-toggle"
+              />
+            )}
+          />
+        </div>
+        <IonNote>Add options like size or color. If unchecked, the product will have one default variant.</IonNote>
       </div>
       {watch("enable_variants") && (
         <div className="form-item">
           <IonLabel className="form-label">Options *</IonLabel>
           {optionFields.map((field, index) => (
-            <div key={field.id} className="option-item">
+            <div key={field.id} className="option-card">
+              <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
+                <IonIcon icon={closeOutline}/>
+              </IonButton>
               <Controller
                 name={`options.${index}.title`}
                 control={control}
@@ -484,9 +491,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
               </div>
               {errors.options?.[index]?.values &&
                   <IonNote color="danger">{errors.options?.[index]?.values.message}</IonNote>}
-              <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
-                <IonIcon icon={removeOutline}/>
-              </IonButton>
             </div>
           ))}
           <IonButton expand="block" fill="outline" onClick={handleAddOption} className="add-option-button">
