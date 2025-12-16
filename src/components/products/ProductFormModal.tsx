@@ -39,7 +39,6 @@ import {HttpTypes} from "@medusajs/types";
 
 enum Tab {
   DETAILS = "details",
-  ORGANIZE = "organize",
   VARIANTS = "variants",
   INVENTORY = "inventory",
 }
@@ -76,7 +75,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const [tab, setTab] = useState<Tab>(Tab.DETAILS)
   const [tabState, setTabState] = useState<TabState>({
     [Tab.DETAILS]: "in-progress",
-    [Tab.ORGANIZE]: "not-started",
     [Tab.VARIANTS]: "not-started",
     [Tab.INVENTORY]: "not-started",
   })
@@ -101,6 +99,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           },
         ]
         : [],
+      enable_variants: false,
     },
     schema: ProductCreateSchema,
     configs,
@@ -137,8 +136,19 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     setSelectedCategories(currentCategories);
   }, [watch("categories")]);
 
+  const watchedOptions = watch("options");
+
+  useEffect(() => {
+    if (watchedOptions.length === 0) {
+      setValue("enable_variants", false);
+    }
+  }, [watchedOptions, setValue]);
+
   const handleAddOption = () => {
-    appendOption({title: "", values: [""]});
+    if (!watch("enable_variants")) {
+      setValue("enable_variants", true);
+    }
+    appendOption({title: "", values: []});
   };
 
   const handleAddVariant = () => {
@@ -226,7 +236,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           })) || [],
         collection_id: payload.collection_id || undefined,
         shipping_profile_id: undefined,
-        enable_variants: undefined,
+        enable_variants: payload.enable_variants,
         additional_data: undefined,
         categories: payload.categories.map((cat) => ({
           id: cat,
@@ -275,8 +285,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
 
     if (currentTab === Tab.DETAILS) {
-      setTab(Tab.ORGANIZE);
-    } else if (currentTab === Tab.ORGANIZE) {
       setTab(Tab.VARIANTS);
     } else if (currentTab === Tab.VARIANTS) {
       if (showInventoryTab) {
@@ -289,10 +297,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   };
 
   const onPrevious = () => {
-    if (tab === Tab.ORGANIZE) {
+    if (tab === Tab.VARIANTS) {
       setTab(Tab.DETAILS);
-    } else if (tab === Tab.VARIANTS) {
-      setTab(Tab.ORGANIZE);
     } else if (tab === Tab.INVENTORY) {
       setTab(Tab.VARIANTS);
     }
@@ -303,18 +309,12 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     if (tab === Tab.DETAILS) {
       currentState[Tab.DETAILS] = "in-progress"
     }
-    if (tab === Tab.ORGANIZE) {
-      currentState[Tab.DETAILS] = "completed"
-      currentState[Tab.ORGANIZE] = "in-progress"
-    }
     if (tab === Tab.VARIANTS) {
       currentState[Tab.DETAILS] = "completed"
-      currentState[Tab.ORGANIZE] = "completed"
       currentState[Tab.VARIANTS] = "in-progress"
     }
     if (tab === Tab.INVENTORY) {
       currentState[Tab.DETAILS] = "completed"
-      currentState[Tab.ORGANIZE] = "completed"
       currentState[Tab.VARIANTS] = "completed"
       currentState[Tab.INVENTORY] = "in-progress"
     }
@@ -326,7 +326,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const renderStepIndicator = () => {
     const steps = [
       {key: Tab.DETAILS, label: "Details"},
-      {key: Tab.ORGANIZE, label: "Organize"},
       {key: Tab.VARIANTS, label: "Variants"},
       ...(showInventoryTab ? [{key: Tab.INVENTORY, label: "Inventory"}] : []),
     ];
@@ -405,6 +404,80 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           )}
         />
       </div>
+      <div className="form-item">
+        <IonLabel className="form-label">Product with Variants</IonLabel>
+        <Controller
+          name="enable_variants"
+          control={control}
+          render={({field}) => (
+            <IonToggle
+              {...field}
+              checked={field.value}
+              onIonChange={(e) => field.onChange(e.detail.checked)}
+              className="availability-toggle"
+            />
+          )}
+        />
+        <IonNote>If unchecked, the product will have one default variant.</IonNote>
+      </div>
+      {watch("enable_variants") && (
+        <div className="form-item">
+          <IonLabel className="form-label">Options *</IonLabel>
+          {optionFields.map((field, index) => (
+            <div key={field.id} className="option-item">
+              <Controller
+                name={`options.${index}.title`}
+                control={control}
+                render={({field}) => (
+                  <IonInput
+                    {...field}
+                    placeholder="Option title"
+                    className="form-input"
+                  />
+                )}
+              />
+              <div className="values-container">
+                {watch(`options.${index}.values`)?.map((value: string, idx: number) => (
+                  <IonChip key={idx} className="value-chip">
+                    <IonLabel>{value}</IonLabel>
+                    <IonIcon
+                      icon={closeOutline}
+                      onClick={() => {
+                        const current = watch(`options.${index}.values`);
+                        setValue(`options.${index}.values`, current.filter((_, i) => i !== idx));
+                      }}
+                    />
+                  </IonChip>
+                ))}
+                <IonInput
+                  placeholder="Add value, press comma to add"
+                  className="form-input add-value-input"
+                  onKeyDown={(e: any) => {
+                    if (e.key === ',') {
+                      e.preventDefault();
+                      const val = e.target.value.trim();
+                      if (val) {
+                        const current = watch(`options.${index}.values`) || [];
+                        setValue(`options.${index}.values`, [...current, val]);
+                        e.target.value = '';
+                      }
+                    }
+                  }}
+                />
+              </div>
+              <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
+                <IonIcon icon={removeOutline}/>
+              </IonButton>
+            </div>
+          ))}
+          <IonButton expand="block" fill="outline" onClick={handleAddOption} className="add-option-button">
+            <IonIcon icon={addOutline} slot="start"/>
+            Add Option
+          </IonButton>
+          <IonNote>Add a comma to the end of every value to create a chip.</IonNote>
+          {errors.options && <IonNote color="danger">{errors.options.message}</IonNote>}
+        </div>
+      )}
       <div className="form-item">
         <IonLabel className="form-label">Categories *</IonLabel>
         <Controller
@@ -492,50 +565,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
             </>
           )}
         />
-      </div>
-    </div>
-  );
-
-  const renderOrganizeStep = () => (
-    <div className="form-fields">
-      <div className="form-item">
-        <IonLabel className="form-label">Options *</IonLabel>
-        {optionFields.map((field, index) => (
-          <div key={field.id} className="option-item">
-            <Controller
-              name={`options.${index}.title`}
-              control={control}
-              render={({field}) => (
-                <IonInput
-                  {...field}
-                  placeholder="Option title"
-                  className="form-input"
-                />
-              )}
-            />
-            <Controller
-              name={`options.${index}.values`}
-              control={control}
-              render={({field}) => (
-                <IonInput
-                  {...field}
-                  value={field.value.join(', ')}
-                  placeholder="Option values (comma separated)"
-                  className="form-input"
-                  onIonChange={(e) => field.onChange(e.detail.value!.split(',').map(v => v.trim()))}
-                />
-              )}
-            />
-            <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
-              <IonIcon icon={removeOutline}/>
-            </IonButton>
-          </div>
-        ))}
-        <IonButton expand="block" fill="outline" onClick={handleAddOption} className="add-option-button">
-          <IonIcon icon={addOutline} slot="start"/>
-          Add Option
-        </IonButton>
-        {errors.options && <IonNote color="danger">{errors.options.message}</IonNote>}
       </div>
     </div>
   );
@@ -657,8 +686,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     switch (tab) {
       case Tab.DETAILS:
         return renderDetailsStep();
-      case Tab.ORGANIZE:
-        return renderOrganizeStep();
       case Tab.VARIANTS:
         return renderVariantsStep();
       case Tab.INVENTORY:
