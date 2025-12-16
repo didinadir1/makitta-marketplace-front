@@ -46,8 +46,8 @@ export type ProductCreateVariantSchema = z.infer<
 >
 
 const ProductCreateOptionSchema = z.object({
-  title: z.string(),
-  values: z.array(z.string()).min(1),
+  title: z.string().min(1,"option title is required"),
+  values: z.array(z.string()).min(1,"should have at least one option value"),
 })
 
 export type ProductCreateOptionSchema = z.infer<

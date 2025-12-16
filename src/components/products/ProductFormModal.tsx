@@ -18,7 +18,6 @@ import {
   IonProgressBar,
   IonRow,
   IonSelect,
-  IonSelectOption,
   IonTextarea,
   IonTitle,
   IonToggle,
@@ -141,8 +140,22 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   useEffect(() => {
     if (watchedOptions.length === 0) {
       setValue("enable_variants", false);
+      setValue("options", [{
+        title: "Default option",
+        values: ["Default option value"],
+      }])
     }
   }, [watchedOptions, setValue]);
+
+  useEffect(() => {
+    if (watch("enable_variants") && watchedOptions.length === 1 && watchedOptions[0].title === "Default option"
+      && watchedOptions[0].values.length === 1 && watchedOptions[0].values[0] === "Default option value") {
+      setValue("options", [{
+        title: "",
+        values: [],
+      }]);
+    }
+  }, [setValue, watch("enable_variants"), watchedOptions]);
 
   const handleAddOption = () => {
     if (!watch("enable_variants")) {
@@ -436,6 +449,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   />
                 )}
               />
+              {errors.options?.[index]?.title &&
+                  <IonNote color="danger">{errors.options?.[index]?.title.message}</IonNote>}
               <div className="values-container">
                 {watch(`options.${index}.values`)?.map((value: string, idx: number) => (
                   <IonChip key={idx} className="value-chip">
@@ -451,20 +466,24 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 ))}
                 <IonInput
                   placeholder="Add value, press comma to add"
-                  className="form-input add-value-input"
+                  className="add-value-input"
                   onKeyDown={(e: any) => {
                     if (e.key === ',') {
                       e.preventDefault();
                       const val = e.target.value.trim();
                       if (val) {
                         const current = watch(`options.${index}.values`) || [];
-                        setValue(`options.${index}.values`, [...current, val]);
+                        if (!current.includes(val)) {
+                          setValue(`options.${index}.values`, [...current, val]);
+                        }
                         e.target.value = '';
                       }
                     }
                   }}
                 />
               </div>
+              {errors.options?.[index]?.values &&
+                  <IonNote color="danger">{errors.options?.[index]?.values.message}</IonNote>}
               <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
                 <IonIcon icon={removeOutline}/>
               </IonButton>

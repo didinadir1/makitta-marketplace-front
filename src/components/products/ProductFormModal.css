@@ -179,6 +179,11 @@ ion-toolbar {
     flex-wrap: wrap;
     gap: 8px;
     align-items: center;
+    padding: 8px;
+    background: var(--ion-color-light);
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 8px;
+    min-height: 40px;
 }
 
 .value-chip {
@@ -197,6 +202,11 @@ ion-toolbar {
 .add-value-input {
     flex: 1;
     min-width: 150px;
+    --padding: 8px;
+    background: transparent;
+    border: none;
+    --placeholder-color: var(--ion-color-medium);
+    font-size: 16px;
 }
 
 .remove-option-button {
