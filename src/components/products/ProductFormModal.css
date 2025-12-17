@@ -4,6 +4,7 @@
     --border-radius: 16px 16px 0 0;
     --box-shadow: 0 -4px 16px rgba(var(--ion-color-text-rgb), 0.1);
     --height: 80%;
+    margin: 0 auto;
 }
 
 ion-toolbar {
@@ -403,5 +404,12 @@ ion-footer {
     .variant-name {
         padding: 4px 8px;
         font-size: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .product-form-modal {
+        --width: 90%;
+        --max-width: 800px;
     }
 }
