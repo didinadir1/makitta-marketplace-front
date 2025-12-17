@@ -435,69 +435,79 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
             )}
           />
         </div>
-        <IonNote>Add options like size or color. If unchecked, the product will have one default variant.</IonNote>
+        <IonNote>Add options like size or color. If unchecked, the product will have only one standard variant.</IonNote>
       </div>
       {watch("enable_variants") && (
         <div className="form-item">
           <IonLabel className="form-label">Options *</IonLabel>
           {optionFields.map((field, index) => (
             <div key={field.id} className="option-card">
-              <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
-                <IonIcon icon={closeOutline}/>
-              </IonButton>
-              <Controller
-                name={`options.${index}.title`}
-                control={control}
-                render={({field}) => (
-                  <IonInput
-                    {...field}
-                    placeholder="Option title"
-                    className="form-input"
+              <div className="option-header">
+                <h3 className="option-title">Option {index + 1}</h3>
+                <IonButton fill="clear" onClick={() => removeOption(index)} className="remove-option-button">
+                  <IonIcon icon={closeOutline}/>
+                </IonButton>
+              </div>
+              <div className="option-content">
+                <div className="form-item">
+                  <IonLabel className="form-label">Option name</IonLabel>
+                  <Controller
+                    name={`options.${index}.title`}
+                    control={control}
+                    render={({field}) => (
+                      <IonInput
+                        {...field}
+                        placeholder="e.g. Size, Color"
+                        className="form-input"
+                      />
+                    )}
                   />
-                )}
-              />
-              {errors.options?.[index]?.title &&
-                  <IonNote color="danger">{errors.options?.[index]?.title.message}</IonNote>}
-              <div className="values-container">
-                {watch(`options.${index}.values`)?.map((value: string, idx: number) => (
-                  <IonChip key={idx} className="value-chip">
-                    <IonLabel>{value}</IonLabel>
-                    <IonIcon
-                      icon={closeOutline}
-                      onClick={() => {
-                        const current = watch(`options.${index}.values`);
-                        setValue(`options.${index}.values`, current.filter((_, i) => i !== idx));
+                  {errors.options?.[index]?.title &&
+                      <IonNote color="danger">{errors.options?.[index]?.title.message}</IonNote>}
+                </div>
+                <div className="form-item">
+                  <IonLabel className="form-label">Option values</IonLabel>
+                  <div className="values-container">
+                    {watch(`options.${index}.values`)?.map((value: string, idx: number) => (
+                      <IonChip key={idx} className="value-chip">
+                        <IonLabel>{value}</IonLabel>
+                        <IonIcon
+                          icon={closeOutline}
+                          onClick={() => {
+                            const current = watch(`options.${index}.values`);
+                            setValue(`options.${index}.values`, current.filter((_, i) => i !== idx));
+                          }}
+                        />
+                      </IonChip>
+                    ))}
+                    <IonInput
+                      placeholder="Add value, press comma to add"
+                      className="add-value-input"
+                      onKeyDown={(e: any) => {
+                        if (e.key === ',') {
+                          e.preventDefault();
+                          const val = e.target.value.trim();
+                          if (val) {
+                            const current = watch(`options.${index}.values`) || [];
+                            if (!current.includes(val)) {
+                              setValue(`options.${index}.values`, [...current, val]);
+                            }
+                            e.target.value = '';
+                          }
+                        }
                       }}
                     />
-                  </IonChip>
-                ))}
-                <IonInput
-                  placeholder="Add value, press comma to add"
-                  className="add-value-input"
-                  onKeyDown={(e: any) => {
-                    if (e.key === ',') {
-                      e.preventDefault();
-                      const val = e.target.value.trim();
-                      if (val) {
-                        const current = watch(`options.${index}.values`) || [];
-                        if (!current.includes(val)) {
-                          setValue(`options.${index}.values`, [...current, val]);
-                        }
-                        e.target.value = '';
-                      }
-                    }
-                  }}
-                />
+                  </div>
+                  {errors.options?.[index]?.values &&
+                      <IonNote color="danger">{errors.options?.[index]?.values.message}</IonNote>}
+                </div>
               </div>
-              {errors.options?.[index]?.values &&
-                  <IonNote color="danger">{errors.options?.[index]?.values.message}</IonNote>}
             </div>
           ))}
           <IonButton expand="block" fill="outline" onClick={handleAddOption} className="add-option-button">
             <IonIcon icon={addOutline} slot="start"/>
             Add Option
           </IonButton>
-          <IonNote>Add a comma to the end of every value to create a chip.</IonNote>
           {errors.options && <IonNote color="danger">{errors.options.message}</IonNote>}
         </div>
       )}

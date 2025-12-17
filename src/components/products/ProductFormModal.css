@@ -167,18 +167,47 @@ ion-toolbar {
     flex-direction: column;
     gap: 16px;
     margin-bottom: 10px;
-    padding: 64px 16px 16px;
+    padding: 16px;
     background: var(--ion-color-light);
     border: 2px solid var(--ion-color-medium);
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.option-card ion-input {
-    flex: 1;
-    --padding: 12px;
-    background: transparent;
-    border-radius: 8px;
+.option-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.option-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+    margin: 0;
+}
+
+.remove-option-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    height: auto;
+    width: auto;
+    font-size: 20px;
+    color: var(--ion-color-danger);
+    --background: transparent;
+    --background-hover: rgba(var(--ion-color-danger-rgb), 0.1);
+    --border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .values-container {
@@ -214,26 +243,6 @@ ion-toolbar {
     border: none;
     --placeholder-color: var(--ion-color-medium);
     font-size: 16px;
-}
-
-.remove-option-button {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    --padding-start: 0;
-    --padding-end: 0;
-    --padding-top: 0;
-    --padding-bottom: 0;
-    height: auto;
-    width: auto;
-    font-size: 20px;
-    color: var(--ion-color-danger);
-    --background: transparent;
-    --background-hover: rgba(var(--ion-color-danger-rgb), 0.1);
-    --border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .add-option-button {
@@ -316,12 +325,13 @@ ion-footer {
         gap: 16px;
     }
     .option-card {
-        padding: 50px 12px 12px;
+        padding: 12px;
         gap: 8px;
     }
+    .option-title {
+        font-size: 16px;
+    }
     .remove-option-button {
-        top: -4px;
-        right: 6px;
         font-size: 18px;
     }
     .selected-tags {
