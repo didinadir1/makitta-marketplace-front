@@ -24,7 +24,7 @@ import {
   IonToolbar,
   useIonToast,
 } from '@ionic/react';
-import {addOutline, chevronBackOutline, chevronForwardOutline, closeOutline, removeOutline} from 'ionicons/icons';
+import {addCircle, chevronBackOutline, chevronForwardOutline, closeOutline, removeOutline} from 'ionicons/icons';
 import './ProductFormModal.css';
 import ImageUploadField from "../store-creation/ImageUploadField";
 import {Controller, useFieldArray, useWatch} from "react-hook-form";
@@ -504,9 +504,9 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
               </div>
             </div>
           ))}
-          <IonButton expand="block" fill="outline" onClick={handleAddOption} className="add-option-button">
-            <IonIcon icon={addOutline} slot="start"/>
-            Add Option
+          <IonButton fill="clear" onClick={handleAddOption} className="add-option-button">
+            <IonIcon icon={addCircle} slot="start"/>
+            add a new option
           </IonButton>
           {errors.options && <IonNote color="danger">{errors.options.message}</IonNote>}
         </div>

@@ -225,7 +225,7 @@ ion-toolbar {
 .value-chip {
     --background: var(--ion-color-secondary);
     --color: white;
-    border-radius: 16px;
+    border-radius: 8px;
     padding: 4px 8px;
 }
 
