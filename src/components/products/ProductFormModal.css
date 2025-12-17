@@ -251,48 +251,70 @@ ion-toolbar {
     --background: var(--ion-color-light);
 }
 
-/* Pricing and Inventory Table */
-.pricing-table {
-    border: 1px solid var(--ion-color-medium);
+.pricing-inventory-table {
+    background: var(--ion-color-step-50);
     border-radius: 8px;
     overflow: hidden;
-    background: var(--ion-color-light);
+    margin-top: 12px;
 }
 
 .table-header {
-    background: var(--ion-color-primary);
-    color: white;
-    font-weight: bold;
-    --inner-padding: 12px;
-}
-
-.table-header ion-col {
-    padding: 12px;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--ion-color-step-100);
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ion-color-step-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .table-row {
-    border-bottom: 1px solid var(--ion-color-light);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 16px;
+    border-bottom: 1px solid var(--ion-color-step-150);
+    gap: 16px;
+    align-items: center;
 }
 
-.table-row ion-col {
-    padding: 8px 12px;
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.variant-cell {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .variant-name {
     font-weight: 500;
-    color: var(--ion-color-primary);
+    font-size: 15px;
+    color: var(--ion-text-color);
 }
 
-.table-input {
-    --padding: 6px 8px;
-    --background: transparent;
-    border: 1px solid var(--ion-color-medium);
-    border-radius: 4px;
-    font-size: 14px;
-    width: 100%;
+.variant-title-input {
+    font-size: 13px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+}
+
+.price-cell {
+    display: flex;
+    align-items: center;
+}
+
+.price-input {
+    --padding-start: 32px;
+    --padding-end: 12px;
+}
+
+.currency-symbol {
+    color: var(--ion-color-step-600);
+    font-size: 15px;
+    font-weight: 500;
 }
 
 /* Variants */
@@ -378,26 +400,8 @@ ion-footer {
     .remove-option-button {
         font-size: 18px;
     }
-    .pricing-table .table-header ion-col,
-    .pricing-table .table-row ion-col {
-        padding: 6px;
-    }
-    .table-input {
-        font-size: 12px;
-        --padding: 4px 6px;
-    }
-    .selected-tags {
-        gap: 4px;
-    }
-    .category-chip {
-        padding: 2px 6px;
-        font-size: 12px;
-    }
-    .values-container {
-        gap: 4px;
-    }
-    .value-chip {
-        padding: 2px 6px;
+    .variant-name {
+        padding: 4px 8px;
         font-size: 12px;
     }
 }

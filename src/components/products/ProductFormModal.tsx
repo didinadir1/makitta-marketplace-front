@@ -157,7 +157,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
   }, [setValue, watch("enable_variants"), watchedOptions]);
 
-  const generateVariants = (options: {title: string, values: string[]}[]) => {
+  const generateVariants = (options: { title: string, values: string[] }[]) => {
     if (options.length === 0) return [];
     const result: { title: string, options: Record<string, string> }[] = [];
     const recurse = (current: string[], index: number) => {
@@ -165,7 +165,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
         const title = current.join('-');
         const opts: Record<string, string> = {};
         options.forEach((opt, i) => opts[opt.title] = current[i]);
-        result.push({ title, options: opts });
+        result.push({title, options: opts});
         return;
       }
       for (const value of options[index].values) {
@@ -475,7 +475,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
             )}
           />
         </div>
-        <IonNote>Add options like size or color. If unchecked, the product will have only one standard variant.</IonNote>
+        <IonNote>Add options like size or color. If unchecked, the product will have only one standard
+          variant.</IonNote>
       </div>
       {watch("enable_variants") && (
         <div className="form-item">
@@ -554,36 +555,46 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       {watch("enable_variants") && variantFields.length > 0 && (
         <div className="form-item">
           <IonLabel className="form-label">Pricing and Inventory</IonLabel>
-          <IonGrid className="pricing-table">
-            <IonRow className="table-header">
-              <IonCol size="4">Variant</IonCol>
-              <IonCol size="4">SKU</IonCol>
-              <IonCol size="4">Price</IonCol>
-            </IonRow>
+          <div className="pricing-inventory-table">
+            {/* Table Header */}
+            <div className="table-header">
+              <div className="header-cell variant-col">Variant</div>
+              <div className="header-cell price-col">Price</div>
+            </div>
+
+            {/* Table Rows */}
             {variantFields.map((field, index) => (
-              <IonRow key={field.id} className="table-row">
-                <IonCol size="4" className="variant-name">{watch(`variants.${index}.title`)}</IonCol>
-                <IonCol size="4">
-                  <Controller
-                    name={`variants.${index}.sku`}
-                    control={control}
-                    render={({field}) => (
-                      <IonInput {...field} placeholder="Enter SKU" className="table-input" />
-                    )}
-                  />
-                </IonCol>
-                <IonCol size="4">
+              <div key={field.id} className="table-row">
+                <div className="variant-cell">
+                  <div className="variant-name">
+                    {watch(`variants.${index}.title`)}
+                  </div>
+                </div>
+
+                <div className="price-cell">
                   <Controller
                     name={`variants.${index}.prices.${regions?.[0]?.currency_code || 'usd'}`}
                     control={control}
                     render={({field}) => (
-                      <IonInput {...field} type="number" placeholder={`Price in ${regions?.[0]?.currency_code || 'USD'}`} className="table-input" />
+                      <IonInput
+                        {...field}
+                        type="number"
+                        pattern="^\d+(\.\d{1,2})?$"
+                        placeholder="0.00"
+                        className="price-input"
+                        fill="outline"
+                        min="1"
+                        step="0.01"
+                      >
+                        {/*todo handle currency*/}
+                        <div slot="start" className="currency-symbol">$</div>
+                      </IonInput>
                     )}
                   />
-                </IonCol>
-              </IonRow>
+                </div>
+              </div>
             ))}
-          </IonGrid>
+          </div>
         </div>
       )}
       <div className="form-item">

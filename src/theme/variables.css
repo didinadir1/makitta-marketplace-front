@@ -81,6 +81,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-step-50: #f3f3f3;
     --ion-color-step-100: #e6e6e6;
     --ion-color-step-150: #d9d9d9;
+    --ion-color-step-600: #4d4d4d;
 
     /* Tab bar, header and searchbar customization */
     --ion-tab-bar-background: var(--ion-color-light);
@@ -159,6 +160,7 @@ http://ionicframework.com/docs/theming/ */
         --ion-color-step-50: #333333;
         --ion-color-step-100: #404040;
         --ion-color-step-150: #4d4d4d;
+        --ion-color-step-600: #b3b3b3;
 
         /* Tab bar, header and searchbar customization */
         --ion-tab-bar-background: var(--ion-color-primary);
