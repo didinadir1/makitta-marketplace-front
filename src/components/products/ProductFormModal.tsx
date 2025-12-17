@@ -157,6 +157,46 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
   }, [setValue, watch("enable_variants"), watchedOptions]);
 
+  const generateVariants = (options: {title: string, values: string[]}[]) => {
+    if (options.length === 0) return [];
+    const result: { title: string, options: Record<string, string> }[] = [];
+    const recurse = (current: string[], index: number) => {
+      if (index === options.length) {
+        const title = current.join('-');
+        const opts: Record<string, string> = {};
+        options.forEach((opt, i) => opts[opt.title] = current[i]);
+        result.push({ title, options: opts });
+        return;
+      }
+      for (const value of options[index].values) {
+        recurse([...current, value], index + 1);
+      }
+    };
+    recurse([], 0);
+    return result;
+  };
+
+  useEffect(() => {
+    if (watch("enable_variants") && watchedOptions.every(opt => opt.values.length > 0)) {
+      const generatedVariants = generateVariants(watchedOptions);
+      const newVariants = generatedVariants.map((gen, index) => ({
+        title: gen.title,
+        sku: "",
+        prices: {},
+        should_create: true,
+        manage_inventory: true,
+        allow_backorder: false,
+        inventory_kit: false,
+        options: gen.options,
+        variant_rank: index,
+        inventory: [{inventory_item_id: "", required_quantity: 0}],
+      }));
+      setValue("variants", newVariants);
+    } else if (!watch("enable_variants")) {
+      setValue("variants", []);
+    }
+  }, [watchedOptions, setValue, watch("enable_variants")]);
+
   const handleAddOption = () => {
     if (!watch("enable_variants")) {
       setValue("enable_variants", true);
@@ -509,6 +549,41 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
             add a new option
           </IonButton>
           {errors.options && <IonNote color="danger">{errors.options.message}</IonNote>}
+        </div>
+      )}
+      {watch("enable_variants") && variantFields.length > 0 && (
+        <div className="form-item">
+          <IonLabel className="form-label">Pricing and Inventory</IonLabel>
+          <IonGrid className="pricing-table">
+            <IonRow className="table-header">
+              <IonCol size="4">Variant</IonCol>
+              <IonCol size="4">SKU</IonCol>
+              <IonCol size="4">Price</IonCol>
+            </IonRow>
+            {variantFields.map((field, index) => (
+              <IonRow key={field.id} className="table-row">
+                <IonCol size="4" className="variant-name">{watch(`variants.${index}.title`)}</IonCol>
+                <IonCol size="4">
+                  <Controller
+                    name={`variants.${index}.sku`}
+                    control={control}
+                    render={({field}) => (
+                      <IonInput {...field} placeholder="Enter SKU" className="table-input" />
+                    )}
+                  />
+                </IonCol>
+                <IonCol size="4">
+                  <Controller
+                    name={`variants.${index}.prices.${regions?.[0]?.currency_code || 'usd'}`}
+                    control={control}
+                    render={({field}) => (
+                      <IonInput {...field} type="number" placeholder={`Price in ${regions?.[0]?.currency_code || 'USD'}`} className="table-input" />
+                    )}
+                  />
+                </IonCol>
+              </IonRow>
+            ))}
+          </IonGrid>
         </div>
       )}
       <div className="form-item">
