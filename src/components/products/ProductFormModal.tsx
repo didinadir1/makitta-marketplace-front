@@ -24,7 +24,14 @@ import {
   IonToolbar,
   useIonToast,
 } from '@ionic/react';
-import {addCircle, chevronBackOutline, chevronForwardOutline, closeOutline, removeOutline} from 'ionicons/icons';
+import {
+  addCircle,
+  addOutline,
+  chevronBackOutline,
+  chevronForwardOutline,
+  closeOutline,
+  removeOutline
+} from 'ionicons/icons';
 import './ProductFormModal.css';
 import ImageUploadField from "../store-creation/ImageUploadField";
 import {Controller, useFieldArray, useWatch} from "react-hook-form";
@@ -38,8 +45,8 @@ import {HttpTypes} from "@medusajs/types";
 
 enum Tab {
   DETAILS = "details",
-  VARIANTS = "variants",
-  INVENTORY = "inventory",
+  ORGANIZE = "organize",
+  PRICING = "pricing",
 }
 
 type ProgressStatus = "not-started" | "in-progress" | "completed"
@@ -74,8 +81,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const [tab, setTab] = useState<Tab>(Tab.DETAILS)
   const [tabState, setTabState] = useState<TabState>({
     [Tab.DETAILS]: "in-progress",
-    [Tab.VARIANTS]: "not-started",
-    [Tab.INVENTORY]: "not-started",
+    [Tab.PRICING]: "not-started",
+    [Tab.ORGANIZE]: "not-started",
   })
   const [defaultImages, setDefaultImages] = useState<{ url: string; file: File }[]>([]);
   const [presentToast] = useIonToast();
@@ -106,16 +113,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
   const {control, handleSubmit, watch, formState: {errors, isSubmitting}, trigger, setValue} = form;
   const {mutateAsync, isPending: isCreatePending} = useCreateProduct()
-
-  const watchedVariants = useWatch({
-    control: form.control,
-    name: "variants",
-  })
-
-  const showInventoryTab = useMemo(
-    () => watchedVariants.some((v) => v.manage_inventory && v.inventory_kit),
-    [watchedVariants]
-  )
 
   const {fields: optionFields, append: appendOption, remove: removeOption} = useFieldArray({
     control,
@@ -193,7 +190,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       }));
       setValue("variants", newVariants);
     } else if (!watch("enable_variants")) {
-      setValue("variants", []);
+      setValue("variants", PRODUCT_CREATE_FORM_DEFAULTS.variants || []);
     }
   }, [watchedOptions, setValue, watch("enable_variants")]);
 
@@ -289,7 +286,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           })) || [],
         collection_id: payload.collection_id || undefined,
         shipping_profile_id: undefined,
-        enable_variants: payload.enable_variants,
+        enable_variants: undefined,
         additional_data: undefined,
         categories: payload.categories.map((cat) => ({
           id: cat,
@@ -338,22 +335,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
 
     if (currentTab === Tab.DETAILS) {
-      setTab(Tab.VARIANTS);
-    } else if (currentTab === Tab.VARIANTS) {
-      if (showInventoryTab) {
-        setTab(Tab.INVENTORY);
-      } else {
-        // Submit if no inventory tab
-        handleSubmit(onSubmit)();
-      }
+      setTab(Tab.ORGANIZE);
+    } else if (currentTab === Tab.ORGANIZE) {
+        setTab(Tab.PRICING);
     }
   };
 
   const onPrevious = () => {
-    if (tab === Tab.VARIANTS) {
+    if (tab === Tab.ORGANIZE) {
       setTab(Tab.DETAILS);
-    } else if (tab === Tab.INVENTORY) {
-      setTab(Tab.VARIANTS);
+    } else if (tab === Tab.PRICING) {
+      setTab(Tab.ORGANIZE);
     }
   };
 
@@ -362,14 +354,14 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     if (tab === Tab.DETAILS) {
       currentState[Tab.DETAILS] = "in-progress"
     }
-    if (tab === Tab.VARIANTS) {
+    if (tab === Tab.ORGANIZE) {
       currentState[Tab.DETAILS] = "completed"
-      currentState[Tab.VARIANTS] = "in-progress"
+      currentState[Tab.ORGANIZE] = "in-progress"
     }
-    if (tab === Tab.INVENTORY) {
+    if (tab === Tab.PRICING) {
       currentState[Tab.DETAILS] = "completed"
-      currentState[Tab.VARIANTS] = "completed"
-      currentState[Tab.INVENTORY] = "in-progress"
+      currentState[Tab.ORGANIZE] = "completed"
+      currentState[Tab.PRICING] = "in-progress"
     }
 
     setTabState({...currentState})
@@ -379,8 +371,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const renderStepIndicator = () => {
     const steps = [
       {key: Tab.DETAILS, label: "Details"},
-      {key: Tab.VARIANTS, label: "Variants"},
-      ...(showInventoryTab ? [{key: Tab.INVENTORY, label: "Inventory"}] : []),
+      {key: Tab.ORGANIZE, label: "Organize"},
+      {key: Tab.PRICING, label: "Pricing"},
     ];
     const currentIndex = steps.findIndex(s => s.key === tab);
     return (
@@ -394,7 +386,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       </div>
     );
   };
-
 
   const renderDetailsStep = () => (
     <div className="form-fields">
@@ -441,23 +432,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
             </>
           )}
         />
-      </div>
-      <div className="form-item">
-        <div className="toggle-item">
-          <IonLabel className="form-label">Discountable</IonLabel>
-          <Controller
-            name="discountable"
-            control={control}
-            render={({field}) => (
-              <IonToggle
-                {...field}
-                checked={field.value}
-                onIonChange={(e) => field.onChange(e.detail.checked)}
-                className="availability-toggle"
-              />
-            )}
-          />
-        </div>
       </div>
       <div className="form-item">
         <div className="toggle-item">
@@ -552,51 +526,29 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           {errors.options && <IonNote color="danger">{errors.options.message}</IonNote>}
         </div>
       )}
-      {watch("enable_variants") && variantFields.length > 0 && (
-        <div className="form-item">
-          <IonLabel className="form-label">Pricing and Inventory</IonLabel>
-          <div className="pricing-inventory-table">
-            {/* Table Header */}
-            <div className="table-header">
-              <div className="header-cell variant-col">Variant</div>
-              <div className="header-cell price-col">Price</div>
-            </div>
+    </div>
+  );
 
-            {/* Table Rows */}
-            {variantFields.map((field, index) => (
-              <div key={field.id} className="table-row">
-                <div className="variant-cell">
-                  <div className="variant-name">
-                    {watch(`variants.${index}.title`)}
-                  </div>
-                </div>
-
-                <div className="price-cell">
-                  <Controller
-                    name={`variants.${index}.prices.${regions?.[0]?.currency_code || 'usd'}`}
-                    control={control}
-                    render={({field}) => (
-                      <IonInput
-                        {...field}
-                        type="number"
-                        pattern="^\d+(\.\d{1,2})?$"
-                        placeholder="0.00"
-                        className="price-input"
-                        fill="outline"
-                        min="1"
-                        step="0.01"
-                      >
-                        {/*todo handle currency*/}
-                        <div slot="start" className="currency-symbol">$</div>
-                      </IonInput>
-                    )}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+  const renderOrganizeStep = () => (
+    <div className="form-fields">
+      <div className="form-item">
+        <div className="toggle-item">
+          <IonLabel className="form-label">Discountable</IonLabel>
+          <Controller
+            name="discountable"
+            control={control}
+            render={({field}) => (
+              <IonToggle
+                {...field}
+                checked={field.value}
+                onIonChange={(e) => field.onChange(e.detail.checked)}
+                className="availability-toggle"
+              />
+            )}
+          />
         </div>
-      )}
+        <IonNote>When unchecked, discounts will not be applied to this product.</IonNote>
+      </div>
       <div className="form-item">
         <IonLabel className="form-label">Categories *</IonLabel>
         <Controller
@@ -688,133 +640,75 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     </div>
   );
 
-  const renderVariantsStep = () => (
+
+  const renderPricingStep = () => (
     <div className="form-fields">
-      <div className="form-item">
-        <IonLabel className="form-label">Variants *</IonLabel>
-        {variantFields.map((field, index) => (
-          <div key={field.id} className="variant-item">
-            <Controller
-              name={`variants.${index}.title`}
-              control={control}
-              render={({field}) => (
-                <IonInput
-                  {...field}
-                  placeholder="Variant title"
-                  className="form-input"
-                />
-              )}
-            />
-            <Controller
-              name={`variants.${index}.sku`}
-              control={control}
-              render={({field}) => (
-                <IonInput
-                  {...field}
-                  placeholder="SKU"
-                  className="form-input"
-                />
-              )}
-            />
-            {regions?.map((region) => (
-              <Controller
-                key={region.id}
-                name={`variants.${index}.prices.${region.currency_code}`}
-                control={control}
-                render={({field}) => (
-                  <IonInput
-                    {...field}
-                    type="number"
-                    placeholder={`Price in ${region.currency_code}`}
-                    className="form-input"
-                  />
-                )}
-              />
-            ))}
-            <Controller
-              name={`variants.${index}.manage_inventory`}
-              control={control}
-              render={({field}) => (
-                <IonToggle
-                  {...field}
-                  checked={field.value}
-                  onIonChange={(e) => field.onChange(e.detail.checked)}
-                  className="availability-toggle"
-                >
-                  Manage Inventory
-                </IonToggle>
-              )}
-            />
-            {watch(`variants.${index}.manage_inventory`) && (
-              <>
-                <Controller
-                  name={`variants.${index}.inventory_kit`}
-                  control={control}
-                  render={({field}) => (
-                    <IonToggle
-                      {...field}
-                      checked={field.value}
-                      onIonChange={(e) => field.onChange(e.detail.checked)}
-                      className="availability-toggle"
-                    >
-                      Inventory Kit
-                    </IonToggle>
-                  )}
-                />
-                {watch(`variants.${index}.inventory_kit`) && (
+      {variantFields.length > 0 && (
+        <div className="form-item">
+          <IonLabel className="form-label">Pricing</IonLabel>
+          <div className="pricing-inventory-table">
+            {/* Table Header */}
+            <div className="table-header">
+              <div className="header-cell variant-col">Variant</div>
+              <div className="header-cell price-col">Price</div>
+            </div>
+
+            {/* Table Rows */}
+            {variantFields.map((field, index) => (
+              <div key={field.id} className="table-row">
+                <div className="variant-cell">
+                  <div className="variant-name">
+                    {watch(`variants.${index}.title`)}
+                  </div>
+                </div>
+
+                <div className="price-cell">
                   <Controller
-                    name={`variants.${index}.inventory.0.required_quantity`}
+                    name={`variants.${index}.prices.${regions?.[0]?.currency_code || 'usd'}`}
                     control={control}
                     render={({field}) => (
                       <IonInput
                         {...field}
                         type="number"
-                        placeholder="Required Quantity"
-                        className="form-input"
-                      />
+                        pattern="^\d+(\.\d{1,2})?$"
+                        placeholder="0.00"
+                        className="price-input"
+                        fill="outline"
+                        min="1"
+                        step="0.01"
+                      >
+                        {/*todo handle currency*/}
+                        <div slot="start" className="currency-symbol">$</div>
+                      </IonInput>
                     )}
                   />
-                )}
-              </>
-            )}
-            <IonButton fill="clear" onClick={() => removeVariant(index)} className="remove-variant-button">
-              <IonIcon icon={removeOutline}/>
-            </IonButton>
+                  {errors.variants?.[index]?.prices &&
+                      <IonNote color="danger">{errors.variants?.[index]?.prices.message}</IonNote>}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-        <IonButton expand="block" fill="outline" onClick={handleAddVariant} className="add-variant-button">
-          <IonIcon icon={addOutline} slot="start"/>
-          Add Variant
-        </IonButton>
-        {errors.variants && <IonNote color="danger">{errors.variants.message}</IonNote>}
-      </div>
+        </div>
+      )}
     </div>
   );
 
-  const renderInventoryStep = () => (
-    <div className="form-fields">
-      <div className="form-item">
-        <IonLabel className="form-label">Inventory Settings</IonLabel>
-        {/* Additional inventory fields if needed */}
-        <IonNote>Additional inventory management settings.</IonNote>
-      </div>
-    </div>
-  );
+  console.log(errors)
 
   const renderCurrentStep = () => {
     switch (tab) {
       case Tab.DETAILS:
         return renderDetailsStep();
-      case Tab.VARIANTS:
-        return renderVariantsStep();
-      case Tab.INVENTORY:
-        return renderInventoryStep();
+      case Tab.ORGANIZE:
+        return renderOrganizeStep();
+      case Tab.PRICING:
+        return renderPricingStep();
       default:
         return null;
     }
   };
 
-  const isLastStep = tab === Tab.VARIANTS && !showInventoryTab || tab === Tab.INVENTORY;
+  const isLastStep = tab === Tab.PRICING ;
 
   const filteredCategories = fetchedCategories?.filter((category) => {
     const searchLower = categorySearch.toLowerCase();

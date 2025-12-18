@@ -1,4 +1,4 @@
-import { z } from "zod"
+import {z} from "zod"
 import {decorateVariantsWithDefaultValues} from "../lib/utils/products/utils";
 import {optionalFloat, optionalInt} from "../lib/utils/validation";
 
@@ -46,8 +46,8 @@ export type ProductCreateVariantSchema = z.infer<
 >
 
 const ProductCreateOptionSchema = z.object({
-  title: z.string().min(1,"option title is required"),
-  values: z.array(z.string()).min(1,"should have at least one option value"),
+  title: z.string().min(1, "Option title is required"),
+  values: z.array(z.string()).min(1, "Should have at least one option value"),
 })
 
 export type ProductCreateOptionSchema = z.infer<
