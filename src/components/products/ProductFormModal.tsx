@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   IonButton,
   IonButtons,
+  IonCheckbox,
   IonChip,
   IonCol,
   IonContent,
@@ -80,6 +81,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const [tabState, setTabState] = useState<TabState>(initialTabState)
   const [defaultImages, setDefaultImages] = useState<{ url: string; file: File }[]>([]);
   const [presentToast] = useIonToast();
+  const [samePriceForAll, setSamePriceForAll] = useState(false);
 
   const configs = []
 
@@ -168,7 +170,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   };
 
   useEffect(() => {
-    if ( tab === Tab.PRICING && watch("enable_variants") && watchedOptions.every(opt => opt.values.length > 0)) {
+    if (tab === Tab.PRICING && watch("enable_variants") && watchedOptions.every(opt => opt.values.length > 0)) {
       const generatedVariants = generateVariants(watchedOptions);
       const newVariants = generatedVariants.map((gen, index) => ({
         title: gen.title,
@@ -195,20 +197,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     appendOption({title: "", values: []});
   };
 
-  const handleAddVariant = () => {
-    appendVariant({
-      title: "",
-      sku: "",
-      prices: [{currency_code: regions?.[0]?.currency_code || 'usd', amount: 0}],
-      should_create: true,
-      manage_inventory: true,
-      allow_backorder: false,
-      inventory_kit: false,
-      options: {},
-      variant_rank: variantFields.length,
-      inventory: [{inventory_item_id: "", required_quantity: 0}],
-    });
-  };
 
   const handleCancel = () => {
     setIsOpen(false);
@@ -318,6 +306,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     )
   }
 
+  console.log({errors})
   const onNext = async (currentTab: Tab) => {
     let fieldsToValidate: string[] = [];
 
@@ -665,6 +654,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       {variantFields.length > 0 && (
         <div className="form-item">
           <IonLabel className="form-label">Pricing</IonLabel>
+          <div className="same-price-checkbox">
+            <IonCheckbox
+              disabled={variantFields.length === 1}
+              checked={samePriceForAll || variantFields.length === 1}
+              onIonChange={(e) => setSamePriceForAll(e.detail.checked)}
+            />
+            <div className="same-price-label">
+              <IonLabel>All the variants have the same price</IonLabel>
+              <IonNote>Apply one price to all</IonNote>
+            </div>
+          </div>
           <div className="pricing-inventory-table">
             {/* Table Header */}
             <div className="table-header">
@@ -695,9 +695,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                         min={0}
                         step="1"
                         onIonBlur={field.onBlur}
-                        onIonChange={(e) => {
+                        onIonInput={(e) => {
                           const value = e.detail.value;
-                          field.onChange(value === '' || !value ? undefined : parseFloat(value));
+                          const numValue = value === '' || !value ? undefined : parseFloat(value);
+                          if (samePriceForAll) {
+                            // Set all variants' prices to this value
+                            variantFields.forEach((_, idx) => {
+                              setValue(`variants.${idx}.prices.0.amount`, numValue);
+                            });
+                          } else {
+                            field.onChange(numValue);
+                          }
                         }}
                       >
                         {/*todo handle currency*/}
