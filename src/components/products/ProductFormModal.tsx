@@ -324,8 +324,21 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   }
 
   const onNext = async (currentTab: Tab) => {
+    let fieldsToValidate: string[] = [];
 
-    const valid = await trigger();
+    if (currentTab === Tab.DETAILS) {
+      fieldsToValidate = ["title", "description", "enable_variants"];
+      if (watch("enable_variants")) {
+        fieldsToValidate.push("options");
+      }
+      fieldsToValidate.push("media");
+    } else if (currentTab === Tab.ORGANIZE) {
+      fieldsToValidate = ["discountable", "categories", "tags"];
+    } else if (currentTab === Tab.PRICING) {
+      fieldsToValidate = ["variants"];
+    }
+
+    const valid = await trigger(fieldsToValidate as any);
 
     if (!valid) {
       return;
@@ -665,15 +678,18 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                     control={control}
                     render={({field}) => (
                       <IonInput
-                        {...field}
+                        value={field.value || ''}
                         type="number"
-                        pattern="^\d+(\.\d{1,2})?$"
                         placeholder="0.00"
                         className="price-input"
                         fill="outline"
-                        min="1"
+                        min={0}
                         step="0.01"
-                        onIonChange={(e) => field.onChange(parseFloat(e.detail.value || '0'))}
+                        onIonBlur={field.onBlur}
+                        onIonChange={(e) => {
+                          const value = e.detail.value;
+                          field.onChange(value === '' || !value  ? undefined : parseFloat(value));
+                        }}
                       >
                         {/*todo handle currency*/}
                         <div slot="start" className="currency-symbol">$</div>
@@ -690,8 +706,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       )}
     </div>
   );
-
-  console.log(errors)
 
   const renderCurrentStep = () => {
     switch (tab) {
