@@ -179,7 +179,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       const newVariants = generatedVariants.map((gen, index) => ({
         title: gen.title,
         sku: "",
-        prices: {},
+        prices: [{ currency_code: regions?.[0]?.currency_code || 'usd', amount: 0 }],
         should_create: true,
         manage_inventory: true,
         allow_backorder: false,
@@ -192,7 +192,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     } else if (!watch("enable_variants")) {
       setValue("variants", PRODUCT_CREATE_FORM_DEFAULTS.variants || []);
     }
-  }, [watchedOptions, setValue, watch("enable_variants")]);
+  }, [watchedOptions, setValue, watch("enable_variants"), regions]);
 
   const handleAddOption = () => {
     if (!watch("enable_variants")) {
@@ -205,7 +205,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     appendVariant({
       title: "",
       sku: "",
-      prices: {},
+      prices: [{ currency_code: regions?.[0]?.currency_code || 'usd', amount: 0 }],
       should_create: true,
       manage_inventory: true,
       allow_backorder: false,
@@ -300,10 +300,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
           is_default: undefined,
           inventory_kit: undefined,
           inventory: undefined,
-          prices: Object.keys(variant.prices || {}).map((key) => ({
-            currency_code: key,
-            amount: parseFloat(variant.prices?.[key] as string),
-          })),
+          prices: variant.prices,
         })),
       },
       {
@@ -664,7 +661,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
                 <div className="price-cell">
                   <Controller
-                    name={`variants.${index}.prices.${regions?.[0]?.currency_code || 'usd'}`}
+                    name={`variants.${index}.prices.0.amount`}
                     control={control}
                     render={({field}) => (
                       <IonInput
@@ -676,14 +673,15 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                         fill="outline"
                         min="1"
                         step="0.01"
+                        onIonChange={(e) => field.onChange(parseFloat(e.detail.value || '0'))}
                       >
                         {/*todo handle currency*/}
                         <div slot="start" className="currency-symbol">$</div>
                       </IonInput>
                     )}
                   />
-                  {errors.variants?.[index]?.prices &&
-                      <IonNote color="danger">{errors.variants?.[index]?.prices.message}</IonNote>}
+                  {errors.variants?.[index]?.prices?.[0]?.amount &&
+                      <IonNote color="danger">{errors.variants?.[index]?.prices?.[0]?.amount.message}</IonNote>}
                 </div>
               </div>
             ))}

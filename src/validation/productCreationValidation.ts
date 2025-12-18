@@ -30,7 +30,12 @@ const ProductCreateVariantSchema = z.object({
   inventory_kit: z.boolean().optional(),
   options: z.record(z.string(), z.string()),
   variant_rank: z.number(),
-  prices: z.record(z.string(), optionalFloat).optional(),
+  prices: z.array(
+    z.object({
+      currency_code: z.string(),
+      amount: z.number().positive().min(1, "Price too low"),
+    })
+  ).min(1),
   inventory: z
     .array(
       z.object({
@@ -141,6 +146,7 @@ export const PRODUCT_CREATE_FORM_DEFAULTS: Partial<
       },
       inventory: [{ inventory_item_id: "", required_quantity: "" }],
       is_default: true,
+      prices: [{ currency_code: "usd", amount: 0 }],
     },
   ]),
   enable_variants: false,
