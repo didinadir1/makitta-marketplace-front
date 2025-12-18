@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -24,17 +24,10 @@ import {
   IonToolbar,
   useIonToast,
 } from '@ionic/react';
-import {
-  addCircle,
-  addOutline,
-  chevronBackOutline,
-  chevronForwardOutline,
-  closeOutline,
-  removeOutline
-} from 'ionicons/icons';
+import {addCircle, chevronBackOutline, chevronForwardOutline, closeOutline} from 'ionicons/icons';
 import './ProductFormModal.css';
 import ImageUploadField from "../store-creation/ImageUploadField";
-import {Controller, useFieldArray, useWatch} from "react-hook-form";
+import {Controller, useFieldArray} from "react-hook-form";
 import {Product} from "../../types/product";
 import {useCreateProduct, useProductCategories, useRegions, useSalesChannels, useStore} from "../../vendor/api";
 import {usePricePreferences} from "../../vendor/api/price-preferences";
@@ -79,7 +72,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const defaultChannel = sales_channels?.[0]
 
   const [tab, setTab] = useState<Tab>(Tab.DETAILS)
-  const initialTabState : TabState = {
+  const initialTabState: TabState = {
     [Tab.DETAILS]: "in-progress",
     [Tab.PRICING]: "not-started",
     [Tab.ORGANIZE]: "not-started",
@@ -175,12 +168,12 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   };
 
   useEffect(() => {
-    if (watch("enable_variants") && watchedOptions.every(opt => opt.values.length > 0)) {
+    if ( tab === Tab.PRICING && watch("enable_variants") && watchedOptions.every(opt => opt.values.length > 0)) {
       const generatedVariants = generateVariants(watchedOptions);
       const newVariants = generatedVariants.map((gen, index) => ({
         title: gen.title,
         sku: "",
-        prices: [{ currency_code: regions?.[0]?.currency_code || 'usd', amount: 0 }],
+        prices: [{currency_code: regions?.[0]?.currency_code || 'usd', amount: 0}],
         should_create: true,
         manage_inventory: true,
         allow_backorder: false,
@@ -190,10 +183,10 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
         inventory: [{inventory_item_id: "", required_quantity: 0}],
       }));
       setValue("variants", newVariants);
-    } else if (!watch("enable_variants")) {
+    } else if (tab === Tab.PRICING && !watch("enable_variants")) {
       setValue("variants", PRODUCT_CREATE_FORM_DEFAULTS.variants || []);
     }
-  }, [watchedOptions, setValue, watch("enable_variants"), regions]);
+  }, [tab]);
 
   const handleAddOption = () => {
     if (!watch("enable_variants")) {
@@ -206,7 +199,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     appendVariant({
       title: "",
       sku: "",
-      prices: [{ currency_code: regions?.[0]?.currency_code || 'usd', amount: 0 }],
+      prices: [{currency_code: regions?.[0]?.currency_code || 'usd', amount: 0}],
       should_create: true,
       manage_inventory: true,
       allow_backorder: false,
@@ -349,7 +342,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     if (currentTab === Tab.DETAILS) {
       setTab(Tab.ORGANIZE);
     } else if (currentTab === Tab.ORGANIZE) {
-        setTab(Tab.PRICING);
+      setTab(Tab.PRICING);
     }
   };
 
@@ -693,7 +686,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                         onIonBlur={field.onBlur}
                         onIonChange={(e) => {
                           const value = e.detail.value;
-                          field.onChange(value === '' || !value  ? undefined : parseFloat(value));
+                          field.onChange(value === '' || !value ? undefined : parseFloat(value));
                         }}
                       >
                         {/*todo handle currency*/}
@@ -725,7 +718,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
   };
 
-  const isLastStep = tab === Tab.PRICING ;
+  const isLastStep = tab === Tab.PRICING;
 
   const filteredCategories = fetchedCategories?.filter((category) => {
     const searchLower = categorySearch.toLowerCase();
