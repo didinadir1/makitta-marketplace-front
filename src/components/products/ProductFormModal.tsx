@@ -519,6 +519,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                           }
                         }
                       }}
+                      onIonBlur={(e: any) => {
+                        // Capture value when input loses focus
+                        const val = e.target.value?.trim();
+                        if (val) {
+                          const current = watch(`options.${index}.values`) || [];
+                          if (!current.includes(val)) {
+                            setValue(`options.${index}.values`, [...current, val]);
+                          }
+                          e.target.value = '';
+                        }
+                      }}
                     />
                   </div>
                   {errors.options?.[index]?.values &&
