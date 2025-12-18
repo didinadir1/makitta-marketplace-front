@@ -79,11 +79,12 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const defaultChannel = sales_channels?.[0]
 
   const [tab, setTab] = useState<Tab>(Tab.DETAILS)
-  const [tabState, setTabState] = useState<TabState>({
+  const initialTabState : TabState = {
     [Tab.DETAILS]: "in-progress",
     [Tab.PRICING]: "not-started",
     [Tab.ORGANIZE]: "not-started",
-  })
+  };
+  const [tabState, setTabState] = useState<TabState>(initialTabState)
   const [defaultImages, setDefaultImages] = useState<{ url: string; file: File }[]>([]);
   const [presentToast] = useIonToast();
 
@@ -220,6 +221,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     setIsOpen(false);
     form.reset();
     setTab(Tab.DETAILS);
+    setTabState(initialTabState)
   };
 
   const onSubmit = async (values: any) => {
@@ -363,10 +365,13 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     const currentState = {...tabState}
     if (tab === Tab.DETAILS) {
       currentState[Tab.DETAILS] = "in-progress"
+      currentState[Tab.ORGANIZE] = "not-started"
+      currentState[Tab.PRICING] = "not-started"
     }
     if (tab === Tab.ORGANIZE) {
       currentState[Tab.DETAILS] = "completed"
       currentState[Tab.ORGANIZE] = "in-progress"
+      currentState[Tab.PRICING] = "not-started"
     }
     if (tab === Tab.PRICING) {
       currentState[Tab.DETAILS] = "completed"
@@ -684,7 +689,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                         className="price-input"
                         fill="outline"
                         min={0}
-                        step="0.01"
+                        step="1"
                         onIonBlur={field.onBlur}
                         onIonChange={(e) => {
                           const value = e.detail.value;
