@@ -120,6 +120,20 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
               modules={[Pagination]}
               className="mySwiper"
             >
+              {(multiple || previewUrls.length === 0) && (<SwiperSlide className="add-image-slide">
+                <div className="image-upload-field" onClick={handleClick}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={(e) => handleFileChange(e, onChange)}
+                    style={{display: 'none'}}
+                    multiple={multiple}
+                  />
+                  <IonIcon icon={addOutline} className="add-icon"/>
+                </div>
+              </SwiperSlide>)}
+
               {previewUrls.map((url, index) => (
                 <SwiperSlide key={index} className="image-preview-slide">
                   <div className="image-preview-item">
@@ -135,20 +149,6 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
                   </div>
                 </SwiperSlide>
               ))}
-
-              {(multiple || previewUrls.length === 0) && (<SwiperSlide className="add-image-slide">
-                <div className="image-upload-field" onClick={handleClick}>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={(e) => handleFileChange(e, onChange)}
-                    style={{display: 'none'}}
-                    multiple={multiple}
-                  />
-                  <IonIcon icon={addOutline} className="add-icon"/>
-                </div>
-              </SwiperSlide>)}
             </Swiper>
           </div>
           {errorMessage &&
