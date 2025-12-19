@@ -306,7 +306,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     )
   }
 
-  console.log({errors})
   const onNext = async (currentTab: Tab) => {
     let fieldsToValidate: string[] = [];
 
@@ -790,7 +789,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 <IonButton
                   expand="block"
                   disabled={isSubmitting || isCreatePending}
-                  className="save-button"
+                  className="nav-button"
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >

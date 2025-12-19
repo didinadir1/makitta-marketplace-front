@@ -101,37 +101,39 @@ const LoginPage: React.FC = () => {
   };
 
   const handleGoogleLogin = async () => {
-    await present({
-      message: 'Logging in...',
-      duration: 0,
-    });
-
-    const {result} = await SocialLogin.login({
-      provider: "google",
-      options: {
-        scopes: ['email', 'profile'],
-      }
-    }) as { result: GoogleLoginResponseOnline }
-
-    await googleLoginMutation({idToken: result.idToken!}, {
-      onSuccess: async (response) => {
-        await dismiss();
-        if (response.originalProvider && response.profile) {
-          setEmail(response.profile?.email ?? '');
-          history.push(`login?link-google=${true}&email=${btoa(response?.profile?.email ?? "")}&google-id-token=${result.idToken}`);
+    try {
+      const {result} = await SocialLogin.login({
+        provider: "google",
+        options: {
+          scopes: ['email', 'profile'],
         }
-       else history.replace(from);
-      },
-      onError: async (error: any) => {
-        await dismiss();
-        console.error('Google Login failed:', error);
-        await presentToast({
-          message: error.message || 'Google Login failed. Please try again.',
-          duration: 3000,
-          color: 'danger',
-        });
-      }
-    })
+      }) as { result: GoogleLoginResponseOnline }
+
+      await googleLoginMutation({idToken: result.idToken!}, {
+        onSuccess: async (response) => {
+          if (response.originalProvider && response.profile) {
+            setEmail(response.profile?.email ?? '');
+            history.push(`login?link-google=${true}&email=${btoa(response?.profile?.email ?? "")}&google-id-token=${result.idToken}`);
+          } else history.replace(from);
+        },
+        onError: async (error: any) => {
+          console.error('Google Login failed:', error);
+          await presentToast({
+            message: error.message || 'Google Login failed. Please try again.',
+            duration: 3000,
+            color: 'danger',
+          });
+        }
+      })
+    } catch (error: any) {
+      // Dismiss loading if SocialLogin.login() fails
+      console.error('Social Login failed:', error);
+      await presentToast({
+        message: error.message || 'Login failed. Please try again.',
+        duration: 3000,
+        color: 'danger',
+      });
+    }
   };
 
 

@@ -98,7 +98,7 @@ const SignupPage: React.FC = () => {
                       <IonInput
                         type="email"
                         {...field}
-                        placeholder="restaurant@example.com"
+                        placeholder="user@example.com"
                       />
                       {errors.email && <IonText color="danger">{errors.email.message}</IonText>}
                     </IonItem>

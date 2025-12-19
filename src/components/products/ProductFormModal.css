@@ -391,12 +391,6 @@ ion-footer {
     margin: 8px;
 }
 
-.save-button {
-    --border-radius: 12px;
-    margin: 16px;
-    --background: var(--ion-color-primary);
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .step-indicator {
