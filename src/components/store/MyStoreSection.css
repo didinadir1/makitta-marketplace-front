@@ -1,6 +1,6 @@
 ion-segment {
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     --background: var(--ion-color-light);
     /*border-top-left-radius: 20px; !* Rounded top corners *!*/
     /*border-top-right-radius: 20px;*/
