@@ -1,6 +1,6 @@
 import {z} from "zod"
 import {decorateVariantsWithDefaultValues} from "../lib/utils/products/utils";
-import {optionalFloat, optionalInt} from "../lib/utils/validation";
+import {optionalInt} from "../lib/utils/validation";
 import {imageSchema} from "./storeCreationValidation";
 
 
@@ -115,8 +115,9 @@ export const ProductCreateSchema = z
     })
   })
 
+export type ProductCreateFields = z.infer<typeof ProductCreateSchema>;
 export const PRODUCT_CREATE_FORM_DEFAULTS: Partial<
-  z.infer<typeof ProductCreateSchema>
+  ProductCreateFields
 > = {
   discountable: true,
   tags: [],
@@ -135,9 +136,9 @@ export const PRODUCT_CREATE_FORM_DEFAULTS: Partial<
       options: {
         "Default option": "Default option value",
       },
-      inventory: [{ inventory_item_id: "", required_quantity: "" }],
+      inventory: [{inventory_item_id: "", required_quantity: ""}],
       is_default: true,
-      prices: [{ currency_code: "usd", amount: 0 }],
+      prices: [{currency_code: "usd", amount: 0}],
     },
   ]),
   enable_variants: false,

@@ -39,8 +39,8 @@ import {compareImageArrays} from "../../lib/util/files";
 
 enum Tab {
   DETAILS = "details",
-  ORGANIZE = "organize",
   PRICING = "pricing",
+  ORGANIZE = "organize",
 }
 
 type ProgressStatus = "not-started" | "in-progress" | "completed"
@@ -383,7 +383,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
         label="Product Images"
         control={control}
         errors={errors}
-        defaultFile={watch("media")?.map((media: any) => media.file)}
+        defaultFile={watch("media")}
         multiple
       />
       <div className="form-item">
