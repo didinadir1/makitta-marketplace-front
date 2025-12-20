@@ -297,6 +297,18 @@ ion-toolbar {
     color: var(--ion-text-color);
 }
 
+.remove-variant-icon {
+    color: var(--ion-color-danger);
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.remove-variant-icon:hover {
+    opacity: 1;
+}
+
 .variant-title-input {
     font-size: 13px;
     --padding-start: 12px;
@@ -305,9 +317,9 @@ ion-toolbar {
 
 .price-cell {
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 5px;
+    justify-content: space-between;
 }
 
 .price-input {

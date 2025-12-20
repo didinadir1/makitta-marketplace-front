@@ -691,9 +691,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                       </IonInput>
                     )}
                   />
-                  {errors.variants?.[index]?.prices?.[0]?.amount &&
-                      <IonNote color="danger">{errors.variants?.[index]?.prices?.[0]?.amount.message}</IonNote>}
+
+                  {variantFields.length > 1 && (
+                    <IonIcon
+                      icon={closeOutline}
+                      onClick={() => removeVariant(index)}
+                      className="remove-variant-icon"
+                    />
+                  )}
                 </div>
+                {errors.variants?.[index]?.prices?.[0]?.amount &&
+                    <IonNote color="danger">{errors.variants?.[index]?.prices?.[0]?.amount.message}</IonNote>}
               </div>
             ))}
           </div>
