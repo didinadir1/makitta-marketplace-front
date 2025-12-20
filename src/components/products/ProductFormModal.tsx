@@ -307,17 +307,17 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
 
     if (currentTab === Tab.DETAILS) {
-      setTab(Tab.ORGANIZE);
-    } else if (currentTab === Tab.ORGANIZE) {
       setTab(Tab.PRICING);
+    } else if (currentTab === Tab.PRICING) {
+      setTab(Tab.ORGANIZE);
     }
   };
 
   const onPrevious = () => {
     if (tab === Tab.ORGANIZE) {
-      setTab(Tab.DETAILS);
+      setTab(Tab.PRICING);
     } else if (tab === Tab.PRICING) {
-      setTab(Tab.ORGANIZE);
+      setTab(Tab.DETAILS);
     }
   };
 
@@ -325,18 +325,18 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     const currentState = {...tabState}
     if (tab === Tab.DETAILS) {
       currentState[Tab.DETAILS] = "in-progress"
+      currentState[Tab.PRICING] = "not-started"
       currentState[Tab.ORGANIZE] = "not-started"
-      currentState[Tab.PRICING] = "not-started"
-    }
-    if (tab === Tab.ORGANIZE) {
-      currentState[Tab.DETAILS] = "completed"
-      currentState[Tab.ORGANIZE] = "in-progress"
-      currentState[Tab.PRICING] = "not-started"
     }
     if (tab === Tab.PRICING) {
       currentState[Tab.DETAILS] = "completed"
-      currentState[Tab.ORGANIZE] = "completed"
       currentState[Tab.PRICING] = "in-progress"
+      currentState[Tab.ORGANIZE] = "not-started"
+    }
+    if (tab === Tab.ORGANIZE) {
+      currentState[Tab.DETAILS] = "completed"
+      currentState[Tab.PRICING] = "completed"
+      currentState[Tab.ORGANIZE] = "in-progress"
     }
 
     setTabState({...currentState})
@@ -346,8 +346,8 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const renderStepIndicator = () => {
     const steps = [
       {key: Tab.DETAILS, label: "Details"},
-      {key: Tab.ORGANIZE, label: "Organize"},
       {key: Tab.PRICING, label: "Pricing"},
+      {key: Tab.ORGANIZE, label: "Organize"},
     ];
     const currentIndex = steps.findIndex(s => s.key === tab);
     return (
@@ -714,16 +714,16 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     switch (tab) {
       case Tab.DETAILS:
         return renderDetailsStep();
-      case Tab.ORGANIZE:
-        return renderOrganizeStep();
       case Tab.PRICING:
         return renderPricingStep();
+      case Tab.ORGANIZE:
+        return renderOrganizeStep();
       default:
         return null;
     }
   };
 
-  const isLastStep = tab === Tab.PRICING;
+  const isLastStep = tab === Tab.ORGANIZE;
 
   const filteredCategories = fetchedCategories?.filter((category) => {
     const searchLower = categorySearch.toLowerCase();
