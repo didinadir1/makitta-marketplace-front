@@ -111,7 +111,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
     control,
     name: "options",
   });
-  const {fields: variantFields, append: appendVariant, remove: removeVariant} = useFieldArray({
+  const {fields: variantFields, remove: removeVariant} = useFieldArray({
     control,
     name: "variants",
   });
@@ -169,20 +169,34 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   useEffect(() => {
     if (tab === Tab.PRICING && watch("enable_variants") && watchedOptions.every(opt => opt.values.length > 0)) {
       const generatedVariants = generateVariants(watchedOptions);
-      const newVariants = generatedVariants.map((gen, index) => ({
-        title: gen.title,
-        sku: "",
-        prices: [{currency_code: regions?.[0]?.currency_code || 'usd', amount: 0}],
-        should_create: true,
-        manage_inventory: true,
-        allow_backorder: false,
-        inventory_kit: false,
-        options: gen.options,
-        variant_rank: index,
-        inventory: [{inventory_item_id: "", required_quantity: 0}],
-      }));
+      const existingVariants = watch("variants") || [];
+
+      const newVariants = generatedVariants.map((gen, index) => {
+        const existing = existingVariants.find((v: any) => v.title === gen.title);
+        if (existing) {
+          return {
+            ...existing,
+            options: gen.options,
+            variant_rank: index,
+          };
+        }
+
+        return {
+          title: gen.title,
+          sku: "",
+          prices: [{currency_code: regions?.[0]?.currency_code || 'usd', amount: 0}],
+          should_create: true,
+          manage_inventory: true,
+          allow_backorder: false,
+          inventory_kit: false,
+          options: gen.options,
+          variant_rank: index,
+          inventory: [{inventory_item_id: "", required_quantity: 0}],
+        };
+      });
+
       setValue("variants", newVariants);
-    } else if (tab === Tab.PRICING && !watch("enable_variants")) {
+    } else if (tab === Tab.PRICING && !watch("enable_variants") && watch("variants").length !== 1) {
       setValue("variants", PRODUCT_CREATE_FORM_DEFAULTS.variants || []);
     }
   }, [tab]);
