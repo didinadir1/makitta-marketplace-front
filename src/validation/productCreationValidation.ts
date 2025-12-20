@@ -1,13 +1,8 @@
 import {z} from "zod"
 import {decorateVariantsWithDefaultValues} from "../lib/utils/products/utils";
 import {optionalFloat, optionalInt} from "../lib/utils/validation";
+import {imageSchema} from "./storeCreationValidation";
 
-export const MediaSchema = z.object({
-  id: z.string().optional(),
-  url: z.string(),
-  isThumbnail: z.boolean(),
-  file: z.any().nullable(), // File
-})
 
 const ProductCreateVariantSchema = z.object({
   should_create: z.boolean(),
@@ -90,7 +85,7 @@ export const ProductCreateSchema = z
     options: z.array(ProductCreateOptionSchema).min(1),
     enable_variants: z.boolean(),
     variants: z.array(ProductCreateVariantSchema).min(1),
-    media: z.array(MediaSchema).optional(),
+    media: z.array(imageSchema).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.variants.every((v) => !v.should_create)) {
@@ -119,10 +114,6 @@ export const ProductCreateSchema = z
       }
     })
   })
-
-export const EditProductMediaSchema = z.object({
-  media: z.array(MediaSchema),
-})
 
 export const PRODUCT_CREATE_FORM_DEFAULTS: Partial<
   z.infer<typeof ProductCreateSchema>

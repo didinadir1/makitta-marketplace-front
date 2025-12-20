@@ -29,7 +29,7 @@ export async function compareImageArrays(
   defaultImages: { url: string; file: File }[] = [],
   updatedImages: File[] = []
 ): Promise<FileComparisonResult> {
-  const keptImagesUrls = [];
+  const keptImagesUrls: any[] = [];
   const newFiles: File[] = [];
 
   for (const updatedFile of updatedImages) {

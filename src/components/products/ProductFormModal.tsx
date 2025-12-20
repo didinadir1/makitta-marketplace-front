@@ -31,11 +31,11 @@ import ImageUploadField from "../store-creation/ImageUploadField";
 import {Controller, useFieldArray} from "react-hook-form";
 import {Product} from "../../types/product";
 import {useCreateProduct, useProductCategories, useRegions, useSalesChannels, useStore} from "../../vendor/api";
-import {usePricePreferences} from "../../vendor/api/price-preferences";
 import {useExtendableForm} from '../../lib/utils/forms/hooks';
 import {PRODUCT_CREATE_FORM_DEFAULTS, ProductCreateSchema} from '../../validation/productCreationValidation';
 import {uploadFilesQuery} from "../../lib/config";
 import {HttpTypes} from "@medusajs/types";
+import {compareImageArrays} from "../../lib/util/files";
 
 enum Tab {
   DETAILS = "details",
@@ -86,9 +86,6 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
   const configs = []
 
   const {regions} = useRegions({limit: 9999})
-  const {price_preferences: pricePreferences} = usePricePreferences({
-    limit: 9999,
-  })
 
   const form = useExtendableForm({
     defaultValues: {
@@ -215,40 +212,22 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
       isThumbnail: boolean
     })[] = []
     try {
-      if (media.length) {
-        const thumbnailReq = media.filter((m) => m.isThumbnail)
-        const otherMediaReq = media.filter((m) => !m.isThumbnail)
+      const {newFiles} = await compareImageArrays(defaultImages, media)
 
-        const fileReqs: any = []
-        if (thumbnailReq?.length) {
-          fileReqs.push(
-            uploadFilesQuery(thumbnailReq).then((r: any) =>
-              r.files.map((f: any) => ({
-                ...f,
-                isThumbnail: true,
-              }))
-            )
-          )
-        }
-        if (otherMediaReq?.length) {
-          fileReqs.push(
-            uploadFilesQuery(otherMediaReq).then((r: any) =>
-              r.files.map((f: any) => ({
-                ...f,
-                isThumbnail: false,
-              }))
-            )
-          )
-        }
-
-        uploadedMedia = (await Promise.all(fileReqs)).flat()
+      if (newFiles.length) {
+        uploadedMedia = await uploadFilesQuery(newFiles).then((r: any) =>
+          r.files.map((f: any) => ({
+            ...f,
+            isThumbnail: false,
+          }))
+        )
       }
     } catch (error) {
       if (error instanceof Error) {
         await presentToast({
-          message: error.message,
-          duration: 3000,
-          color: "danger",
+          message: "couldn't upload file",
+          duration: 2000,
+          color: 'danger',
         })
       }
     }
@@ -700,7 +679,7 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
                           if (samePriceForAll) {
                             // Set all variants' prices to this value
                             variantFields.forEach((_, idx) => {
-                              setValue(`variants.${idx}.prices.0.amount`, numValue);
+                              setValue(`variants.${idx}.prices.0.amount`, numValue!);
                             });
                           } else {
                             field.onChange(numValue);

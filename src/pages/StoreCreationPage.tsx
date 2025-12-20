@@ -92,7 +92,7 @@ const StoreCreationPage: React.FC = () => {
       }
     } catch (error) {
       if (error instanceof Error) {
-        presentToast({
+        await presentToast({
           message: "couldn't upload file",
           duration: 2000,
           color: 'danger',
