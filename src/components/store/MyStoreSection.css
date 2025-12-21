@@ -1,23 +1,9 @@
 /* Content Styling */
 .my-store-content {
-    padding-top: 220px; /* 200px header + 20px spacing */
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     background: var(--ion-background-color);
     min-height: 100vh;
-}
-
-/* Adjust content padding on smaller screens */
-@media (max-width: 768px) {
-    .my-store-content {
-        padding-top: 200px; /* 180px header + 20px spacing */
-    }
-}
-
-@media (max-width: 480px) {
-    .my-store-content {
-        padding-top: 300px; /* 280px header + 20px spacing */
-    }
 }
 
 /* Content Styling */

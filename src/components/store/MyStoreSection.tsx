@@ -6,9 +6,10 @@ import OrdersTab from "../orders/OrdersTab";
 
 interface MyStoreSectionProps {
   activeTab: string;
+  maxOffset: number;
 }
 
-const MyStoreSection: React.FC<MyStoreSectionProps> = ({activeTab}) => {
+const MyStoreSection: React.FC<MyStoreSectionProps> = ({activeTab, maxOffset}) => {
 
 
   const renderTabContent = () => {
@@ -39,7 +40,7 @@ const MyStoreSection: React.FC<MyStoreSectionProps> = ({activeTab}) => {
   return (
     <>
 
-      <div className="my-store-content">
+      <div className="my-store-content" style={{ paddingTop: `${maxOffset + 70}px` }}>
         {renderTabContent()}
       </div>
     </>

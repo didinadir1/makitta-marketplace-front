@@ -115,7 +115,7 @@ const StorePage: React.FC = () => {
         className="store-page-content"
       >
         {seller?.id ? (
-          <MyStoreSection activeTab={activeTab}/>
+          <MyStoreSection activeTab={activeTab} maxOffset={maxOffset}/>
         ) : (
           <div className="create-store-container">
             <IonLabel>
