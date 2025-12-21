@@ -1,37 +1,36 @@
-ion-segment {
-    position: sticky;
-    top: 0;
+/* Segment Wrapper - Controls positioning */
+.segment-wrapper {
+    position: fixed;
+    top: 200px;
+    left: 0;
+    right: 0;
     z-index: 1000;
+    transition: top 0.1s ease-out;
+    will-change: top;
+}
+
+/* Segment (Tab) Styling */
+ion-segment {
     --background: var(--ion-color-light);
-    /*border-top-left-radius: 20px; !* Rounded top corners *!*/
-    /*border-top-right-radius: 20px;*/
-    box-shadow: 0 1px rgba(var(--ion-color-text-rgb), 0.2); /* Subtle shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow-x: auto;
     white-space: nowrap;
     display: flex;
     flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    width: 100vw; /* Ensure full width for scrolling */
-    scrollbar-width: thin; /* Firefox scrollbar */
-    scrollbar-color: var(--ion-color-medium) transparent; /* Firefox scrollbar colors */
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ion-color-medium) transparent;
 }
-
-.my-store-content {
-    padding-top: 70px; /* Adjust padding to account for the fixed segment */
-    border-top-left-radius: 20px; /* Rounded top corners */
-    border-top-right-radius: 20px;
-    background: var(--ion-background-color); /* Set background to --ion-background-color */
-}
-
-/* Segment (Tab) Styling */
 
 ion-segment-button {
     --background-checked: var(--ion-color-light);
-    --color-checked: var(--ion-color-primary-lighter);
+    --color-checked: var(--ion-color-primary);
     --color: var(--ion-color-medium);
+    --indicator-color: var(--ion-color-primary);
     font-size: 14px;
     text-transform: none;
-    min-height: 40px;
+    min-height: 50px;
     padding: 8px 0;
     flex-shrink: 0;
 }
@@ -79,8 +78,30 @@ ion-segment::-webkit-scrollbar-thumb:hover {
 }
 
 /* Content Styling */
+.my-store-content {
+    padding-top: 270px; /* 200px header + 50px segment + 20px spacing */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background: var(--ion-background-color);
+    min-height: 100vh;
+}
+
+/* Adjust content padding on smaller screens */
+@media (max-width: 768px) {
+    .my-store-content {
+        padding-top: 250px; /* 180px header + 50px segment + 20px spacing */
+    }
+}
+
+@media (max-width: 480px) {
+    .my-store-content {
+        padding-top: 350px; /* 280px header + 50px segment + 20px spacing */
+    }
+}
+
+/* Content Styling */
 ion-content {
-    --background: var(--ion-background-color) !important; /* Set to --ion-background-color for consistency */
+    --background: var(--ion-background-color) !important;
 }
 
 /* Make IonList background transparent */

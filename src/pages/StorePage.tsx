@@ -1,17 +1,18 @@
-import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonLabel, IonNote, IonPage,} from '@ionic/react'; // Added IonToggle
-import React, {useState} from 'react';
+import {IonAvatar, IonButton, IonContent, IonIcon, IonLabel, IonNote, IonPage,} from '@ionic/react';
+import React, {useRef, useState} from 'react';
 import './StorePage.css';
 import {settingsOutline} from 'ionicons/icons';
-import MyStoreSection from "../components/store/MyStoreSection";
-import {useHistory} from "react-router-dom";
-import {useSellerMe} from "../vendor/api"; // Import necessary icons and chevronForwardOutline
+import MyStoreSection from '../components/store/MyStoreSection';
+import {useHistory} from 'react-router-dom';
+import {useSellerMe} from '../vendor/api';
 
 const StorePage: React.FC = () => {
   const history = useHistory();
-  const {seller} = useSellerMe()
+  const {seller} = useSellerMe();
+  const contentRef = useRef<HTMLIonContentElement>(null);
 
   const handleEditClick = async () => {
-    history.push("/store/edit-store")
+    history.push('/store/edit-store');
   };
 
   // Placeholder data for reviews and products sold - replace with actual API data
@@ -24,53 +25,87 @@ const StorePage: React.FC = () => {
   const [scrollTop, setScrollTop] = useState(0);
 
   const handleScroll = (e: CustomEvent) => {
-    setScrollTop(e.detail.scrollTop);
+    const scrollY = e.detail.scrollTop;
+    setScrollTop(scrollY);
   };
+
+  // Calculate header offset (collapses up to 200px)
+  const headerOffset = Math.min(200, scrollTop * 0.5);
 
   return (
     <IonPage>
-      {seller && (<IonHeader className="store-header" style={{ '--scroll-top': `${scrollTop}px` }}>
-        <div className="store-header-background">
-          <div className="store-header-content">
-            <div className="store-info-section">
-              <IonAvatar className="store-avatar">
-                <img src={seller?.photo ?? "public/store-default-image.png"} alt="Store"/>
-              </IonAvatar>
-              <div className="store-details">
-                <IonLabel className="store-name">{seller?.name ?? "Store Name"}</IonLabel>
-                <div className="store-stats">
-                  <div className="stat-item">
-                    <IonLabel className="stat-value">{storeStats.averageRating}</IonLabel>
-                    <IonNote className="stat-label">Avg Rating</IonNote>
-                  </div>
-                  <div className="stat-item">
-                    <IonLabel className="stat-value">{storeStats.totalReviews}</IonLabel>
-                    <IonNote className="stat-label">Reviews</IonNote>
-                  </div>
-                  <div className="stat-item">
-                    <IonLabel className="stat-value">{storeStats.productsSold}</IonLabel>
-                    <IonNote className="stat-label">Sold</IonNote>
+      {seller && (
+        <div
+          className="store-header"
+          style={{
+            transform: `translateY(-${headerOffset}px)`,
+          }}
+        >
+          <div className="store-header-background">
+            <div className="store-header-content">
+              <div className="store-info-section">
+                <IonAvatar className="store-avatar">
+                  <img
+                    src={seller?.photo ?? 'public/store-default-image.png'}
+                    alt="Store"
+                  />
+                </IonAvatar>
+                <div className="store-details">
+                  <IonLabel className="store-name">
+                    {seller?.name ?? 'Store Name'}
+                  </IonLabel>
+                  <div className="store-stats">
+                    <div className="stat-item">
+                      <IonLabel className="stat-value">
+                        {storeStats.averageRating}
+                      </IonLabel>
+                      <IonNote className="stat-label">Avg Rating</IonNote>
+                    </div>
+                    <div className="stat-item">
+                      <IonLabel className="stat-value">
+                        {storeStats.totalReviews}
+                      </IonLabel>
+                      <IonNote className="stat-label">Reviews</IonNote>
+                    </div>
+                    <div className="stat-item">
+                      <IonLabel className="stat-value">
+                        {storeStats.productsSold}
+                      </IonLabel>
+                      <IonNote className="stat-label">Sold</IonNote>
+                    </div>
                   </div>
                 </div>
               </div>
+              <IonButton
+                fill="clear"
+                className="edit-store-button"
+                onClick={handleEditClick}
+              >
+                <IonIcon icon={settingsOutline} slot="icon-only"/>
+              </IonButton>
             </div>
-            <IonButton fill="clear" className="edit-store-button" onClick={handleEditClick}>
-              <IonIcon icon={settingsOutline} slot="icon-only"/>
-            </IonButton>
           </div>
         </div>
-      </IonHeader>)}
-      <IonContent scrollEvents={true} onIonScroll={handleScroll}>
-        {seller?.id ? (<MyStoreSection/>) : (
+      )}
+      <IonContent
+        ref={contentRef}
+        scrollEvents={true}
+        onIonScroll={handleScroll}
+        className="store-page-content"
+      >
+        {seller?.id ? (
+          <MyStoreSection scrollTop={scrollTop}/>
+        ) : (
           <div className="create-store-container">
             <IonLabel>
-              You haven't created a store yet.<br/> Click the button below to get started.
+              You haven't created a store yet.
+              <br/> Click the button below to get started.
             </IonLabel>
             <IonButton routerLink="/store/create-store">
               Create my store
             </IonButton>
-          </div>)}
-
+          </div>
+        )}
       </IonContent>
     </IonPage>
   );

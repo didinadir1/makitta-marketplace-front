@@ -6,7 +6,11 @@ import './MyStoreSection.css';
 import DashboardTab from "../dashboard/DashboardTab";
 import OrdersTab from "../orders/OrdersTab";
 
-const MyStoreSection: React.FC = () => {
+interface MyStoreSectionProps {
+  scrollTop: number;
+}
+
+const MyStoreSection: React.FC<MyStoreSectionProps> = ({ scrollTop }) => {
 
 
   const [activeTab, setActiveTab] = useState<string>('products');
@@ -40,7 +44,7 @@ const MyStoreSection: React.FC = () => {
   return (
     <>
 
-      <IonSegment value={activeTab} onIonChange={e => setActiveTab(e.detail.value as string)}>
+      <IonSegment value={activeTab} onIonChange={e => setActiveTab(e.detail.value as string)} style={{ transform: `translateY(${-200 + Math.min(200, scrollTop * 0.5)}px)` }}>
         <IonSegmentButton value="dashboard">
           <IonIcon icon={grid}/>
           <IonLabel>Dashboard</IonLabel>
