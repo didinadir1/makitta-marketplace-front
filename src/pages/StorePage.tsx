@@ -1,5 +1,5 @@
 import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonLabel, IonNote, IonPage,} from '@ionic/react'; // Added IonToggle
-import React from 'react';
+import React, {useState} from 'react';
 import './StorePage.css';
 import {settingsOutline} from 'ionicons/icons';
 import MyStoreSection from "../components/store/MyStoreSection";
@@ -21,9 +21,22 @@ const StorePage: React.FC = () => {
     productsSold: 456,
   };
 
+  const [headerOffset, setHeaderOffset] = useState(0);
+  let lastScrollTop = 0;
+
+  const handleScroll = (e: CustomEvent) => {
+    const scrollTop = e.detail.scrollTop;
+    const delta = scrollTop - lastScrollTop;
+    lastScrollTop = scrollTop;
+    setHeaderOffset(prev => {
+      const newOffset = prev - delta * 0.5; // Adjust multiplier for sensitivity
+      return Math.max(-200, Math.min(0, newOffset));
+    });
+  };
+
   return (
     <IonPage>
-      {seller && (<IonHeader className="store-header">
+      {seller && (<IonHeader className="store-header" style={{ '--header-offset': `${headerOffset}px` }}>
         <div className="store-header-background">
           <div className="store-header-content">
             <div className="store-info-section">
@@ -54,7 +67,7 @@ const StorePage: React.FC = () => {
           </div>
         </div>
       </IonHeader>)}
-      <IonContent>
+      <IonContent scrollEvents={true} onIonScroll={handleScroll}>
         {seller?.id ? (<MyStoreSection/>) : (
           <div className="create-store-container">
             <IonLabel>

@@ -2,7 +2,12 @@
 
 /* Store Header Area */
 .store-header {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  transform: translateY(var(--header-offset, 0px));
   height: 200px; /* Increased height for better visual impact */
   overflow: hidden;
 }
