@@ -26,9 +26,24 @@ const StorePage: React.FC = () => {
   const [scrollTop, setScrollTop] = useState(0);
   const [activeTab, setActiveTab] = useState<string>('products');
   const [maxOffset, setMaxOffset] = useState(200);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [headerOffset, setHeaderOffset] = useState(0);
 
   const handleScroll = (e: CustomEvent) => {
     const scrollY = e.detail.scrollTop;
+    let computedOffset;
+    // Detect scroll direction
+    if (scrollY > lastScrollTop && scrollY > 50) {
+      // Scrolling down - hide header
+      computedOffset = Math.min(maxOffset, scrollTop * 0.5);
+      setHeaderOffset(computedOffset)
+    } else if (scrollY < lastScrollTop) {
+      // Scrolling up - show header
+      computedOffset = Math.max(0, headerOffset - (lastScrollTop - scrollY) * 0.5);
+      setHeaderOffset(computedOffset)
+    }
+
+    setLastScrollTop(scrollY);
     setScrollTop(scrollY);
   };
 
@@ -48,9 +63,9 @@ const StorePage: React.FC = () => {
 
     return () => window.removeEventListener('resize', updateMaxOffset);
   }, []);
+  console.log(scrollTop)
 
-  // Calculate header offset (collapses up to maxOffset)
-  const headerOffset = Math.min(maxOffset, scrollTop * 0.5);
+
 
   return (
     <IonPage>
@@ -115,7 +130,7 @@ const StorePage: React.FC = () => {
         className="store-page-content"
       >
         {seller?.id ? (
-          <MyStoreSection activeTab={activeTab} maxOffset={maxOffset}/>
+          <MyStoreSection activeTab={activeTab} maxOffset={maxOffset} headerOffset={headerOffset}/>
         ) : (
           <div className="create-store-container">
             <IonLabel>

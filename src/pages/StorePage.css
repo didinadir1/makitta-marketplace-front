@@ -6,7 +6,6 @@
   right: 0;
   z-index: 10;
   height: 200px;
-  transition: transform 0.3s ease;
 }
 
 .store-header-background {
