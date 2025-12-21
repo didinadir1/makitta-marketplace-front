@@ -7,9 +7,10 @@
   left: 0;
   right: 0;
   z-index: 10;
-  transform: translateY(var(--header-offset, 0px));
+  transform: translateY(calc(-1 * min(200px, var(--scroll-top) * 0.5)));
   height: 200px; /* Increased height for better visual impact */
   overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
 .store-header-background {

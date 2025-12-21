@@ -21,22 +21,15 @@ const StorePage: React.FC = () => {
     productsSold: 456,
   };
 
-  const [headerOffset, setHeaderOffset] = useState(0);
-  let lastScrollTop = 0;
+  const [scrollTop, setScrollTop] = useState(0);
 
   const handleScroll = (e: CustomEvent) => {
-    const scrollTop = e.detail.scrollTop;
-    const delta = scrollTop - lastScrollTop;
-    lastScrollTop = scrollTop;
-    setHeaderOffset(prev => {
-      const newOffset = prev - delta * 0.5; // Adjust multiplier for sensitivity
-      return Math.max(-200, Math.min(0, newOffset));
-    });
+    setScrollTop(e.detail.scrollTop);
   };
 
   return (
     <IonPage>
-      {seller && (<IonHeader className="store-header" style={{ '--header-offset': `${headerOffset}px` }}>
+      {seller && (<IonHeader className="store-header" style={{ '--scroll-top': `${scrollTop}px` }}>
         <div className="store-header-background">
           <div className="store-header-content">
             <div className="store-info-section">
