@@ -1,5 +1,5 @@
 import {IonAvatar, IonButton, IonContent, IonIcon, IonLabel, IonNote, IonPage,} from '@ionic/react';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './StorePage.css';
 import {settingsOutline} from 'ionicons/icons';
 import MyStoreSection from '../components/store/MyStoreSection';
@@ -25,14 +25,32 @@ const StorePage: React.FC = () => {
 
   const [scrollTop, setScrollTop] = useState(0);
   const [activeTab, setActiveTab] = useState<string>('products');
+  const [maxOffset, setMaxOffset] = useState(200);
 
   const handleScroll = (e: CustomEvent) => {
     const scrollY = e.detail.scrollTop;
     setScrollTop(scrollY);
   };
 
-  // Calculate header offset (collapses up to 200px)
-  const headerOffset = Math.min(250, scrollTop * 0.5);
+  useEffect(() => {
+    const updateMaxOffset = () => {
+      if (window.innerWidth <= 480) {
+        setMaxOffset(280);
+      } else if (window.innerWidth <= 768) {
+        setMaxOffset(180);
+      } else {
+        setMaxOffset(200);
+      }
+    };
+
+    updateMaxOffset();
+    window.addEventListener('resize', updateMaxOffset);
+
+    return () => window.removeEventListener('resize', updateMaxOffset);
+  }, []);
+
+  // Calculate header offset (collapses up to maxOffset)
+  const headerOffset = Math.min(maxOffset, scrollTop * 0.5);
 
   return (
     <IonPage>
