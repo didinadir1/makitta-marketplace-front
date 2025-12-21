@@ -5,6 +5,7 @@ import {settingsOutline} from 'ionicons/icons';
 import MyStoreSection from '../components/store/MyStoreSection';
 import {useHistory} from 'react-router-dom';
 import {useSellerMe} from '../vendor/api';
+import StoreTabs from '../components/store/StoreTabs';
 
 const StorePage: React.FC = () => {
   const history = useHistory();
@@ -23,6 +24,7 @@ const StorePage: React.FC = () => {
   };
 
   const [scrollTop, setScrollTop] = useState(0);
+  const [activeTab, setActiveTab] = useState<string>('products');
 
   const handleScroll = (e: CustomEvent) => {
     const scrollY = e.detail.scrollTop;
@@ -30,7 +32,7 @@ const StorePage: React.FC = () => {
   };
 
   // Calculate header offset (collapses up to 200px)
-  const headerOffset = Math.min(200, scrollTop * 0.5);
+  const headerOffset = Math.min(250, scrollTop * 0.5);
 
   return (
     <IonPage>
@@ -85,6 +87,7 @@ const StorePage: React.FC = () => {
               </IonButton>
             </div>
           </div>
+          <StoreTabs activeTab={activeTab} setActiveTab={setActiveTab}/>
         </div>
       )}
       <IonContent
@@ -94,7 +97,7 @@ const StorePage: React.FC = () => {
         className="store-page-content"
       >
         {seller?.id ? (
-          <MyStoreSection scrollTop={scrollTop}/>
+          <MyStoreSection activeTab={activeTab}/>
         ) : (
           <div className="create-store-container">
             <IonLabel>

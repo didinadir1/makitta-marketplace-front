@@ -1,5 +1,3 @@
-/* Styles for the Store Page - Enhanced Header */
-
 /* Store Header Area */
 .store-header {
   position: fixed;
@@ -7,9 +5,6 @@
   left: 0;
   right: 0;
   z-index: 10;
-  transform: translateY(calc(-1 * min(200px, var(--scroll-top) * 0.5)));
-  height: 200px; /* Increased height for better visual impact */
-  overflow: hidden;
   transition: transform 0.3s ease;
 }
 
@@ -17,8 +12,9 @@
   background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%); /* Modern gradient background */
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }

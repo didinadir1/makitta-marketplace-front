@@ -1,0 +1,67 @@
+/* Segment (Tab) Styling */
+ion-segment {
+    --background: var(--ion-color-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ion-color-medium) transparent;
+}
+
+ion-segment-button {
+    --background-checked: var(--ion-color-light);
+    --color-checked: var(--ion-color-primary);
+    --color: var(--ion-color-medium);
+    --indicator-color: var(--ion-color-primary);
+    font-size: 14px;
+    text-transform: none;
+    min-height: 50px;
+    padding: 8px 0;
+    flex-shrink: 0;
+}
+
+/* Responsive button widths */
+@media (max-width: 767px) {
+    ion-segment-button {
+        flex: 0 0 calc(100vw / 3);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    ion-segment-button {
+        flex: 0 0 calc(100vw / 5);
+    }
+}
+
+@media (min-width: 1024px) {
+    ion-segment-button {
+        flex: 0 0 calc(100vw / 7);
+    }
+}
+
+ion-segment-button ion-icon {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+/* Custom scrollbar for WebKit browsers */
+ion-segment::-webkit-scrollbar {
+    height: 6px;
+}
+
+ion-segment::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+ion-segment::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 3px;
+}
+
+ion-segment::-webkit-scrollbar-thumb:hover {
+    background: var(--ion-color-dark);
+}

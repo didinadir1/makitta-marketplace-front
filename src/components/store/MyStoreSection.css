@@ -1,85 +1,6 @@
-/* Segment Wrapper - Controls positioning */
-.segment-wrapper {
-    position: fixed;
-    top: 200px;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    transition: top 0.1s ease-out;
-    will-change: top;
-}
-
-/* Segment (Tab) Styling */
-ion-segment {
-    --background: var(--ion-color-light);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow-x: auto;
-    white-space: nowrap;
-    display: flex;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    scrollbar-width: thin;
-    scrollbar-color: var(--ion-color-medium) transparent;
-}
-
-ion-segment-button {
-    --background-checked: var(--ion-color-light);
-    --color-checked: var(--ion-color-primary);
-    --color: var(--ion-color-medium);
-    --indicator-color: var(--ion-color-primary);
-    font-size: 14px;
-    text-transform: none;
-    min-height: 50px;
-    padding: 8px 0;
-    flex-shrink: 0;
-}
-
-/* Responsive button widths */
-@media (max-width: 767px) {
-    ion-segment-button {
-        flex: 0 0 calc(100vw / 3);
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-    ion-segment-button {
-        flex: 0 0 calc(100vw / 5);
-    }
-}
-
-@media (min-width: 1024px) {
-    ion-segment-button {
-        flex: 0 0 calc(100vw / 7);
-    }
-}
-
-ion-segment-button ion-icon {
-    font-size: 20px;
-    margin-bottom: 2px;
-}
-
-/* Custom scrollbar for WebKit browsers */
-ion-segment::-webkit-scrollbar {
-    height: 6px;
-}
-
-ion-segment::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-ion-segment::-webkit-scrollbar-thumb {
-    background: var(--ion-color-medium);
-    border-radius: 3px;
-}
-
-ion-segment::-webkit-scrollbar-thumb:hover {
-    background: var(--ion-color-dark);
-}
-
 /* Content Styling */
 .my-store-content {
-    padding-top: 270px; /* 200px header + 50px segment + 20px spacing */
+    padding-top: 220px; /* 200px header + 20px spacing */
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     background: var(--ion-background-color);
@@ -89,13 +10,13 @@ ion-segment::-webkit-scrollbar-thumb:hover {
 /* Adjust content padding on smaller screens */
 @media (max-width: 768px) {
     .my-store-content {
-        padding-top: 250px; /* 180px header + 50px segment + 20px spacing */
+        padding-top: 200px; /* 180px header + 20px spacing */
     }
 }
 
 @media (max-width: 480px) {
     .my-store-content {
-        padding-top: 350px; /* 280px header + 50px segment + 20px spacing */
+        padding-top: 300px; /* 280px header + 20px spacing */
     }
 }
 
