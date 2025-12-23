@@ -12,8 +12,8 @@ ion-segment {
 }
 
 ion-segment-button {
-    --background-checked: var(--ion-color-light);
-    --color-checked: var(--ion-color-primary);
+    --background-checked: var(--ion-color-primary);
+    --color-checked: var(--ion-color-primary-contrast);
     --color: var(--ion-color-medium);
     --indicator-color: var(--ion-color-primary);
     font-size: 14px;
