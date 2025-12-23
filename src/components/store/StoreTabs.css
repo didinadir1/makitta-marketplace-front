@@ -5,10 +5,12 @@ ion-segment {
     white-space: nowrap;
     display: flex;
     flex-wrap: nowrap;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     width: 100%;
     scrollbar-width: thin;
     scrollbar-color: var(--ion-color-medium) transparent;
+    justify-content: flex-start;
 }
 
 ion-segment-button {
