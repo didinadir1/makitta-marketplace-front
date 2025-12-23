@@ -63,8 +63,6 @@ const StorePage: React.FC = () => {
 
     return () => window.removeEventListener('resize', updateMaxOffset);
   }, []);
-  console.log(scrollTop)
-
 
 
   return (
